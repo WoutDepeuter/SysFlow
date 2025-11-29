@@ -1,5 +1,3 @@
-
-
 #Function to show all menu options
 function Show-Menu {
     Write-Host "==========================" -ForegroundColor Cyan
@@ -27,7 +25,6 @@ do {
         '5' { Write-Host "Closed sysflow" -ForegroundColor Yellow }
         Default { Write-Host "Invalid Choice" -ForegroundColor Red }
     }
-
     #if the user didn't choose to exit, wait for input and show the menu again
     if ($keuze -ne '5') {
         Write-Host ""
@@ -36,7 +33,6 @@ do {
         Clear-Host
         Show-Menu
     }
-
     #if the user chose to exit, the loop ends
 } until ($keuze -eq '5')
 #End of script
