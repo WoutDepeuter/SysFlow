@@ -27,7 +27,6 @@ if ($usedRamPercent -ge $treshold) {
     Free = [math]::round($ram.FreePhysicalMemory/1MB,2)
     Used = [math]::round($usedRam/1MB,2)
     UsedPercent = $usedRamPercent
-
 }
 
 #End of script
