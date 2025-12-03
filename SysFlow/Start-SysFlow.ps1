@@ -1,4 +1,8 @@
+
+
+
 #Function to show all menu options
+
 function Show-Menu {
     Write-Host "==========================" -ForegroundColor Cyan
     Write-Host "     Sysflow              " -ForegroundColor Cyan
@@ -19,6 +23,7 @@ do {
     #switch to process the user's choice and open the correct module
     switch ($keuze) {
         '1' { Write-Host "Module Loaded: System Status" -ForegroundColor Green }
+
         '2' { Write-Host "Module Loaded: Back Ups" -ForegroundColor Green }
         '3' { Write-Host "Module Loaded: Software Management" -ForegroundColor Green }
         '4' { Write-Host "Module Loaded: Taskmanager" -ForegroundColor Green }

@@ -1,6 +1,10 @@
 param(
     [int]$treshold = 50
-)
+    )
+
+
+
+    
 #CPU stats
 $cpu = Get-CimInstance -ClassName Win32_Processor
 #Display CPU load percentage

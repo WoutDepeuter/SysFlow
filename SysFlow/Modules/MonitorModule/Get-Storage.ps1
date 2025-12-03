@@ -41,8 +41,5 @@ $results = foreach ($drive in $drives) {
     }
 }
 
-# Output the results. 
-# Because these are objects, you can now do things like:
-# $results | Export-Csv "C:\logs\diskusage.csv" -NoTypeInformation
-# $results | Out-GridView
+
 return $results
