@@ -70,7 +70,7 @@ do {
                         Write-Host "Gathering RAM Stats..." -ForegroundColor Cyan
                         Get-RamStats -threshold 70 | Format-Table -AutoSize
                         Write-Host "Gathering Storage Stats..." -ForegroundColor Cyan
-                        StorageStats-Threshold 80 | Format-Table -AutoSize
+                        Get-StorageStats -Threshold 80 | Format-Table -AutoSize
                     }
                     '5' { Write-Host "Returning to Main Menu..." -ForegroundColor Yellow }
                     Default { Write-Host "Invalid Choice" -ForegroundColor Red }
