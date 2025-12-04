@@ -1,6 +1,5 @@
 #Function to show all menu options
-Import-Module SysFlow.Modules.MonitorModule
-
+Import-Module "$PSScriptRoot\Modules\MonitorModule\MonitorModule.psm1" -Force
 function Show-Menu {
     Write-Host "==========================" -ForegroundColor Cyan
     Write-Host "     Sysflow              " -ForegroundColor Cyan
@@ -62,7 +61,7 @@ do {
                     }
                     '3' { 
                         Write-Host "Gathering Storage Stats..." -ForegroundColor Cyan
-                        Get-StorageStats -Threshold 80 | Format-Table -AutoSize
+                        Get-StorageStats -Threshold 80 
                     }
                     '4' { 
                         # Alles tonen
@@ -71,7 +70,7 @@ do {
                         Write-Host "Gathering RAM Stats..." -ForegroundColor Cyan
                         Get-RamStats -threshold 70 | Format-Table -AutoSize
                         Write-Host "Gathering Storage Stats..." -ForegroundColor Cyan
-                        Get-StorageStats -Threshold 80 | Format-Table -AutoSize
+                        StorageStats-Threshold 80 | Format-Table -AutoSize
                     }
                     '5' { Write-Host "Returning to Main Menu..." -ForegroundColor Yellow }
                     Default { Write-Host "Invalid Choice" -ForegroundColor Red }
