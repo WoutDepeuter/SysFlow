@@ -5,13 +5,13 @@ function Get-Uptime {
     # Calculate the timespan
     $uptime = (Get-Date) - $os.LastBootUpTime
     
-    # Create and return the custom object immediately
+    # Create and return the custom object with Uptime property
     [PSCustomObject]@{
-        Days    = $uptime.Days
-        Hours   = $uptime.Hours
-        Minutes = $uptime.Minutes
-        Seconds = $uptime.Seconds
-        # Optional: readable total hours for quick math
+        Uptime     = $uptime
+        Days       = $uptime.Days
+        Hours      = $uptime.Hours
+        Minutes    = $uptime.Minutes
+        Seconds    = $uptime.Seconds
         TotalHours = [math]::Round($uptime.TotalHours, 2) 
     }
 }
