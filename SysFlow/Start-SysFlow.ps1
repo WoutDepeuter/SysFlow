@@ -1,42 +1,71 @@
-
-
-#Function to show all menu options
-function Show-Menu {
-    Write-Host "==========================" -ForegroundColor Cyan
-    Write-Host "     Sysflow              " -ForegroundColor Cyan
-    Write-Host "==========================" -ForegroundColor Cyan
-    Write-Host "1. System Status"
-    Write-Host "2. Back Ups"
-    Write-Host "3. Software Management"
-    Write-Host "4. Taskmanager"
-    Write-Host "5. Exit"
+# Function for the Status Submenu
+function Show-StatusMenu {
+    Write-Host "----- System Status -----" -ForegroundColor Green
+    Write-Host "1. CPU Only"
+    Write-Host "2. RAM Only"
+    Write-Host "3. Storage Only"
+    Write-Host "4. Show All Stats"
+    Write-Host "5. System Uptime"
+    Write-Host "6. Back to Main Menu"
 }
-#clear the host and show the menu
-Clear-Host
-Show-Menu
-#shows the menu until the users chooses to exit
+
+# --- START SUBMENU LOOP ---
+# Loop until the user chooses to exit
+#submenu to show system stats
+# Initialize variable
 do {
-    $keuze = Read-Host "Select an option (1-5)"
+    Write-Host ""
+    Show-StatusMenu
+    # Get user choice
+    $subKeuze = Read-Host "Select stat option (1-6)"
     Clear-Host
-    #switch to process the user's choice and open the correct module
-    switch ($keuze) {
-        '1' { Write-Host "Module Loaded: System Status" -ForegroundColor Green }
-        '2' { Write-Host "Module Loaded: Back Ups" -ForegroundColor Green }
-        '3' { Write-Host "Module Loaded: Software Management" -ForegroundColor Green }
-        '4' { Write-Host "Module Loaded: Taskmanager" -ForegroundColor Green }
-        '5' { Write-Host "Closed sysflow" -ForegroundColor Yellow }
-        Default { Write-Host "Invalid Choice" -ForegroundColor Red }
+
+    
+    # Display the user's choice (unless they are exiting)
+    if ($subKeuze -ne '6') {
+        Write-Host "Status Option: $subKeuze" -ForegroundColor DarkCyan
+        Write-Host "-------------------"
     }
 
-    #if the user didn't choose to exit, wait for input and show the menu again
-    if ($keuze -ne '5') {
-        Write-Host ""
-        Write-Host "Press Enter to go back to the menu"
-        Read-Host
-        Clear-Host
-        Show-Menu
+    switch ($subKeuze) {
+        '1' { 
+            #show cpu stats
+            
+            Write-Host "Gathering CPU Stats..." -ForegroundColor Cyan
+            Get-CPUStats -Threshold 70 | Format-Table -AutoSize
+        }
+        '2' { 
+            #show ram stats
+            Write-Host "Gathering RAM Stats..." -ForegroundColor Cyan
+            Get-RamStats -Threshold 70 | Format-Table -AutoSize
+        }
+        '3' { #show storage stats
+            Write-Host "Gathering Storage Stats..." -ForegroundColor Cyan
+            Get-StorageStats -Threshold 80 | Format-Table -AutoSize 
+        }
+        '4' { 
+            # Show All
+            Write-Host "Gathering All Stats..." -ForegroundColor Cyan
+            Get-CPUStats -Threshold 70 | Format-Table -AutoSize
+            Get-RamStats -Threshold 70 | Format-Table -AutoSize
+            Get-StorageStats -Threshold 80 | Format-Table -AutoSize
+            Get-Uptime | Format-Table -AutoSize
+        }
+        #show uptime
+        '5' { 
+            Write-Host "Gathering Uptime..." -ForegroundColor Cyan
+            Get-Uptime | Format-Table -AutoSize
+        }
+        #go back to main menu
+        '6' 
+        { 
+            Write-Host "Returning to Main Menu..." -ForegroundColor Yellow 
+        }
+        #invalid choice
+        Default { 
+            Write-Host "Invalid Choice" -ForegroundColor Red 
+        }
     }
+} until ($subKeuze -eq '6')
+# --- END SUBMENU LOOP ---
 
-    #if the user chose to exit, the loop ends
-} until ($keuze -eq '5')
-#End of script
