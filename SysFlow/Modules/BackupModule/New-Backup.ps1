@@ -87,3 +87,4 @@ function New-Backup {
         Write-Error "Failed to create backup: $_"
     }
 }
+# End of New-Backup function
