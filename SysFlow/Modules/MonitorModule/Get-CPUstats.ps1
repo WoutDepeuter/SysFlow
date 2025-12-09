@@ -1,5 +1,5 @@
 function Get-CPUStats {
-   
+    
     <#
     .SYNOPSIS
         Retrieves CPU statistics and checks against a specified threshold.
