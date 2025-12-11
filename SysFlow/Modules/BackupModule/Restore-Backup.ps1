@@ -50,4 +50,45 @@ function Restore-Backup {
         [string]$RestoreDestination
     )
 
+    # Validate that the backup file exists
+    if (-not (Test-Path -Path $BackupFilePath)) {
+        Write-Error "Backup file does not exist: $BackupFilePath"
+        return
+    }
+    # Create the restore destination directory if it doesn't exist
+    if (-not (Test-Path -Path $RestoreDestination)) {
+        Write-Verbose "Creating restore destination: $RestoreDestination"
+        New-Item -ItemType Directory -Path $RestoreDestination | Out-Null
+    }
+    try {
+        Write-Verbose "Restoring backup from: $BackupFilePath to $RestoreDestination"
+        # Extract the zip archive to the restore destination
+        Expand-Archive -Path $BackupFilePath -DestinationPath $RestoreDestination -Force
+
+        # Get the number of files restored
+        $filesRestored = (Get-ChildItem -Path $RestoreDestination -Recurse | Measure-Object).Count
+
+        # Return restoration result
+        return [PSCustomObject]@{
+            BackupFile        = $BackupFilePath
+            RestoreDestination = $RestoreDestination
+            FilesRestored     = $filesRestored
+            Success           = $true
+        }
+    }
+    catch {
+        Write-Error "Failed to restore backup: $_"
+        return [PSCustomObject]@{
+            BackupFile        = $BackupFilePath
+            RestoreDestination = $RestoreDestination
+            FilesRestored     = 0
+            Success           = $false
+        }
+    }
+
+
+# End of Restore-Backup function
+
+
 }
+
