@@ -32,8 +32,6 @@ function Get-StorageStats {
         - UsedPercent: Percentage of used space
         - Status: OK or CRITICAL based on threshold
     .NOTES
-    
-
 #>
 
     [CmdletBinding()]
