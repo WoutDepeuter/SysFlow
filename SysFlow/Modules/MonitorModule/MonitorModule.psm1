@@ -1,14 +1,23 @@
-. $PSScriptRoot\Get-StorageStats.ps1
-Export-ModuleMember -Function Get-StorageStats
-. $PSScriptRoot\Get-CPUStats.ps1
-Export-ModuleMember -Function Get-CPUStats
-. $PSScriptRoot\Get-RamStats.ps1
-Export-ModuleMember -Function Get-RamStats
+# ============================================================================
+# MonitorModule.psm1
+# System Monitoring Module - CPU, RAM, Storage, Uptime, and Process stats
+# ============================================================================
 
-. $PSScriptRoot\Get-Uptime.ps1
-Export-ModuleMember -Function Get-Uptime
+# Get module root directory
+$moduleRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 
-. $PSScriptRoot\Get-ProcessStats.ps1
-Export-ModuleMember -Function Get-ProcessStats
-# Export the functions that you want to be available to the user.
-Export-ModuleMember -Function Get-StorageStats, Get-CPUStats, Get-RamStats
+# ============================================================================
+# Dot-source function files
+# ============================================================================
+
+. (Join-Path $moduleRoot 'Get-StorageStats.ps1')
+. (Join-Path $moduleRoot 'Get-CPUStats.ps1')
+. (Join-Path $moduleRoot 'Get-RamStats.ps1')
+. (Join-Path $moduleRoot 'Get-Uptime.ps1')
+. (Join-Path $moduleRoot 'Get-ProcessStats.ps1')
+
+# ============================================================================
+# Export public functions
+# ============================================================================
+
+Export-ModuleMember -Function 'Get-StorageStats', 'Get-CPUStats', 'Get-RamStats', 'Get-Uptime', 'Get-ProcessStats'
