@@ -72,6 +72,7 @@ do {
                 Clear-Host
 
                 switch ($SubChoice) {
+                    
                     '1' { Write-Host "Gathering CPU Stats..." -ForegroundColor Cyan; Get-CPUStats -Threshold 70 | Format-Table -AutoSize }
                     '2' { Write-Host "Gathering RAM Stats..." -ForegroundColor Cyan; Get-RamStats -Threshold 70 | Format-Table -AutoSize }
                     '3' { Write-Host "Gathering Storage Stats..." -ForegroundColor Cyan; Get-StorageStats -Threshold 80 | Format-Table -AutoSize }
@@ -101,6 +102,7 @@ do {
         }
 
         # --- OPTION 2: BACKUP (Placeholder) ---
+
         '2' {
             Write-Host "Backup Module coming soon..." -ForegroundColor Gray
             Pause
@@ -129,3 +131,4 @@ do {
     }
 
 } until ($MainExit -eq $true)
+# End of Start-SysFlow.ps1
