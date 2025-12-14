@@ -44,7 +44,8 @@ function Show-StatusMenu {
     Write-Host "3. Storage Only"
     Write-Host "4. Show All Stats"
     Write-Host "5. System Uptime"
-    Write-Host "B. Back to Main Menu" # 'B' is often more intuitive than '6' for 'Back'
+    Write-Host "6. Process Stats"
+    Write-Host "B. Back to Main Menu" # 'B' is often more intuitive than '7' for 'Back'
 }
 
 
@@ -82,6 +83,7 @@ do {
                         Get-Uptime | Format-Table -AutoSize
                     }
                     '5' { Write-Host "Gathering Uptime..." -ForegroundColor Cyan; Get-Uptime | Format-Table -AutoSize }
+                    '6' { Write-Host "Gathering Process Stats..." -ForegroundColor Cyan; Get-ProcessStats -threshold 500 | Format-Table -AutoSize }
                     
                     # Back to Main Menu
                     'B' { 
