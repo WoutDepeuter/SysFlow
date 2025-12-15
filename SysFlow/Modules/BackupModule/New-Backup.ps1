@@ -41,10 +41,11 @@ function New-Backup {
         Version: 1.0
         Requires: PowerShell 5.0 or higher (for Compress-Archive)
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact='Medium')]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('FullName')]
         [string[]]$PathsToBackup,
         
         [Parameter(Mandatory=$true)]
@@ -71,24 +72,26 @@ function New-Backup {
     $BackupFilePath = Join-Path -Path $BackupDestination -ChildPath $BackupName
 
     try {
-        Write-Verbose "Creating backup at: $BackupFilePath"
+        Write-Verbose "Preparing to create backup at: $BackupFilePath"
         
-        # Add visual feedback
-        Write-Progress -Activity "Backup in Progress" -Status "Compressing files..." -PercentComplete 0
+        if ($PSCmdlet.ShouldProcess($BackupFilePath, 'Create backup archive')) {
+            Write-Progress -Activity "Creating backup" -Status "Compressing files..." -PercentComplete 0
+            
+            # Create a zip archive using LiteralPath to avoid wildcard expansion
+            Compress-Archive -LiteralPath $PathsToBackup -DestinationPath $BackupFilePath -Force -CompressionLevel Optimal
+            
+            Write-Progress -Activity "Creating backup" -Completed -Status "Done"
+            Write-Host "Backup created successfully at: $BackupFilePath" -ForegroundColor Green
+        } else {
+            Write-Verbose "WhatIf: Skipped creating backup at $BackupFilePath"
+        }
         
-        # Create a zip archive
-        Compress-Archive -Path $PathsToBackup -DestinationPath $BackupFilePath -Force -CompressionLevel Optimal
-        
-        # Complete progress
-        Write-Progress -Activity "Backup in Progress" -Status "Done" -PercentComplete 100 -Completed
-
-        Write-Host "Backup created successfully at: $BackupFilePath" -ForegroundColor GreenColor Green
-        
-        # Return backup info
+        # Return backup info (even on WhatIf, reflect intended path)
+        $size = (Test-Path $BackupFilePath) ? (Get-Item $BackupFilePath).Length : 0
         return [PSCustomObject]@{
             BackupPath = $BackupFilePath
             CreatedAt = Get-Date
-            Size = (Get-Item $BackupFilePath).Length
+            Size = $size
         }
     }
     catch {
