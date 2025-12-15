@@ -65,6 +65,19 @@ function Restore-Backup {
         # Extract the zip archive to the restore destination
         Expand-Archive -Path $BackupFilePath -DestinationPath $RestoreDestination -Force
 
+        # If a manifest exists in the archive, surface its info
+        $manifestPath = Join-Path $RestoreDestination 'backup-manifest.json'
+        $sources = $null
+        if (Test-Path $manifestPath) {
+            try {
+                $manifestContent = Get-Content -Path $manifestPath -Raw -ErrorAction Stop
+                $manifestJson = $manifestContent | ConvertFrom-Json
+                $sources = $manifestJson.Sources
+            } catch {
+                Write-Warning "Could not parse backup manifest: $_"
+            }
+        }
+
         # Get the number of files restored
         $filesRestored = (Get-ChildItem -Path $RestoreDestination -Recurse | Measure-Object).Count
 
@@ -73,6 +86,7 @@ function Restore-Backup {
             BackupFile        = $BackupFilePath
             RestoreDestination = $RestoreDestination
             FilesRestored     = $filesRestored
+            Sources           = $sources
             Success           = $true
         }
     }

@@ -73,18 +73,35 @@ function New-Backup {
 
     try {
         Write-Verbose "Preparing to create backup at: $BackupFilePath"
-        
+
+        # Build a small manifest with sources and metadata
+        $manifest = [PSCustomObject]@{
+            Sources    = $PathsToBackup
+            CreatedAt  = (Get-Date).ToString('o')
+            Machine    = $env:COMPUTERNAME
+            User       = $env:USERNAME
+            Tool       = 'SysFlow New-Backup'
+            Version    = '1.0'
+        }
+
+        $tempManifestPath = Join-Path $env:TEMP ("backup-manifest_" + [Guid]::NewGuid().ToString() + ".json")
+        $manifest | ConvertTo-Json -Depth 4 | Set-Content -Path $tempManifestPath -Encoding UTF8
+
         if ($PSCmdlet.ShouldProcess($BackupFilePath, 'Create backup archive')) {
             Write-Progress -Activity "Creating backup" -Status "Compressing files..." -PercentComplete 0
             
-            # Create a zip archive using LiteralPath to avoid wildcard expansion
-            Compress-Archive -LiteralPath $PathsToBackup -DestinationPath $BackupFilePath -Force -CompressionLevel Optimal
+            # Include sources and the manifest file
+            $itemsToArchive = @($PathsToBackup + $tempManifestPath)
+            Compress-Archive -LiteralPath $itemsToArchive -DestinationPath $BackupFilePath -Force -CompressionLevel Optimal
             
             Write-Progress -Activity "Creating backup" -Completed -Status "Done"
             Write-Host "Backup created successfully at: $BackupFilePath" -ForegroundColor Green
         } else {
             Write-Verbose "WhatIf: Skipped creating backup at $BackupFilePath"
         }
+
+        # Cleanup temp manifest
+        if (Test-Path $tempManifestPath) { Remove-Item -Path $tempManifestPath -ErrorAction SilentlyContinue }
         
         # Return backup info (even on WhatIf, reflect intended path)
         $size = (Test-Path $BackupFilePath) ? (Get-Item $BackupFilePath).Length : 0
