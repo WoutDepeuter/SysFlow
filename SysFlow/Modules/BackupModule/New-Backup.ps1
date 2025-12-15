@@ -72,9 +72,17 @@ function New-Backup {
 
     try {
         Write-Verbose "Creating backup at: $BackupFilePath"
-        # Create a zip archive of the specified paths
-        Compress-Archive -Path $PathsToBackup -DestinationPath $BackupFilePath -Force
-        Write-Host "Backup created successfully at: $BackupFilePath" -ForegroundColor Green
+        
+        # Add visual feedback
+        Write-Progress -Activity "Backup in Progress" -Status "Compressing files..." -PercentComplete 0
+        
+        # Create a zip archive
+        Compress-Archive -Path $PathsToBackup -DestinationPath $BackupFilePath -Force -CompressionLevel Optimal
+        
+        # Complete progress
+        Write-Progress -Activity "Backup in Progress" -Status "Done" -PercentComplete 100 -Completed
+
+        Write-Host "Backup created successfully at: $BackupFilePath" -ForegroundColor GreenColor Green
         
         # Return backup info
         return [PSCustomObject]@{
