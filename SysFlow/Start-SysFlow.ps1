@@ -2,7 +2,21 @@
 .SYNOPSIS
     Start-SysFlow.ps1 - The central entry point for the application.
 #>
-
+function Get-FolderSelection {
+    param([string]$Description)
+    
+    # Load Windows Forms assembly
+    Add-Type -AssemblyName System.Windows.Forms
+    
+    $folderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog
+    $folderBrowser.Description = $Description
+    $folderBrowser.ShowNewFolderButton = $true
+    
+    if ($folderBrowser.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+        return $folderBrowser.SelectedPath
+    }
+    return $null
+}
 # ------------------------------
 # 1. INITIALIZATION & MODULES
 # ------------------------------
@@ -127,23 +141,37 @@ do {
 
                 switch ($BackupChoice) {
                     '1' {
-                        Write-Host "Create a new backup" -ForegroundColor Cyan
-                        $pathsInput = Read-Host "Enter path(s) to backup (comma-separated)"
-                        $dest = Read-Host "Enter backup destination folder"
-                        $name = Read-Host "Optional: Enter backup name (press Enter for default)"
+    Write-Host "Create a new backup" -ForegroundColor Cyan
+    
+    # --- CHANGE START ---
+    $useGui = Read-Host "Do you want to select folders using a window? (Y/N)"
+    
+    if ($useGui -eq 'Y' -or $useGui -eq 'y') {
+        # Select Source
+        Write-Host "Select the folder you want to backup..." -ForegroundColor Yellow
+        $sourcePath = Get-FolderSelection -Description "Select folder to Backup"
+        
+        # Select Destination
+        if ($sourcePath) {
+            Write-Host "Select where to save the backup..." -ForegroundColor Yellow
+            $destPath = Get-FolderSelection -Description "Select Destination for Backup"
+        }
+        
+        # Assign to the variables your script uses
+        if ($sourcePath) { $pathsInput = $sourcePath }
+        if ($destPath)   { $dest = $destPath }
+        
+    } else {
+        # Fallback to original manual typing
+        $pathsInput = Read-Host "Enter path(s) to backup (comma-separated)"
+        $dest = Read-Host "Enter backup destination folder"
+    }
+    # --- CHANGE END ---
 
-                        $paths = $pathsInput -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
-                        if (-not $paths -or -not $dest) {
-                            Write-Host "Paths and destination are required." -ForegroundColor Red
-                            break
-                        }
-
-                        if ([string]::IsNullOrWhiteSpace($name)) {
-                            New-Backup -PathsToBackup $paths -BackupDestination $dest | Format-List
-                        } else {
-                            New-Backup -PathsToBackup $paths -BackupDestination $dest -BackupName $name | Format-List
-                        }
-                    }
+    # ... rest of your existing logic ...
+    $name = Read-Host "Optional: Enter backup name (press Enter for default)"
+    # ...
+}
                     '2' {
                         Write-Host "Restore a backup" -ForegroundColor Cyan
                         $file = Read-Host "Enter full path to backup .zip file"
