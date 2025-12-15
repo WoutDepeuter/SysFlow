@@ -8,6 +8,7 @@
 # ------------------------------
 # Ensure the script knows where the modules are located
 $MonitorModulePath = Join-Path $PSScriptRoot 'Modules\MonitorModule\MonitorModule.psm1'
+$BackupModulePath  = Join-Path $PSScriptRoot 'Modules\BackupModule\BackupModule.psm1'
 
 # Import the MonitorModule (if it exists)
 if (Test-Path $MonitorModulePath) {
@@ -16,7 +17,12 @@ if (Test-Path $MonitorModulePath) {
     Write-Warning "Monitor module not found at: $MonitorModulePath"
 }
 
-# (You can import your BackupModule and SoftwareModule here later)
+# Import the BackupModule (if it exists)
+if (Test-Path $BackupModulePath) {
+    Import-Module $BackupModulePath -Force -ErrorAction Stop
+} else {
+    Write-Warning "Backup module not found at: $BackupModulePath"
+}
 
 
 # ------------------------------
@@ -46,6 +52,15 @@ function Show-StatusMenu {
     Write-Host "5. System Uptime"
     Write-Host "6. Process Stats"
     Write-Host "B. Back to Main Menu" # 'B' is often more intuitive than '7' for 'Back'
+}
+
+function Show-BackupMenu {
+    Write-Host "----- Backup Management Submenu -----" -ForegroundColor Green
+    Write-Host "1. Create Backup"
+    Write-Host "2. Restore Backup"
+    Write-Host "3. Remove Backup(s)"
+    Write-Host "4. List Backups"
+    Write-Host "B. Back to Main Menu"
 }
 
 
@@ -101,11 +116,62 @@ do {
             } until ($SubExit -eq $true)
         }
 
-        # --- OPTION 2: BACKUP (Placeholder) ---
-
+        # --- OPTION 2: BACKUP SUBMENU ---
         '2' {
-            Write-Host "Backup Module coming soon..." -ForegroundColor Gray
-            Pause
+            $BackupExit = $false
+            do {
+                Write-Host ""
+                Show-BackupMenu
+                $BackupChoice = Read-Host "Select backup option"
+                Clear-Host
+
+                switch ($BackupChoice) {
+                    '1' {
+                        Write-Host "Create a new backup" -ForegroundColor Cyan
+                        $pathsInput = Read-Host "Enter path(s) to backup (comma-separated)"
+                        $dest = Read-Host "Enter backup destination folder"
+                        $name = Read-Host "Optional: Enter backup name (press Enter for default)"
+
+                        $paths = $pathsInput -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+                        if (-not $paths -or -not $dest) {
+                            Write-Host "Paths and destination are required." -ForegroundColor Red
+                            break
+                        }
+
+                        if ([string]::IsNullOrWhiteSpace($name)) {
+                            New-Backup -PathsToBackup $paths -BackupDestination $dest | Format-List
+                        } else {
+                            New-Backup -PathsToBackup $paths -BackupDestination $dest -BackupName $name | Format-List
+                        }
+                    }
+                    '2' {
+                        Write-Host "Restore a backup" -ForegroundColor Cyan
+                        $file = Read-Host "Enter full path to backup .zip file"
+                        $restoreTo = Read-Host "Enter restore destination folder"
+                        if (-not $file -or -not $restoreTo) {
+                            Write-Host "Backup file and destination are required." -ForegroundColor Red
+                            break
+                        }
+                        Restore-Backup -BackupFilePath $file -RestoreDestination $restoreTo | Format-List
+                    }
+                    '3' {
+                        Write-Host "Remove backup(s)" -ForegroundColor Cyan
+                        $dest = Read-Host "Enter backup destination folder to manage"
+                        if (-not $dest) { Write-Host "Destination is required." -ForegroundColor Red; break }
+                        Remove-Backup -BackupDestination $dest
+                    }
+                    '4' {
+                        Write-Host "List backups" -ForegroundColor Cyan
+                        $dest = Read-Host "Enter backup destination folder to list"
+                        if (-not $dest) { Write-Host "Destination is required." -ForegroundColor Red; break }
+                        $list = Remove-Backup -BackupDestination $dest -ListOnly
+                        if ($list) { $list | Select-Object Index,Name,Size,Created | Format-Table -AutoSize }
+                    }
+                    'B' { Write-Host "Returning to Main Menu..." -ForegroundColor Yellow; $BackupExit = $true }
+                    'b' { Write-Host "Returning to Main Menu..." -ForegroundColor Yellow; $BackupExit = $true }
+                    Default { Write-Host "Invalid choice in backup submenu" -ForegroundColor Red }
+                }
+            } until ($BackupExit -eq $true)
         }
 
         # --- OPTION 3: SOFTWARE (Placeholder) ---

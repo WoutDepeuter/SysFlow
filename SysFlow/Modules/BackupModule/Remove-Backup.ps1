@@ -224,5 +224,5 @@ function Remove-Backup {
     return $results
 }
 # End of Remove-Backup function
-Remove-Backup -BackupDestination "c:\Backups"
+ 
 
