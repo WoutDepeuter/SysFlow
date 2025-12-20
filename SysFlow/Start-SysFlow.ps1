@@ -80,9 +80,10 @@ function Show-BackupMenu {
 function Show-SettingsMenu {
     Write-Host "----- Settings Menu -----" -ForegroundColor Green
     Write-Host "1. View Current Configuration"
-    Write-Host "2. Set Default Backup Folder"
-    Write-Host "3. Set Default Report Folder"
-    Write-Host "4. Set Monitoring Thresholds"
+    Write-Host "2. Set Default Backup Destination Folder"
+    Write-Host "3. Set Default Source Folder to Backup"
+    Write-Host "4. Set Default Report Folder"
+    Write-Host "5. Set Monitoring Thresholds"
     Write-Host "B. Back to Main Menu"
 }
 
@@ -130,11 +131,27 @@ do {
 
                     '1' {
                         # Ask for source path
-                        $useGui = Read-Host "Use folder selection window for source? (Y/N)"
-                        if ($useGui -match '^[Yy]$') {
-                            $pathsInput = Get-FolderSelection "Select folder to backup"
+                        if ($Config.DefaultBackupSource) {
+                            Write-Host "\nDefault source folder: $($Config.DefaultBackupSource)" -ForegroundColor Cyan
+                            $useDefaultSource = Read-Host "Use default source folder? (Y/N)"
+                            
+                            if ($useDefaultSource -match '^[Yy]$') {
+                                $pathsInput = $Config.DefaultBackupSource
+                            } else {
+                                $useGui = Read-Host "Use folder selection window? (Y/N)"
+                                if ($useGui -match '^[Yy]$') {
+                                    $pathsInput = Get-FolderSelection "Select folder to backup"
+                                } else {
+                                    $pathsInput = Read-Host "Enter path(s) to backup (comma-separated)"
+                                }
+                            }
                         } else {
-                            $pathsInput = Read-Host "Enter path(s) to backup (comma-separated)"
+                            $useGui = Read-Host "Use folder selection window for source? (Y/N)"
+                            if ($useGui -match '^[Yy]$') {
+                                $pathsInput = Get-FolderSelection "Select folder to backup"
+                            } else {
+                                $pathsInput = Read-Host "Enter path(s) to backup (comma-separated)"
+                            }
                         }
                         
                         # Ask about destination
@@ -234,10 +251,11 @@ do {
 
                 switch ($SettingsChoice) {
                     '1' {
-                        Write-Host "`n=== Current Configuration ===" -ForegroundColor Cyan
+                        Write-Host "\n=== Current Configuration ===" -ForegroundColor Cyan
                         Write-Host ""
                         Write-Host "Backup Settings:" -ForegroundColor Yellow
-                        Write-Host "  Default Backup Folder: $($Config.DefaultBackupDestination)" -ForegroundColor White
+                        Write-Host "  Default Backup Destination: $($Config.DefaultBackupDestination)" -ForegroundColor White
+                        Write-Host "  Default Source Folder: $($Config.DefaultBackupSource)" -ForegroundColor White
                         Write-Host ""
                         Write-Host "Report Settings:" -ForegroundColor Yellow
                         Write-Host "  Default Report Path: $($Config.DefaultReportPath)" -ForegroundColor White
@@ -252,7 +270,7 @@ do {
                     }
 
                     '2' {
-                        Write-Host "`nCurrent default: $($Config.DefaultBackupDestination)" -ForegroundColor Cyan
+                        Write-Host "\nCurrent default destination: $($Config.DefaultBackupDestination)" -ForegroundColor Cyan
                         $useGui = Read-Host "Use folder selection? (Y/N)"
                         
                         if ($useGui -match '^[Yy]$') {
@@ -271,8 +289,27 @@ do {
                         Pause
                     }
 
-                    '3' {
-                        Write-Host "`nCurrent default: $($Config.DefaultReportPath)" -ForegroundColor Cyan
+                    '4' {
+                        Write-Host "\nCurrent default report path: $($Config.DefaultReportPath)" -ForegroundColor Cyanolor Cyan
+                        $useGui = Read-Host "Use folder selection? (Y/N)"
+                        
+                        if ($useGui -match '^[Yy]$') {
+                            $newPath = Get-FolderSelection "Select default source folder to backup"
+                        } else {
+                            $newPath = Read-Host "Enter new default source folder"
+                        }
+                        
+                        if ($newPath) {
+                            $configContent = Get-Content $ConfigPath -Raw
+                            $configContent = $configContent -replace "DefaultBackupSource = '.*'", "DefaultBackupSource = '$($newPath -replace '\\\\','\\\\')'"
+                            $configContent | Set-Content $ConfigPath -Encoding UTF8
+                            $Config.DefaultBackupSource = $newPath
+                            Write-Host "\u2713 Default source folder set to: $newPath" -ForegroundColor Green
+                        }
+                        Pause
+                    }
+
+                    '4' {
                         $useGui = Read-Host "Use folder selection? (Y/N)"
                         
                         if ($useGui -match '^[Yy]$') {
@@ -291,8 +328,8 @@ do {
                         Pause
                     }
 
-                    '4' {
-                        Write-Host "`n=== Set Monitoring Thresholds ===" -ForegroundColor Cyan
+                    '5' {
+                        Write-Host "\n=== Set Monitoring Thresholds ===" -ForegroundColor Cyan
                         Write-Host "Current values shown in parentheses" -ForegroundColor Gray
                         Write-Host ""
                         
