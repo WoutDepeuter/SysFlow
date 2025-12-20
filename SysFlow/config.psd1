@@ -1,6 +1,6 @@
 @{
     # Default backup destination folder
-    DefaultBackupDestination = 'C:\Users\depeu\OneDrive\Afbeeldingen\backups'
+    DefaultBackupDestination = 'C:\Users\depeu'
     
     # Default report output folder
     DefaultReportPath = '.\Reports'
@@ -11,5 +11,6 @@
     StorageThreshold = 50
     ProcessMemoryThreshold = 10
 }
+
 
 

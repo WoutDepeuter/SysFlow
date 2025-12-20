@@ -129,19 +129,33 @@ do {
                 switch ($BackupChoice) {
 
                     '1' {
-                        $useGui = Read-Host "Use folder selection window? (Y/N)"
-
+                        # Ask for source path
+                        $useGui = Read-Host "Use folder selection window for source? (Y/N)"
                         if ($useGui -match '^[Yy]$') {
                             $pathsInput = Get-FolderSelection "Select folder to backup"
-                            $dest = Get-FolderSelection "Select backup destination"
                         } else {
                             $pathsInput = Read-Host "Enter path(s) to backup (comma-separated)"
+                        }
+                        
+                        # Ask about destination
+                        if ($Config.DefaultBackupDestination) {
+                            Write-Host "`nDefault backup folder: $($Config.DefaultBackupDestination)" -ForegroundColor Cyan
+                            $useDefault = Read-Host "Use default backup folder? (Y/N)"
                             
-                            # Offer default if configured
-                            if ($Config.DefaultBackupDestination) {
-                                Write-Host "Default: $($Config.DefaultBackupDestination)" -ForegroundColor Gray
-                                $dest = Read-Host "Backup destination (Enter for default)"
-                                if (-not $dest) { $dest = $Config.DefaultBackupDestination }
+                            if ($useDefault -match '^[Yy]$') {
+                                $dest = $Config.DefaultBackupDestination
+                            } else {
+                                $useGuiDest = Read-Host "Use folder selection for destination? (Y/N)"
+                                if ($useGuiDest -match '^[Yy]$') {
+                                    $dest = Get-FolderSelection "Select backup destination"
+                                } else {
+                                    $dest = Read-Host "Enter backup destination folder"
+                                }
+                            }
+                        } else {
+                            $useGuiDest = Read-Host "Use folder selection for destination? (Y/N)"
+                            if ($useGuiDest -match '^[Yy]$') {
+                                $dest = Get-FolderSelection "Select backup destination"
                             } else {
                                 $dest = Read-Host "Enter backup destination folder"
                             }
