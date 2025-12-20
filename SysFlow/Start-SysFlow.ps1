@@ -15,6 +15,20 @@ function Get-FolderSelection {
 # Import Modules
 $MonitorModulePath = Join-Path $PSScriptRoot 'Modules\MonitorModule\MonitorModule.psm1'
 $BackupModulePath  = Join-Path $PSScriptRoot 'Modules\BackupModule\BackupModule.psm1'
+$ConfigPath = Join-Path $PSScriptRoot 'config.psd1'
+
+# Load configuration
+$Config = @{}
+if (Test-Path $ConfigPath) {
+    try {
+        $Config = Import-PowerShellDataFile -Path $ConfigPath
+    } catch {
+        Write-Warning "Failed to load config: $_"
+        $Config = @{ DefaultBackupDestination = '' }
+    }
+} else {
+    $Config = @{ DefaultBackupDestination = '' }
+}
 
 # Import Monitor Module
 if (Test-Path $MonitorModulePath) {
@@ -36,6 +50,7 @@ function Show-MainMenu {
     Write-Host "2. Backup Management"
     Write-Host "3. Software Management"
     Write-Host "4. Reporting"
+    Write-Host "5. Settings"
     Write-Host "Q. Exit"
     Write-Host ""
 }
@@ -59,6 +74,15 @@ function Show-BackupMenu {
     Write-Host "2. Restore Backup"
     Write-Host "3. Remove Backup(s)"
     Write-Host "4. List Backups"
+    Write-Host "B. Back to Main Menu"
+}
+
+function Show-SettingsMenu {
+    Write-Host "----- Settings Menu -----" -ForegroundColor Green
+    Write-Host "1. View Current Configuration"
+    Write-Host "2. Set Default Backup Folder"
+    Write-Host "3. Set Default Report Folder"
+    Write-Host "4. Set Monitoring Thresholds"
     Write-Host "B. Back to Main Menu"
 }
 
@@ -112,7 +136,15 @@ do {
                             $dest = Get-FolderSelection "Select backup destination"
                         } else {
                             $pathsInput = Read-Host "Enter path(s) to backup (comma-separated)"
-                            $dest = Read-Host "Enter backup destination folder"
+                            
+                            # Offer default if configured
+                            if ($Config.DefaultBackupDestination) {
+                                Write-Host "Default: $($Config.DefaultBackupDestination)" -ForegroundColor Gray
+                                $dest = Read-Host "Backup destination (Enter for default)"
+                                if (-not $dest) { $dest = $Config.DefaultBackupDestination }
+                            } else {
+                                $dest = Read-Host "Enter backup destination folder"
+                            }
                         }
 
                         $name = Read-Host "Optional backup name"
@@ -136,12 +168,24 @@ do {
                     }
 
                     '3' {
-                        $dest = Read-Host "Enter backup destination folder"
+                        if ($Config.DefaultBackupDestination) {
+                            Write-Host "Default: $($Config.DefaultBackupDestination)" -ForegroundColor Gray
+                            $dest = Read-Host "Backup folder (Enter for default)"
+                            if (-not $dest) { $dest = $Config.DefaultBackupDestination }
+                        } else {
+                            $dest = Read-Host "Enter backup destination folder"
+                        }
                         Remove-Backup -BackupDestination $dest
                     }
 
                     '4' {
-                        $dest = Read-Host "Enter backup destination folder"
+                        if ($Config.DefaultBackupDestination) {
+                            Write-Host "Default: $($Config.DefaultBackupDestination)" -ForegroundColor Gray
+                            $dest = Read-Host "Backup folder (Enter for default)"
+                            if (-not $dest) { $dest = $Config.DefaultBackupDestination }
+                        } else {
+                            $dest = Read-Host "Enter backup destination folder"
+                        }
                         Remove-Backup -BackupDestination $dest -ListOnly |
                             Format-Table Index, Name, Size, Created -AutoSize
                     }
@@ -152,9 +196,116 @@ do {
             } until ($BackupExit)
         }
 
-        '3' {
-            Write-Host "Software Module coming soon..." -ForegroundColor Gray
+        '4' {
+            Write-Host "Reporting Module coming soon..." -ForegroundColor Gray
             Pause
+        }
+
+        '5' {
+            $SettingsExit = $false
+            do {
+                Show-SettingsMenu
+                $SettingsChoice = Read-Host "Select settings option"
+                Clear-Host
+
+                switch ($SettingsChoice) {
+                    '1' {
+                        Write-Host "`n=== Current Configuration ===" -ForegroundColor Cyan
+                        Write-Host ""
+                        Write-Host "Backup Settings:" -ForegroundColor Yellow
+                        Write-Host "  Default Backup Folder: $($Config.DefaultBackupDestination)" -ForegroundColor White
+                        Write-Host ""
+                        Write-Host "Report Settings:" -ForegroundColor Yellow
+                        Write-Host "  Default Report Path: $($Config.DefaultReportPath)" -ForegroundColor White
+                        Write-Host ""
+                        Write-Host "Monitoring Thresholds:" -ForegroundColor Yellow
+                        Write-Host "  CPU Threshold: $($Config.CPUThreshold)%" -ForegroundColor White
+                        Write-Host "  RAM Threshold: $($Config.RAMThreshold)%" -ForegroundColor White
+                        Write-Host "  Storage Threshold: $($Config.StorageThreshold)%" -ForegroundColor White
+                        Write-Host "  Process Memory: $($Config.ProcessMemoryThreshold) MB" -ForegroundColor White
+                        Write-Host ""
+                        Pause
+                    }
+
+                    '2' {
+                        Write-Host "`nCurrent default: $($Config.DefaultBackupDestination)" -ForegroundColor Cyan
+                        $useGui = Read-Host "Use folder selection? (Y/N)"
+                        
+                        if ($useGui -match '^[Yy]$') {
+                            $newPath = Get-FolderSelection "Select default backup folder"
+                        } else {
+                            $newPath = Read-Host "Enter new default backup folder"
+                        }
+                        
+                        if ($newPath) {
+                            $configContent = Get-Content $ConfigPath -Raw
+                            $configContent = $configContent -replace "DefaultBackupDestination = '.*'", "DefaultBackupDestination = '$($newPath -replace '\\\\','\\\\')'"
+                            $configContent | Set-Content $ConfigPath -Encoding UTF8
+                            $Config.DefaultBackupDestination = $newPath
+                            Write-Host "✓ Default backup folder set to: $newPath" -ForegroundColor Green
+                        }
+                        Pause
+                    }
+
+                    '3' {
+                        Write-Host "`nCurrent default: $($Config.DefaultReportPath)" -ForegroundColor Cyan
+                        $useGui = Read-Host "Use folder selection? (Y/N)"
+                        
+                        if ($useGui -match '^[Yy]$') {
+                            $newPath = Get-FolderSelection "Select default report folder"
+                        } else {
+                            $newPath = Read-Host "Enter new default report folder"
+                        }
+                        
+                        if ($newPath) {
+                            $configContent = Get-Content $ConfigPath -Raw
+                            $configContent = $configContent -replace "DefaultReportPath = '.*'", "DefaultReportPath = '$($newPath -replace '\\\\','\\\\')'"
+                            $configContent | Set-Content $ConfigPath -Encoding UTF8
+                            $Config.DefaultReportPath = $newPath
+                            Write-Host "✓ Default report folder set to: $newPath" -ForegroundColor Green
+                        }
+                        Pause
+                    }
+
+                    '4' {
+                        Write-Host "`n=== Set Monitoring Thresholds ===" -ForegroundColor Cyan
+                        Write-Host "Current values shown in parentheses" -ForegroundColor Gray
+                        Write-Host ""
+                        
+                        $cpu = Read-Host "CPU threshold % (current: $($Config.CPUThreshold))"
+                        $ram = Read-Host "RAM threshold % (current: $($Config.RAMThreshold))"
+                        $storage = Read-Host "Storage threshold % (current: $($Config.StorageThreshold))"
+                        $process = Read-Host "Process memory MB (current: $($Config.ProcessMemoryThreshold))"
+                        
+                        $configContent = Get-Content $ConfigPath -Raw
+                        if ($cpu) { 
+                            $configContent = $configContent -replace "CPUThreshold = \d+", "CPUThreshold = $cpu"
+                            $Config.CPUThreshold = [int]$cpu
+                        }
+                        if ($ram) { 
+                            $configContent = $configContent -replace "RAMThreshold = \d+", "RAMThreshold = $ram"
+                            $Config.RAMThreshold = [int]$ram
+                        }
+                        if ($storage) { 
+                            $configContent = $configContent -replace "StorageThreshold = \d+", "StorageThreshold = $storage"
+                            $Config.StorageThreshold = [int]$storage
+                        }
+                        if ($process) { 
+                            $configContent = $configContent -replace "ProcessMemoryThreshold = \d+", "ProcessMemoryThreshold = $process"
+                            $Config.ProcessMemoryThreshold = [int]$process
+                        }
+                        
+                        if ($cpu -or $ram -or $storage -or $process) {
+                            $configContent | Set-Content $ConfigPath -Encoding UTF8
+                            Write-Host "✓ Thresholds updated successfully" -ForegroundColor Green
+                        }
+                        Pause
+                    }
+
+                    'B' { $SettingsExit = $true }
+                    'b' { $SettingsExit = $true }
+                }
+            } until ($SettingsExit)
         }
 
         'Q' { $MainExit = $true }
