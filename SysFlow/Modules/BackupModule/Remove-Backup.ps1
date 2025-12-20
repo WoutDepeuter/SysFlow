@@ -104,8 +104,7 @@ function Remove-Backup {
 
     # Get all backups
     Write-Host "Scanning backups..." -ForegroundColor Cyan
-    $backups = @(Get-Item -Path (Join-Path $BackupDestination '*') -ErrorAction SilentlyContinue | 
-                 Where-Object { $_.PSIsContainer -eq $false } |
+    $backups = @(Get-ChildItem -Path $BackupDestination -File -Filter "*.zip" -ErrorAction SilentlyContinue | 
                  Sort-Object -Property CreationTime -Descending)
 
     if ($backups.Count -eq 0) {

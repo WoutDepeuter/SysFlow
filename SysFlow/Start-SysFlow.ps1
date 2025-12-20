@@ -183,9 +183,14 @@ do {
 
                     '3' {
                         if ($Config.DefaultBackupDestination) {
-                            Write-Host "Default: $($Config.DefaultBackupDestination)" -ForegroundColor Gray
-                            $dest = Read-Host "Backup folder (Enter for default)"
-                            if (-not $dest) { $dest = $Config.DefaultBackupDestination }
+                            Write-Host "\nDefault backup folder: $($Config.DefaultBackupDestination)" -ForegroundColor Cyan
+                            $useDefault = Read-Host "Use default backup folder? (Y/N)"
+                            
+                            if ($useDefault -match '^[Yy]$') {
+                                $dest = $Config.DefaultBackupDestination
+                            } else {
+                                $dest = Read-Host "Enter backup folder path"
+                            }
                         } else {
                             $dest = Read-Host "Enter backup destination folder"
                         }
@@ -194,9 +199,14 @@ do {
 
                     '4' {
                         if ($Config.DefaultBackupDestination) {
-                            Write-Host "Default: $($Config.DefaultBackupDestination)" -ForegroundColor Gray
-                            $dest = Read-Host "Backup folder (Enter for default)"
-                            if (-not $dest) { $dest = $Config.DefaultBackupDestination }
+                            Write-Host "\nDefault backup folder: $($Config.DefaultBackupDestination)" -ForegroundColor Cyan
+                            $useDefault = Read-Host "Use default backup folder? (Y/N)"
+                            
+                            if ($useDefault -match '^[Yy]$') {
+                                $dest = $Config.DefaultBackupDestination
+                            } else {
+                                $dest = Read-Host "Enter backup folder path"
+                            }
                         } else {
                             $dest = Read-Host "Enter backup destination folder"
                         }
