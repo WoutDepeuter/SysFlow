@@ -41,10 +41,11 @@ function New-Backup {
         Version: 1.0
         Requires: PowerShell 5.0 or higher (for Compress-Archive)
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact='Medium')]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('FullName')]
         [string[]]$PathsToBackup,
         
         [Parameter(Mandatory=$true)]
@@ -71,16 +72,43 @@ function New-Backup {
     $BackupFilePath = Join-Path -Path $BackupDestination -ChildPath $BackupName
 
     try {
-        Write-Verbose "Creating backup at: $BackupFilePath"
-        # Create a zip archive of the specified paths
-        Compress-Archive -Path $PathsToBackup -DestinationPath $BackupFilePath -Force
-        Write-Host "Backup created successfully at: $BackupFilePath" -ForegroundColor Green
+        Write-Verbose "Preparing to create backup at: $BackupFilePath"
+
+        # Build a small manifest with sources and metadata
+        $manifest = [PSCustomObject]@{
+            Sources    = $PathsToBackup
+            CreatedAt  = (Get-Date).ToString('o')
+            Machine    = $env:COMPUTERNAME
+            User       = $env:USERNAME
+            Tool       = 'SysFlow New-Backup'
+            Version    = '1.0'
+        }
+
+        $tempManifestPath = Join-Path $env:TEMP ("backup-manifest_" + [Guid]::NewGuid().ToString() + ".json")
+        $manifest | ConvertTo-Json -Depth 4 | Set-Content -Path $tempManifestPath -Encoding UTF8
+
+        if ($PSCmdlet.ShouldProcess($BackupFilePath, 'Create backup archive')) {
+            Write-Progress -Activity "Creating backup" -Status "Compressing files..." -PercentComplete 0
+            
+            # Include sources and the manifest file
+            $itemsToArchive = @($PathsToBackup + $tempManifestPath)
+            Compress-Archive -LiteralPath $itemsToArchive -DestinationPath $BackupFilePath -Force -CompressionLevel Optimal
+            
+            Write-Progress -Activity "Creating backup" -Completed -Status "Done"
+            Write-Host "Backup created successfully at: $BackupFilePath" -ForegroundColor Green
+        } else {
+            Write-Verbose "WhatIf: Skipped creating backup at $BackupFilePath"
+        }
+
+        # Cleanup temp manifest
+        if (Test-Path $tempManifestPath) { Remove-Item -Path $tempManifestPath -ErrorAction SilentlyContinue }
         
-        # Return backup info
+        # Return backup info (even on WhatIf, reflect intended path)
+        $size = (Test-Path $BackupFilePath) ? (Get-Item $BackupFilePath).Length : 0
         return [PSCustomObject]@{
             BackupPath = $BackupFilePath
             CreatedAt = Get-Date
-            Size = (Get-Item $BackupFilePath).Length
+            Size = $size
         }
     }
     catch {
@@ -88,6 +116,10 @@ function New-Backup {
     }
 }
 # End of New-Backup function
+ 
+
+
+
 
 
 
