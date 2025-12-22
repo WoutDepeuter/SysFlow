@@ -193,12 +193,44 @@ do {
                     }
 
                     '2' {
-                        $file = Read-Host "Enter backup zip path"
+                        $file = $null
+                        if ($Config.DefaultBackupDestination) {
+                            Write-Host "\nDefault backup folder: $($Config.DefaultBackupDestination)" -ForegroundColor Cyan
+                            $useDefaultFolder = Read-Host "Select a backup from the default folder? (Y/N)"
+                            if ($useDefaultFolder -match '^[Yy]$') {
+                                try {
+                                    $zips = Get-ChildItem -Path $Config.DefaultBackupDestination -Filter "*.zip" -File | Sort-Object LastWriteTime -Descending
+                                } catch {
+                                    Write-Warning "Could not read default backup folder: $_"
+                                    $zips = @()
+                                }
+
+                                if ($zips.Count -eq 0) {
+                                    Write-Host "No backup ZIPs found in default folder." -ForegroundColor Yellow
+                                } else {
+                                    Write-Host "\nAvailable backups:" -ForegroundColor Cyan
+                                    for ($i = 0; $i -lt $zips.Count; $i++) {
+                                        $idx = $i + 1
+                                        Write-Host ("{0}. {1} ({2})" -f $idx, $zips[$i].Name, $zips[$i].LastWriteTime)
+                                    }
+                                    $choice = Read-Host "Enter number to select backup"
+                                    if ($choice -match '^[0-9]+$' -and [int]$choice -ge 1 -and [int]$choice -le $zips.Count) {
+                                        $file = $zips[[int]$choice - 1].FullName
+                                        Write-Host "Selected: $file" -ForegroundColor Green
+                                    } else {
+                                        Write-Host "Invalid selection; falling back to manual path." -ForegroundColor Yellow
+                                    }
+                                }
+                            }
+                        }
+
+                        if (-not $file) {
+                            $file = Read-Host "Enter backup zip path"
+                        }
+
                         $useManifest = Read-Host "Use manifest paths to restore to original locations? (Y/N)"
-                        
                         if ($useManifest -match '^[Yy]$') {
-                            $restoreTo = Read-Host "Enter a fallback restore destination (used only if manifest missing)"
-                            Restore-Backup -BackupFilePath $file -RestoreDestination $restoreTo -UseManifestPaths
+                            Restore-Backup -BackupFilePath $file -UseManifestPaths
                         } else {
                             $restoreTo = Read-Host "Enter restore destination"
                             Restore-Backup -BackupFilePath $file -RestoreDestination $restoreTo

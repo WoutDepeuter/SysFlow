@@ -40,17 +40,17 @@ function Restore-Backup {
         Requires: PowerShell 5.0 or higher (for Expand-Archive)
     #>
 
-    [CmdletBinding(SupportsShouldProcess=$true)]
+    [CmdletBinding(SupportsShouldProcess=$true, DefaultParameterSetName='Destination')]
     param (
         [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [string]$BackupFilePath,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true, ParameterSetName='Destination')]
         [ValidateNotNullOrEmpty()]
         [string]$RestoreDestination,
 
-        [Parameter()]
+        [Parameter(ParameterSetName='Manifest')]
         [switch]$UseManifestPaths
     )
 
@@ -59,13 +59,15 @@ function Restore-Backup {
         Write-Error "Backup file does not exist: $BackupFilePath"
         return
     }
-    # Create the restore destination directory if it doesn't exist
-    if (-not (Test-Path -Path $RestoreDestination)) {
-        Write-Verbose "Creating restore destination: $RestoreDestination"
-        New-Item -ItemType Directory -Path $RestoreDestination | Out-Null
+    # Create the restore destination directory when using destination mode
+    if ($PSCmdlet.ParameterSetName -eq 'Destination') {
+        if (-not (Test-Path -Path $RestoreDestination)) {
+            Write-Verbose "Creating restore destination: $RestoreDestination"
+            New-Item -ItemType Directory -Path $RestoreDestination | Out-Null
+        }
     }
     try {
-        if ($UseManifestPaths) {
+        if ($PSCmdlet.ParameterSetName -eq 'Manifest') {
             Write-Verbose "Restoring using manifest paths from: $BackupFilePath"
 
             # Extract to temp first to read manifest and map items
@@ -76,15 +78,13 @@ function Restore-Backup {
             # Find manifest (support randomized temp manifest names)
             $manifestFile = Get-ChildItem -Path $tempExtract -Filter "backup-manifest*.json" -File -Recurse | Select-Object -First 1
             if (-not $manifestFile) {
-                Write-Warning "No manifest found in backup. Falling back to destination restore."
-                Expand-Archive -Path $BackupFilePath -DestinationPath $RestoreDestination -Force
-                $filesRestored = (Get-ChildItem -Path $RestoreDestination -Recurse | Measure-Object).Count
+                Write-Error "No manifest found in backup. Restore aborted (no fallback)."
                 return [PSCustomObject]@{
                     BackupFile         = $BackupFilePath
-                    RestoreDestination = $RestoreDestination
-                    FilesRestored      = $filesRestored
-                    UsedManifest       = $false
-                    Success            = $true
+                    RestoreDestination = "Original paths (manifest)"
+                    FilesRestored      = 0
+                    UsedManifest       = $true
+                    Success            = $false
                 }
             }
 
