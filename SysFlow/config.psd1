@@ -3,7 +3,7 @@
     DefaultBackupDestination = 'C:\Users\depeu'
     
     # Default source folder to backup (what gets backed up)
-    DefaultBackupSource = ''
+    DefaultBackupSource = 'C:\Users\depeu\touhou_little_maid'
     
     # Default report output folder
     DefaultReportPath = '.\Reports'
@@ -14,6 +14,8 @@
     StorageThreshold = 50
     ProcessMemoryThreshold = 10
 }
+
+
 
 
 

@@ -194,8 +194,15 @@ do {
 
                     '2' {
                         $file = Read-Host "Enter backup zip path"
-                        $restoreTo = Read-Host "Enter restore destination"
-                        Restore-Backup -BackupFilePath $file -RestoreDestination $restoreTo
+                        $useManifest = Read-Host "Use manifest paths to restore to original locations? (Y/N)"
+                        
+                        if ($useManifest -match '^[Yy]$') {
+                            $restoreTo = Read-Host "Enter a fallback restore destination (used only if manifest missing)"
+                            Restore-Backup -BackupFilePath $file -RestoreDestination $restoreTo -UseManifestPaths
+                        } else {
+                            $restoreTo = Read-Host "Enter restore destination"
+                            Restore-Backup -BackupFilePath $file -RestoreDestination $restoreTo
+                        }
                     }
 
                     '3' {
@@ -289,8 +296,8 @@ do {
                         Pause
                     }
 
-                    '4' {
-                        Write-Host "\nCurrent default report path: $($Config.DefaultReportPath)" -ForegroundColor Cyanolor Cyan
+                    '3' {
+                        Write-Host "\nCurrent default source: $($Config.DefaultBackupSource)" -ForegroundColor Cyan
                         $useGui = Read-Host "Use folder selection? (Y/N)"
                         
                         if ($useGui -match '^[Yy]$') {
@@ -304,12 +311,13 @@ do {
                             $configContent = $configContent -replace "DefaultBackupSource = '.*'", "DefaultBackupSource = '$($newPath -replace '\\\\','\\\\')'"
                             $configContent | Set-Content $ConfigPath -Encoding UTF8
                             $Config.DefaultBackupSource = $newPath
-                            Write-Host "\u2713 Default source folder set to: $newPath" -ForegroundColor Green
+                            Write-Host "✓ Default source folder set to: $newPath" -ForegroundColor Green
                         }
                         Pause
                     }
 
                     '4' {
+                        Write-Host "\nCurrent default report path: $($Config.DefaultReportPath)" -ForegroundColor Cyan
                         $useGui = Read-Host "Use folder selection? (Y/N)"
                         
                         if ($useGui -match '^[Yy]$') {
