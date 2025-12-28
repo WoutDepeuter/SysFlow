@@ -13,6 +13,7 @@ function Update-Software {
     .NOTES
     #>
     param(
+        
         [string]$PackageName,
         [ValidateSet('winget', 'choco')]
         [string]$Manager = 'winget'
@@ -20,6 +21,7 @@ function Update-Software {
     
     )
     try {
+        
         #check what manager to use if manager is winget or choco uses that manager to update
         if ($Manager -eq 'winget') {
             Write-Host "Updating $PackageName using Winget..."
@@ -33,6 +35,7 @@ function Update-Software {
         #output update command executed
         Write-Host "Update command executed for $PackageName."
     }
+    #error handling
     catch {
         Write-Error "Update failed: $_"
     }
@@ -40,3 +43,4 @@ function Update-Software {
 
 
 # End of Update-Software function
+
