@@ -903,6 +903,32 @@ do {
                             $configContent | Set-Content $ConfigPath -Encoding UTF8
                             Write-Host "✓ Thresholds updated successfully" -ForegroundColor Green
                         }
+
+                        
+                        Pause
+                    }
+
+                    '6' {
+                        $current = if ($Config.DefaultPackageManager) { $Config.DefaultPackageManager } else { 'winget' }
+                        Write-Host "\nCurrent default package manager: $current" -ForegroundColor Cyan
+                        $sel = Read-Host "Enter default manager (winget/choco)"
+                        if ($sel -notin @('winget','choco')) {
+                            Write-Host "Invalid choice. Please enter 'winget' or 'choco'." -ForegroundColor Yellow
+                        } else {
+                            $configContent = Get-Content $ConfigPath -Raw
+                            if ($configContent -match "DefaultPackageManager\s*=") {
+                                $configContent = $configContent -replace "DefaultPackageManager\s*=\s*'.*'", "DefaultPackageManager = '$sel'"
+                            } else {
+                                if ($configContent -match "\}\s*$") {
+                                    $configContent = $configContent -replace "\}\s*$", "    DefaultPackageManager = '$sel'`n}"
+                                } else {
+                                    $configContent += "`nDefaultPackageManager = '$sel'"
+                                }
+                            }
+                            $configContent | Set-Content $ConfigPath -Encoding UTF8
+                            $Config.DefaultPackageManager = $sel
+                            Write-Host "✓ Default package manager set to: $sel" -ForegroundColor Green
+                        }
                         Pause
                     }
 
