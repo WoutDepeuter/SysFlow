@@ -9,12 +9,13 @@
     DefaultReportPath = '.\Reports'
     
     # Monitoring thresholds
-    CPUThreshold = 50
-    RAMThreshold = 50
-    StorageThreshold = 50
-    ProcessMemoryThreshold = 10
+    CPUThreshold = 20
+    RAMThreshold = 20
+    StorageThreshold = 20
+    ProcessMemoryThreshold = 20
     DefaultPackageManager = 'choco'
 }
+
 
 
 
