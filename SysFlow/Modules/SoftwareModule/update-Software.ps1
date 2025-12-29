@@ -96,6 +96,3 @@ function Update-Software {
 
 
 # End of Update-Software function
-
-Update-Software -Manager 'choco'
-Update-Software -PackageName 'git.git' -Manager 'winget'
