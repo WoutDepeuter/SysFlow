@@ -31,6 +31,11 @@ if (Test-Path $ConfigPath) {
     $Config = @{ DefaultBackupDestination = '' }
 }
 
+# Ensure default package manager is available in config at runtime
+if (-not ($Config.ContainsKey('DefaultPackageManager')) -or [string]::IsNullOrWhiteSpace($Config.DefaultPackageManager)) {
+    $Config.DefaultPackageManager = 'winget'
+}
+
 # Import Monitor Module
 if (Test-Path $MonitorModulePath) {
     Import-Module $MonitorModulePath -Force
@@ -89,6 +94,7 @@ function Show-SettingsMenu {
     Write-Host "3. Set Default Source Folder to Backup"
     Write-Host "4. Set Default Report Folder"
     Write-Host "5. Set Monitoring Thresholds"
+    Write-Host "6. Set Default Package Manager"
     Write-Host "B. Back to Main Menu"
 }
 
@@ -299,16 +305,18 @@ function Start-SysFlow {
                         '2' {
                             $name = Read-Host "Enter software name or ID"
                             if (-not [string]::IsNullOrWhiteSpace($name)) {
-                                $mgr = Read-Host "Manager (winget/choco, default winget)"
-                                if ([string]::IsNullOrWhiteSpace($mgr)) { $mgr = 'winget' }
+                                $defaultMgr = if ([string]::IsNullOrWhiteSpace($Config.DefaultPackageManager)) { 'winget' } else { $Config.DefaultPackageManager }
+                                $mgr = Read-Host "Manager (winget/choco, default $defaultMgr)"
+                                if ([string]::IsNullOrWhiteSpace($mgr)) { $mgr = $defaultMgr }
                                 Install-Software -SoftwareName $name -Manager $mgr
                             }
                             Pause
                         }
                         '3' {
                             $name = Read-Host "Enter software name or ID"
-                            $mgr = Read-Host "Manager (winget/choco, leave blank for winget)"
-                            if ([string]::IsNullOrWhiteSpace($mgr)) { $mgr = 'winget' }
+                            $defaultMgr = if ([string]::IsNullOrWhiteSpace($Config.DefaultPackageManager)) { 'winget' } else { $Config.DefaultPackageManager }
+                            $mgr = Read-Host "Manager (winget/choco, default $defaultMgr)"
+                            if ([string]::IsNullOrWhiteSpace($mgr)) { $mgr = $defaultMgr }
 
                             if ([string]::IsNullOrWhiteSpace($name)) {
                                 $showList = Read-Host "No name entered. Show installed software list? (Y/N)"
@@ -322,8 +330,9 @@ function Start-SysFlow {
                         }
                         '4' {
                             $name = Read-Host "Enter software name or ID"
-                            $mgr = Read-Host "Manager (winget/choco, leave blank for winget)"
-                            if ([string]::IsNullOrWhiteSpace($mgr)) { $mgr = 'winget' }
+                            $defaultMgr = if ([string]::IsNullOrWhiteSpace($Config.DefaultPackageManager)) { 'winget' } else { $Config.DefaultPackageManager }
+                            $mgr = Read-Host "Manager (winget/choco, default $defaultMgr)"
+                            if ([string]::IsNullOrWhiteSpace($mgr)) { $mgr = $defaultMgr }
 
                             if ([string]::IsNullOrWhiteSpace($name)) {
                                 $showList = Read-Host "No name entered. Show installed software list? (Y/N)"
@@ -360,6 +369,9 @@ function Start-SysFlow {
                             Write-Host "Backup Settings:" -ForegroundColor Yellow
                             Write-Host "  Default Backup Destination: $($Config.DefaultBackupDestination)" -ForegroundColor White
                             Write-Host "  Default Source Folder: $($Config.DefaultBackupSource)" -ForegroundColor White
+                            Write-Host ""
+                            Write-Host "Software Settings:" -ForegroundColor Yellow
+                            Write-Host "  Default Package Manager: $($Config.DefaultPackageManager)" -ForegroundColor White
                             Write-Host ""
                             Write-Host "Report Settings:" -ForegroundColor Yellow
                             Write-Host "  Default Report Path: $($Config.DefaultReportPath)" -ForegroundColor White
@@ -464,6 +476,30 @@ function Start-SysFlow {
                             if ($cpu -or $ram -or $storage -or $process) {
                                 $configContent | Set-Content $ConfigPath -Encoding UTF8
                                 Write-Host "✓ Thresholds updated successfully" -ForegroundColor Green
+                            }
+                            Pause
+                        }
+
+                        '6' {
+                            $current = if ($Config.DefaultPackageManager) { $Config.DefaultPackageManager } else { 'winget' }
+                            Write-Host "\nCurrent default package manager: $current" -ForegroundColor Cyan
+                            $sel = Read-Host "Enter default manager (winget/choco)"
+                            if ($sel -notin @('winget','choco')) {
+                                Write-Host "Invalid choice. Please enter 'winget' or 'choco'." -ForegroundColor Yellow
+                            } else {
+                                $configContent = Get-Content $ConfigPath -Raw
+                                if ($configContent -match "DefaultPackageManager\s*=") {
+                                    $configContent = $configContent -replace "DefaultPackageManager\s*=\s*'.*'", "DefaultPackageManager = '$sel'"
+                                } else {
+                                    if ($configContent -match "\}\s*$") {
+                                        $configContent = $configContent -replace "\}\s*$", "    DefaultPackageManager = '$sel'`n}"
+                                    } else {
+                                        $configContent += "`nDefaultPackageManager = '$sel'"
+                                    }
+                                }
+                                $configContent | Set-Content $ConfigPath -Encoding UTF8
+                                $Config.DefaultPackageManager = $sel
+                                Write-Host "✓ Default package manager set to: $sel" -ForegroundColor Green
                             }
                             Pause
                         }
