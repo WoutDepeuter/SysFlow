@@ -136,4 +136,3 @@ function Uninstall-Software {
 }
 # End of Uninstall-Software function
 
-Uninstall-Software -Manager 'choco'
