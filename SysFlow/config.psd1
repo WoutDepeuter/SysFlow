@@ -13,6 +13,7 @@
     RAMThreshold = 50
     StorageThreshold = 50
     ProcessMemoryThreshold = 10
+    DefaultPackageManager = 'winget'
 }
 
 
