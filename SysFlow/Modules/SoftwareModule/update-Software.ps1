@@ -92,6 +92,7 @@ function Update-Software {
     catch {
         Write-Error "Update failed: $_"
     }
+
 }
 
 
