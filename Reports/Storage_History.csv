@@ -1,0 +1,3 @@
+"DriveLetter","Label","TotalSizeGB","FreeSpaceGB","UsedPercent","Status","RunDate","RunTime","RunTimestamp"
+"C:","Windows-SSD","951.65","121.37","87.25","CRITICAL","2025-12-30","16:58:59","30/12/2025 16:58:59"
+"G:","Google Drive","951.65","115.3","87.88","CRITICAL","2025-12-30","16:58:59","30/12/2025 16:58:59"

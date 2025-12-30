@@ -70,7 +70,7 @@ if (Test-Path $ReportingModulePath) {
     Import-Module $ReportingModulePath -Force
 }
 
-# Main Menu Function
+# Main Menu Function 
 function Show-MainMenu {
     Clear-Host
     Write-Host "==============================" -ForegroundColor Cyan
@@ -120,6 +120,7 @@ function Show-SettingsMenu {
     Write-Host "B. Back to Main Menu"
 }
 
+# Submenu Functions for software management
 function Show-SoftwareMenu {
     Write-Host "----- Software Management Submenu -----" -ForegroundColor Green
     Write-Host "1. List Installed Software"
