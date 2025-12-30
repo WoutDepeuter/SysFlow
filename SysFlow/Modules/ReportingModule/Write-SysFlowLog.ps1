@@ -28,4 +28,26 @@ function Write-SysFlowLog {
         None.
     #>
     param(
+        [Parameter(Mandatory=$true)]
+        [ValidateSet('Info', 'Warning', 'Error')]
+        [string]$LogLevel,
         
+        [Parameter(Mandatory=$true)]
+        [string]$Message,
+        
+        [string]$Details,
+        
+        [string]$LogFilePath
+    )
+    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $logEntry = "[$timestamp] [$LogLevel] $Message"
+    if ($Details) {
+        $logEntry += " | Details: $Details"
+    }
+    if ($LogFilePath) {
+        Add-Content -Path $LogFilePath -Value $logEntry
+    } else {
+        Write-Output $logEntry
+    }
+}
+
