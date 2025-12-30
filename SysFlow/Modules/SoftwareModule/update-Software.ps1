@@ -93,6 +93,14 @@ function Update-Software {
         Write-Error "Update failed: $_"
     }
 
+        return [PSCustomObject]@{
+        Timestamp   = Get-Date
+        Action      = "Update-Software"
+        PackageName = $PackageName
+        Manager     = $Manager
+        Status      = $status
+        Details     = $errorDetails
+    }
 }
 
 
