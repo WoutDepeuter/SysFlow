@@ -1,4 +1,4 @@
-#folder selection GUI function
+# Folder selection GUI function
 function Get-FolderSelection {
     param([string]$Description)
 
@@ -13,10 +13,10 @@ function Get-FolderSelection {
     }
     return $null
 }
+
 # Import Modules
 $MonitorModulePath = Join-Path $PSScriptRoot 'Modules\MonitorModule\MonitorModule.psm1'
-$BackupModulePath  = Join-Path $PSScriptRoot 'Modules\BackupModule\BackupModule.psm1'
-$MonitorModulePath = Join-Path $PSScriptRoot 'Modules\SoftwareModule\SoftwareModule.psm1'
+$BackupModulePath = Join-Path $PSScriptRoot 'Modules\BackupModule\BackupModule.psm1'
 $SoftwareModulePath = Join-Path $PSScriptRoot 'Modules\SoftwareModule\SoftwareModule.psm1'
 $ConfigPath = Join-Path $PSScriptRoot 'config.psd1'
 
@@ -64,10 +64,6 @@ if (Test-Path $BackupModulePath) {
 if (Test-Path $SoftwareModulePath) {
     Import-Module $SoftwareModulePath -Force
 }
-if (Test-Path $MonitorModulePath) {
-    Import-Module $MonitorModulePath -Force
-}
-
 
 # Main Menu Function
 function Show-MainMenu {
@@ -127,18 +123,8 @@ function Show-SoftwareMenu {
     Write-Host "4. Uninstall Software"
     Write-Host "B. Back to Main Menu"
 }
-# Submenu Functions for software management
 
-function Show-SoftwareMenu {
-    Write-Host "----- Software Management Submenu -----" -ForegroundColor Green
-    Write-Host "1. List Installed Software"
-    Write-Host "2. Install Software"
-    Write-Host "3. Update Software"
-    Write-Host "4. Uninstall Software"
-    Write-Host "B. Back to Main Menu"
-}
 # Main driver
- 
 function Start-SysFlow {
     $MainExit = $false
 
@@ -156,32 +142,81 @@ function Start-SysFlow {
                     Clear-Host
 
                     switch ($SubChoice) {
-                        '1' { Get-CPUStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold) | Format-Table -AutoSize }
-                        '2' { Get-RamStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.RAMThreshold) | Format-Table -AutoSize }
-                        '3' { Get-StorageStats -Threshold (Get-ThresholdValue -Default 80 -Value $Config.StorageThreshold) | Format-Table -AutoSize }
-                        '4' {
-                            $cpuThreshold = Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold
-                            $ramThreshold = Get-ThresholdValue -Default 70 -Value $Config.RAMThreshold
-                            $storageThreshold = Get-ThresholdValue -Default 80 -Value $Config.StorageThreshold
-
-                            Get-CPUStats -Threshold $cpuThreshold | Format-Table -AutoSize
-                            Get-RamStats -Threshold $ramThreshold | Format-Table -AutoSize
-                            Get-StorageStats -Threshold $storageThreshold | Format-Table -AutoSize
-                            Get-Uptime | Format-Table -AutoSize
+                        '1' {
+                            $stats = Get-CPUStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold)
+                            $stats | Format-Table -AutoSize
+                            Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "CPU_History.csv")
+                            Write-SysFlowLog -LogLevel "Info" -Message "CPU stats gecontroleerd. Load: $($stats.LoadPercentage)%" -LogFilePath $Config.LogPath
                         }
-                        '5' { Get-Uptime | Format-Table -AutoSize }
-                        '6' { Get-ProcessStats -Threshold (Get-ThresholdValue -Default 500 -Value $Config.ProcessMemoryThreshold) | Format-Table -AutoSize }
+
+                        '2' {
+                            $stats = Get-RamStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.RAMThreshold)
+                            Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "RAM_History.csv")
+                            Write-SysFlowLog -LogLevel "Info" -Message "RAM stats gecontroleerd. Vrij: $($stats.Free) GB" -LogFilePath $Config.LogPath
+                        }
+
+                        '3' {
+                            $stats = Get-StorageStats -Threshold (Get-ThresholdValue -Default 80 -Value $Config.StorageThreshold)
+                            $stats | Format-Table -AutoSize
+                            Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "Storage_History.csv")
+                            Write-SysFlowLog -LogLevel "Info" -Message "Storage gecontroleerd voor $($stats.Count) schijven." -LogFilePath $Config.LogPath
+                        }
+
+                        '4' {
+                            $cpu = Get-CPUStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold)
+                            $ram = Get-RamStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.RAMThreshold)
+                            $storage = Get-StorageStats -Threshold (Get-ThresholdValue -Default 80 -Value $Config.StorageThreshold)
+                            $uptime = Get-Uptime
+
+                            Write-Host "`n--- CPU Details ---" -ForegroundColor Cyan
+                            $cpu | Format-Table -AutoSize
+
+                            Write-Host "`n--- RAM Details ---" -ForegroundColor Cyan
+                            $ram | Format-Table -AutoSize
+
+                            Write-Host "--- Storage Details ---" -ForegroundColor Cyan
+                            $storage | Format-Table -AutoSize
+
+                            Write-Host "--- Uptime Details ---" -ForegroundColor Cyan
+                            $uptime | Format-Table -AutoSize
+
+                            Export-StatToCsv -Stats $cpu -OutputFilePath (Join-Path $Config.DefaultReportPath "CPU_History.csv")
+                            Export-StatToCsv -Stats $ram -OutputFilePath (Join-Path $Config.DefaultReportPath "RAM_History.csv")
+                            Export-StatToCsv -Stats $storage -OutputFilePath (Join-Path $Config.DefaultReportPath "Storage_History.csv")
+
+                            Write-SysFlowLog -LogLevel "Info" -Message "Volledige systeemscan uitgevoerd." -LogFilePath $Config.LogPath
+                        }
+
+                        '5' {
+                            $stats = Get-Uptime
+                            $stats | Format-Table -AutoSize
+                            Write-SysFlowLog -LogLevel "Info" -Message "Uptime: $($stats.Days) dagen, $($stats.Hours) uur." -LogFilePath $Config.LogPath
+                        }
+
+                        '6' {
+                            $stats = Get-ProcessStats -Threshold (Get-ThresholdValue -Default 500 -Value $Config.ProcessMemoryThreshold)
+                            $highMem = $stats | Where-Object { $_.MemoryUsageMB -ge (Get-ThresholdValue -Default 500 -Value $Config.ProcessMemoryThreshold) }
+
+                            if ($highMem) {
+                                $highMem | Format-Table -AutoSize
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Hoog geheugenverbruik: $($highMem.Count) processen." -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Info" -Message "Processen gecontroleerd, geen uitschieters." -LogFilePath $Config.LogPath
+                            }
+
+                            if ($stats) {
+                                Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "Process_History.csv")
+                            }
+                        }
+
                         'B' { $SubExit = $true }
                         'b' { $SubExit = $true }
                     }
                 } until ($SubExit)
             }
 
-            # switch for backup management
-            #1 for create backup
-            
+            # Switch for backup management
             '2' {
-                
                 $BackupExit = $false
                 do {
                     Show-BackupMenu
@@ -189,8 +224,9 @@ function Start-SysFlow {
                     Clear-Host
 
                     switch ($BackupChoice) {
-                        #create backup
+                        # Create backup
                         '1' {
+                                
                             # Ask for source path
                             if ($Config.DefaultBackupSource) {
                                 Write-Host "\nDefault source folder: $($Config.DefaultBackupSource)" -ForegroundColor Cyan
@@ -563,9 +599,9 @@ function Start-SysFlow {
         }
     } until ($MainExit)
 }
+
 Write-SysFlowLog -LogLevel "Info" -Message "SysFlow applicatie gestart" -LogFilePath $Config.LogPath
 Start-SysFlow
-
 
 
 

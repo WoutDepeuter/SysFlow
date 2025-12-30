@@ -2,6 +2,7 @@
 
 $moduleRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 
+
 # Dot-source function files
 . (Join-Path $moduleRoot 'Get-SoftwareList.ps1')
 . (Join-Path $moduleRoot 'Install-Software.ps1')
