@@ -36,9 +36,38 @@ function Export-StatToCsv {
     Write-SysFlowLog -LogLevel 'Info' -Message "Exporting statistics to CSV" -Details "Output path: $OutputFilePath, Record count: $($Stats.Count)" -LogFilePath $defaultLogPath
     
     try {
-        $Stats | Export-Csv -Path $OutputFilePath -NoTypeInformation -Force
+        # Ensure output directory exists
+        $outputDir = Split-Path -Parent $OutputFilePath
+        if (-not (Test-Path $outputDir)) {
+            New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+        }
+
+        # Attach a consistent run timestamp, date, and time to each record
+        $runTimestamp = Get-Date
+        $runDate = $runTimestamp.ToString('yyyy-MM-dd')
+        $runTime = $runTimestamp.ToString('HH:mm:ss')
+        $rows = $Stats | ForEach-Object {
+            $item = $_
+            if ($item -is [System.Collections.IDictionary]) { $item = [pscustomobject]$item }
+            elseif ($item -isnot [System.Management.Automation.PSObject]) { $item = [pscustomobject]@{ Value = $item } }
+            $item | Select-Object *,
+                @{ Name = 'RunDate'; Expression = { $runDate } },
+                @{ Name = 'RunTime'; Expression = { $runTime } },
+                @{ Name = 'RunTimestamp'; Expression = { $runTimestamp } }
+        }
+
+        $fileExists = Test-Path $OutputFilePath
+        $exportParams = @{ Path = $OutputFilePath; NoTypeInformation = $true; Encoding = 'UTF8' }
+
+        if ($fileExists) {
+            $rows | Export-Csv @exportParams -Append
+        }
+        else {
+            $rows | Export-Csv @exportParams
+        }
+
         Write-Output "Statistics exported successfully to $OutputFilePath"
-        Write-SysFlowLog -LogLevel 'Info' -Message "Statistics exported successfully" -Details "File: $OutputFilePath" -LogFilePath $defaultLogPath
+        Write-SysFlowLog -LogLevel 'Info' -Message "Statistics exported successfully" -Details "File: $OutputFilePath; Records: $($rows.Count); Date: $runDate; Time: $runTime; Timestamp: $runTimestamp" -LogFilePath $defaultLogPath
     }
     catch {
         Write-Error "Failed to export statistics: $_"
