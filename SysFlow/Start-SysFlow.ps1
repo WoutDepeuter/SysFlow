@@ -226,7 +226,8 @@ function Start-SysFlow {
                     switch ($BackupChoice) {
                         # Create backup
                         '1' {
-                                
+                            Write-SysFlowLog -LogLevel "Info" -Message "Backup creation initiated" -LogFilePath $Config.LogPath
+                            
                             # Ask for source path
                             if ($Config.DefaultBackupSource) {
                                 Write-Host "\nDefault source folder: $($Config.DefaultBackupSource)" -ForegroundColor Cyan
@@ -279,6 +280,8 @@ function Start-SysFlow {
 
                             if ($pathsInput -and $dest) {
                                 $pathList = $pathsInput -split ',' | ForEach-Object { $_.Trim() }
+                                $backupDetails = "Source: $pathsInput | Destination: $dest | Name: $(if ([string]::IsNullOrWhiteSpace($name)) { 'Auto-generated' } else { $name })"
+                                Write-SysFlowLog -LogLevel "Info" -Message "Creating backup" -Details $backupDetails -LogFilePath $Config.LogPath
 
                                 if ([string]::IsNullOrWhiteSpace($name)) {
                                     New-Backup -PathsToBackup $pathList -BackupDestination $dest
@@ -286,10 +289,14 @@ function Start-SysFlow {
                                     if (-not $name.EndsWith('.zip')) { $name += '.zip' }
                                     New-Backup -PathsToBackup $pathList -BackupDestination $dest -BackupName $name
                                 }
+                                Write-SysFlowLog -LogLevel "Info" -Message "Backup created successfully" -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Backup cancelled: missing source or destination" -LogFilePath $Config.LogPath
                             }
                         }
 
                         '2' {
+                            Write-SysFlowLog -LogLevel "Info" -Message "Restore backup initiated" -LogFilePath $Config.LogPath
                             $file = $null
                             if ($Config.DefaultBackupDestination) {
                                 Write-Host "\nDefault backup folder: $($Config.DefaultBackupDestination)" -ForegroundColor Cyan
@@ -299,11 +306,13 @@ function Start-SysFlow {
                                         $zips = Get-ChildItem -Path $Config.DefaultBackupDestination -Filter "*.zip" -File | Sort-Object LastWriteTime -Descending
                                     } catch {
                                         Write-Warning "Could not read default backup folder: $_"
+                                        Write-SysFlowLog -LogLevel "Error" -Message "Failed to read backup folder" -Details $_ -LogFilePath $Config.LogPath
                                         $zips = @()
                                     }
 
                                     if ($zips.Count -eq 0) {
                                         Write-Host "No backup ZIPs found in default folder." -ForegroundColor Yellow
+                                        Write-SysFlowLog -LogLevel "Warning" -Message "No backup files found" -LogFilePath $Config.LogPath
                                     } else {
                                         Write-Host "\nAvailable backups:" -ForegroundColor Cyan
                                         for ($i = 0; $i -lt $zips.Count; $i++) {
@@ -314,8 +323,10 @@ function Start-SysFlow {
                                         if ($choice -match '^[0-9]+$' -and [int]$choice -ge 1 -and [int]$choice -le $zips.Count) {
                                             $file = $zips[[int]$choice - 1].FullName
                                             Write-Host "Selected: $file" -ForegroundColor Green
+                                            Write-SysFlowLog -LogLevel "Info" -Message "Backup selected for restore" -Details "File: $file" -LogFilePath $Config.LogPath
                                         } else {
                                             Write-Host "Invalid selection; falling back to manual path." -ForegroundColor Yellow
+                                            Write-SysFlowLog -LogLevel "Warning" -Message "Invalid backup selection" -LogFilePath $Config.LogPath
                                         }
                                     }
                                 }
@@ -327,14 +338,19 @@ function Start-SysFlow {
 
                             $useManifest = Read-Host "Use manifest paths to restore to original locations? (Y/N)"
                             if ($useManifest -match '^[Yy]$') {
+                                Write-SysFlowLog -LogLevel "Info" -Message "Restoring backup using manifest paths" -Details "File: $file" -LogFilePath $Config.LogPath
                                 Restore-Backup -BackupFilePath $file -UseManifestPaths
+                                Write-SysFlowLog -LogLevel "Info" -Message "Restore completed" -LogFilePath $Config.LogPath
                             } else {
                                 $restoreTo = Read-Host "Enter restore destination"
+                                Write-SysFlowLog -LogLevel "Info" -Message "Restoring backup to custom location" -Details "File: $file | Destination: $restoreTo" -LogFilePath $Config.LogPath
                                 Restore-Backup -BackupFilePath $file -RestoreDestination $restoreTo
+                                Write-SysFlowLog -LogLevel "Info" -Message "Restore completed" -LogFilePath $Config.LogPath
                             }
                         }
 
                         '3' {
+                            Write-SysFlowLog -LogLevel "Info" -Message "Backup removal initiated" -LogFilePath $Config.LogPath
                             if ($Config.DefaultBackupDestination) {
                                 Write-Host "\nDefault backup folder: $($Config.DefaultBackupDestination)" -ForegroundColor Cyan
                                 $useDefault = Read-Host "Use default backup folder? (Y/N)"
@@ -347,10 +363,13 @@ function Start-SysFlow {
                             } else {
                                 $dest = Read-Host "Enter backup destination folder"
                             }
+                            Write-SysFlowLog -LogLevel "Info" -Message "Removing backups" -Details "Destination: $dest" -LogFilePath $Config.LogPath
                             Remove-Backup -BackupDestination $dest
+                            Write-SysFlowLog -LogLevel "Info" -Message "Backup removal completed" -LogFilePath $Config.LogPath
                         }
 
                         '4' {
+                            Write-SysFlowLog -LogLevel "Info" -Message "Listing backups" -LogFilePath $Config.LogPath
                             if ($Config.DefaultBackupDestination) {
                                 Write-Host "\nDefault backup folder: $($Config.DefaultBackupDestination)" -ForegroundColor Cyan
                                 $useDefault = Read-Host "Use default backup folder? (Y/N)"
@@ -363,8 +382,9 @@ function Start-SysFlow {
                             } else {
                                 $dest = Read-Host "Enter backup destination folder"
                             }
-                            Remove-Backup -BackupDestination $dest -ListOnly |
-                                Format-Table Index, Name, Size, Created -AutoSize
+                            $backupList = Remove-Backup -BackupDestination $dest -ListOnly
+                            $backupList | Format-Table Index, Name, Size, Created -AutoSize
+                            Write-SysFlowLog -LogLevel "Info" -Message "Backups listed" -Details "Found $($backupList.Count) backups" -LogFilePath $Config.LogPath
                         }
 
                         'B' { $BackupExit = $true }
@@ -383,7 +403,10 @@ function Start-SysFlow {
                     switch ($SoftChoice) {
                         '1' {
                             Write-Host "Listing installed software..." -ForegroundColor Cyan
-                            Get-SoftwareList | Sort-Object Name | Format-Table Name, Version, Publisher -AutoSize
+                            Write-SysFlowLog -LogLevel "Info" -Message "Listing installed software" -LogFilePath $Config.LogPath
+                            $softwareList = Get-SoftwareList | Sort-Object Name
+                            $softwareList | Format-Table Name, Version, Publisher -AutoSize
+                            Write-SysFlowLog -LogLevel "Info" -Message "Software list displayed" -Details "Found $($softwareList.Count) applications" -LogFilePath $Config.LogPath
                             Pause
                         }
                         '2' {
@@ -392,7 +415,11 @@ function Start-SysFlow {
                                 $defaultMgr = if ([string]::IsNullOrWhiteSpace($Config.DefaultPackageManager)) { 'winget' } else { $Config.DefaultPackageManager }
                                 $mgr = Read-Host "Manager (winget/choco, default $defaultMgr)"
                                 if ([string]::IsNullOrWhiteSpace($mgr)) { $mgr = $defaultMgr }
+                                Write-SysFlowLog -LogLevel "Info" -Message "Installing software" -Details "Name: $name | Manager: $mgr" -LogFilePath $Config.LogPath
                                 Install-Software -SoftwareName $name -Manager $mgr
+                                Write-SysFlowLog -LogLevel "Info" -Message "Software installation completed" -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Software installation cancelled: no name provided" -LogFilePath $Config.LogPath
                             }
                             Pause
                         }
@@ -404,11 +431,14 @@ function Start-SysFlow {
 
                             if ([string]::IsNullOrWhiteSpace($name)) {
                                 $showList = Read-Host "No name entered. Show installed software list? (Y/N)"
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Software update cancelled: no name provided" -LogFilePath $Config.LogPath
                                 if ($showList -match '^[Yy]$') {
                                     Get-SoftwareList | Sort-Object Name | Format-Table Name, Version -AutoSize
                                 }
                             } else {
+                                Write-SysFlowLog -LogLevel "Info" -Message "Updating software" -Details "Name: $name | Manager: $mgr" -LogFilePath $Config.LogPath
                                 Update-Software -PackageName $name -Manager $mgr
+                                Write-SysFlowLog -LogLevel "Info" -Message "Software update completed" -LogFilePath $Config.LogPath
                             }
                             Pause
                         }
@@ -420,11 +450,14 @@ function Start-SysFlow {
 
                             if ([string]::IsNullOrWhiteSpace($name)) {
                                 $showList = Read-Host "No name entered. Show installed software list? (Y/N)"
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Software uninstall cancelled: no name provided" -LogFilePath $Config.LogPath
                                 if ($showList -match '^[Yy]$') {
                                     Get-SoftwareList | Sort-Object Name | Format-Table Name, Version -AutoSize
                                 }
                             } else {
+                                Write-SysFlowLog -LogLevel "Info" -Message "Uninstalling software" -Details "Name: $name | Manager: $mgr" -LogFilePath $Config.LogPath
                                 Uninstall-Software -PackageName $name -Manager $mgr
+                                Write-SysFlowLog -LogLevel "Info" -Message "Software uninstall completed" -LogFilePath $Config.LogPath
                             }
                             Pause
                         }
@@ -436,6 +469,7 @@ function Start-SysFlow {
 
             '4' {
                 Write-Host "Reporting Module coming soon..." -ForegroundColor Gray
+                Write-SysFlowLog -LogLevel "Info" -Message "Reporting module accessed (not yet implemented)" -LogFilePath $Config.LogPath
                 Pause
             }
 
@@ -466,6 +500,7 @@ function Start-SysFlow {
                             Write-Host "  Storage Threshold: $($Config.StorageThreshold)%" -ForegroundColor White
                             Write-Host "  Process Memory: $($Config.ProcessMemoryThreshold) MB" -ForegroundColor White
                             Write-Host ""
+                            Write-SysFlowLog -LogLevel "Info" -Message "Configuration viewed" -LogFilePath $Config.LogPath
                             Pause
                         }
 
@@ -485,6 +520,9 @@ function Start-SysFlow {
                                 $configContent | Set-Content $ConfigPath -Encoding UTF8
                                 $Config.DefaultBackupDestination = $newPath
                                 Write-Host "✓ Default backup folder set to: $newPath" -ForegroundColor Green
+                                Write-SysFlowLog -LogLevel "Info" -Message "Default backup destination updated" -Details "New path: $newPath" -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Default backup destination change cancelled" -LogFilePath $Config.LogPath
                             }
                             Pause
                         }
@@ -505,6 +543,9 @@ function Start-SysFlow {
                                 $configContent | Set-Content $ConfigPath -Encoding UTF8
                                 $Config.DefaultBackupSource = $newPath
                                 Write-Host "✓ Default source folder set to: $newPath" -ForegroundColor Green
+                                Write-SysFlowLog -LogLevel "Info" -Message "Default backup source updated" -Details "New path: $newPath" -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Default backup source change cancelled" -LogFilePath $Config.LogPath
                             }
                             Pause
                         }
@@ -525,6 +566,9 @@ function Start-SysFlow {
                                 $configContent | Set-Content $ConfigPath -Encoding UTF8
                                 $Config.DefaultReportPath = $newPath
                                 Write-Host "✓ Default report folder set to: $newPath" -ForegroundColor Green
+                                Write-SysFlowLog -LogLevel "Info" -Message "Default report path updated" -Details "New path: $newPath" -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Default report path change cancelled" -LogFilePath $Config.LogPath
                             }
                             Pause
                         }
@@ -540,26 +584,35 @@ function Start-SysFlow {
                             $process = Read-Host "Process memory MB (current: $($Config.ProcessMemoryThreshold))"
                             
                             $configContent = Get-Content $ConfigPath -Raw
+                            $changedThresholds = @()
+                            
                             if ($cpu) { 
                                 $configContent = $configContent -replace "CPUThreshold = \d+", "CPUThreshold = $cpu"
                                 $Config.CPUThreshold = [int]$cpu
+                                $changedThresholds += "CPU: $cpu%"
                             }
                             if ($ram) { 
                                 $configContent = $configContent -replace "RAMThreshold = \d+", "RAMThreshold = $ram"
                                 $Config.RAMThreshold = [int]$ram
+                                $changedThresholds += "RAM: $ram%"
                             }
                             if ($storage) { 
                                 $configContent = $configContent -replace "StorageThreshold = \d+", "StorageThreshold = $storage"
                                 $Config.StorageThreshold = [int]$storage
+                                $changedThresholds += "Storage: $storage%"
                             }
                             if ($process) { 
                                 $configContent = $configContent -replace "ProcessMemoryThreshold = \d+", "ProcessMemoryThreshold = $process"
                                 $Config.ProcessMemoryThreshold = [int]$process
+                                $changedThresholds += "Process Memory: $process MB"
                             }
                             
-                            if ($cpu -or $ram -or $storage -or $process) {
+                            if ($changedThresholds.Count -gt 0) {
                                 $configContent | Set-Content $ConfigPath -Encoding UTF8
                                 Write-Host "✓ Thresholds updated successfully" -ForegroundColor Green
+                                Write-SysFlowLog -LogLevel "Info" -Message "Monitoring thresholds updated" -Details ($changedThresholds -join " | ") -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Info" -Message "Monitoring thresholds not changed" -LogFilePath $Config.LogPath
                             }
                             Pause
                         }
@@ -570,6 +623,7 @@ function Start-SysFlow {
                             $sel = Read-Host "Enter default manager (winget/choco)"
                             if ($sel -notin @('winget','choco')) {
                                 Write-Host "Invalid choice. Please enter 'winget' or 'choco'." -ForegroundColor Yellow
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Invalid package manager selection attempted" -Details "Input: $sel" -LogFilePath $Config.LogPath
                             } else {
                                 $configContent = Get-Content $ConfigPath -Raw
                                 if ($configContent -match "DefaultPackageManager\s*=") {
@@ -584,6 +638,7 @@ function Start-SysFlow {
                                 $configContent | Set-Content $ConfigPath -Encoding UTF8
                                 $Config.DefaultPackageManager = $sel
                                 Write-Host "✓ Default package manager set to: $sel" -ForegroundColor Green
+                                Write-SysFlowLog -LogLevel "Info" -Message "Default package manager updated" -Details "New manager: $sel" -LogFilePath $Config.LogPath
                             }
                             Pause
                         }
@@ -594,8 +649,14 @@ function Start-SysFlow {
                 } until ($SettingsExit)
             }
 
-            'Q' { $MainExit = $true }
-            'q' { $MainExit = $true }
+            'Q' { 
+                Write-SysFlowLog -LogLevel "Info" -Message "SysFlow application closed by user" -LogFilePath $Config.LogPath
+                $MainExit = $true 
+            }
+            'q' { 
+                Write-SysFlowLog -LogLevel "Info" -Message "SysFlow application closed by user" -LogFilePath $Config.LogPath
+                $MainExit = $true 
+            }
         }
     } until ($MainExit)
 }
