@@ -16,6 +16,7 @@ function Get-FolderSelection {
 # Import Modules
 $MonitorModulePath = Join-Path $PSScriptRoot 'Modules\MonitorModule\MonitorModule.psm1'
 $BackupModulePath  = Join-Path $PSScriptRoot 'Modules\BackupModule\BackupModule.psm1'
+$MonitorModulePath = Join-Path $PSScriptRoot 'Modules\SoftwareModule\SoftwareModule.psm1'
 $SoftwareModulePath = Join-Path $PSScriptRoot 'Modules\SoftwareModule\SoftwareModule.psm1'
 $ConfigPath = Join-Path $PSScriptRoot 'config.psd1'
 
@@ -62,6 +63,9 @@ if (Test-Path $BackupModulePath) {
 # Import Software Module
 if (Test-Path $SoftwareModulePath) {
     Import-Module $SoftwareModulePath -Force
+}
+if (Test-Path $MonitorModulePath) {
+    Import-Module $MonitorModulePath -Force
 }
 
 # Main Menu Function
