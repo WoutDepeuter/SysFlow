@@ -15,9 +15,10 @@ function Get-FolderSelection {
 }
 
 # Import Modules
-$MonitorModulePath = Join-Path $PSScriptRoot 'Modules\MonitorModule\MonitorModule.psm1'
-$BackupModulePath = Join-Path $PSScriptRoot 'Modules\BackupModule\BackupModule.psm1'
-$SoftwareModulePath = Join-Path $PSScriptRoot 'Modules\SoftwareModule\SoftwareModule.psm1'
+$MonitorModulePath   = Join-Path $PSScriptRoot 'Modules\MonitorModule\MonitorModule.psm1'
+$BackupModulePath    = Join-Path $PSScriptRoot 'Modules\BackupModule\BackupModule.psm1'
+$SoftwareModulePath  = Join-Path $PSScriptRoot 'Modules\SoftwareModule\SoftwareModule.psm1'
+$ReportingModulePath = Join-Path $PSScriptRoot 'Modules\ReportingModule\ReportingModule.psm1'
 $ConfigPath = Join-Path $PSScriptRoot 'config.psd1'
 
 # Load configuration
@@ -63,6 +64,10 @@ if (Test-Path $BackupModulePath) {
 # Import Software Module
 if (Test-Path $SoftwareModulePath) {
     Import-Module $SoftwareModulePath -Force
+}
+# Import Reporting Module (provides Export-StatToCsv, Write-SysFlowLog)
+if (Test-Path $ReportingModulePath) {
+    Import-Module $ReportingModulePath -Force
 }
 
 # Main Menu Function
@@ -652,7 +657,7 @@ function Start-SysFlow {
             'Q' { 
                 Write-SysFlowLog -LogLevel "Info" -Message "SysFlow application closed by user" -LogFilePath $Config.LogPath
                 $MainExit = $true 
-            }
+            } 
             'q' { 
                 Write-SysFlowLog -LogLevel "Info" -Message "SysFlow application closed by user" -LogFilePath $Config.LogPath
                 $MainExit = $true 

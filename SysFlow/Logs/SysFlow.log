@@ -1,0 +1,34 @@
+[2025-12-30 16:49:25] [Info] SysFlow applicatie gestart
+[2025-12-30 16:49:27] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\RAM_History.csv, Record count: 1
+[2025-12-30 16:49:27] [Info] Statistics exported successfully | Details: File: .\Reports\RAM_History.csv
+[2025-12-30 16:49:27] [Info] RAM stats gecontroleerd. Vrij: 10.25 GB
+[2025-12-30 16:49:31] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Storage_History.csv, Record count: 2
+[2025-12-30 16:49:31] [Info] Statistics exported successfully | Details: File: .\Reports\Storage_History.csv
+[2025-12-30 16:49:31] [Info] Storage gecontroleerd voor 2 schijven.
+[2025-12-30 16:49:35] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\CPU_History.csv, Record count: 1
+[2025-12-30 16:49:35] [Info] Statistics exported successfully | Details: File: .\Reports\CPU_History.csv
+[2025-12-30 16:49:35] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\RAM_History.csv, Record count: 1
+[2025-12-30 16:49:35] [Info] Statistics exported successfully | Details: File: .\Reports\RAM_History.csv
+[2025-12-30 16:49:35] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Storage_History.csv, Record count: 2
+[2025-12-30 16:49:35] [Info] Statistics exported successfully | Details: File: .\Reports\Storage_History.csv
+[2025-12-30 16:49:35] [Info] Volledige systeemscan uitgevoerd.
+[2025-12-30 16:50:06] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\CPU_History.csv, Record count: 1
+[2025-12-30 16:50:06] [Info] Statistics exported successfully | Details: File: .\Reports\CPU_History.csv
+[2025-12-30 16:50:06] [Info] CPU stats gecontroleerd. Load: 10%
+[2025-12-30 16:50:08] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\CPU_History.csv, Record count: 1
+[2025-12-30 16:50:08] [Info] Statistics exported successfully | Details: File: .\Reports\CPU_History.csv
+[2025-12-30 16:50:08] [Info] CPU stats gecontroleerd. Load: 21%
+[2025-12-30 16:50:09] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\RAM_History.csv, Record count: 1
+[2025-12-30 16:50:09] [Info] Statistics exported successfully | Details: File: .\Reports\RAM_History.csv
+[2025-12-30 16:50:09] [Info] RAM stats gecontroleerd. Vrij: 10.18 GB
+[2025-12-30 16:50:11] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Storage_History.csv, Record count: 2
+[2025-12-30 16:50:11] [Info] Statistics exported successfully | Details: File: .\Reports\Storage_History.csv
+[2025-12-30 16:50:11] [Info] Storage gecontroleerd voor 2 schijven.
+[2025-12-30 16:50:15] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\CPU_History.csv, Record count: 1
+[2025-12-30 16:50:15] [Info] Statistics exported successfully | Details: File: .\Reports\CPU_History.csv
+[2025-12-30 16:50:15] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\RAM_History.csv, Record count: 1
+[2025-12-30 16:50:15] [Info] Statistics exported successfully | Details: File: .\Reports\RAM_History.csv
+[2025-12-30 16:50:15] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Storage_History.csv, Record count: 2
+[2025-12-30 16:50:15] [Info] Statistics exported successfully | Details: File: .\Reports\Storage_History.csv
+[2025-12-30 16:50:15] [Info] Volledige systeemscan uitgevoerd.
+[2025-12-30 16:50:16] [Info] Uptime: 0 dagen, 7 uur.
