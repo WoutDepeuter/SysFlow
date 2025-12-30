@@ -39,14 +39,31 @@ function Write-SysFlowLog {
         
         [string]$LogFilePath
     )
+    
+    # If no log file path specified, use default
+    if (-not $LogFilePath) {
+        $moduleRoot = Split-Path -Parent $PSScriptRoot
+        $sysflowRoot = Split-Path -Parent $moduleRoot
+        $LogFilePath = Join-Path $sysflowRoot "Logs\SysFlow.log"
+    }
+    
+    # Ensure log directory exists
+    $logDir = Split-Path -Parent $LogFilePath
+    if (-not (Test-Path $logDir)) {
+        New-Item -ItemType Directory -Path $logDir -Force | Out-Null
+    }
+    
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     $logEntry = "[$timestamp] [$LogLevel] $Message"
     if ($Details) {
         $logEntry += " | Details: $Details"
     }
-    if ($LogFilePath) {
-        Add-Content -Path $LogFilePath -Value $logEntry
-    } else {
+    
+    try {
+        Add-Content -Path $LogFilePath -Value $logEntry -ErrorAction Stop
+    }
+    catch {
+        Write-Warning "Failed to write to log file: $_"
         Write-Output $logEntry
     }
 }

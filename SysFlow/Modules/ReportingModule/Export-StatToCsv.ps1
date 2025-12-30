@@ -20,12 +20,29 @@ function Export-StatToCsv {
         [Parameter(Mandatory=$true)]
         [string]$OutputFilePath
     )
+    
+    # Determine default log file path
+    $moduleRoot = Split-Path -Parent $PSScriptRoot
+    $sysflowRoot = Split-Path -Parent $moduleRoot
+    $defaultLogPath = Join-Path $sysflowRoot "Logs\SysFlow.log"
+    
+    # Ensure Logs directory exists
+    $logDir = Split-Path -Parent $defaultLogPath
+    if (-not (Test-Path $logDir)) {
+        New-Item -ItemType Directory -Path $logDir -Force | Out-Null
+    }
+    
+    # Log the export attempt
+    Write-SysFlowLog -LogLevel 'Info' -Message "Exporting statistics to CSV" -Details "Output path: $OutputFilePath, Record count: $($Stats.Count)" -LogFilePath $defaultLogPath
+    
     try {
         $Stats | Export-Csv -Path $OutputFilePath -NoTypeInformation -Force
         Write-Output "Statistics exported successfully to $OutputFilePath"
+        Write-SysFlowLog -LogLevel 'Info' -Message "Statistics exported successfully" -Details "File: $OutputFilePath" -LogFilePath $defaultLogPath
     }
     catch {
         Write-Error "Failed to export statistics: $_"
+        Write-SysFlowLog -LogLevel 'Error' -Message "Failed to export statistics" -Details "Error: $_" -LogFilePath $defaultLogPath
     }
 }
 
