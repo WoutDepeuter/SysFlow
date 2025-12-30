@@ -68,6 +68,7 @@ if (Test-Path $MonitorModulePath) {
     Import-Module $MonitorModulePath -Force
 }
 
+
 # Main Menu Function
 function Show-MainMenu {
     Clear-Host
@@ -562,8 +563,10 @@ function Start-SysFlow {
         }
     } until ($MainExit)
 }
-
+Write-SysFlowLog -LogLevel "Info" -Message "SysFlow applicatie gestart" -LogFilePath $Config.LogPath
 Start-SysFlow
+
+
 
 
 
