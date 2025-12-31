@@ -152,20 +152,37 @@ function Start-SysFlow {
                             $stats = Get-CPUStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold)
                             $stats | Format-Table -AutoSize
                             Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "CPU_History.csv")
-                            Write-SysFlowLog -LogLevel "Info" -Message "CPU stats checked. Load: $($stats.LoadPercentage)%" -LogFilePath $Config.LogPath
+                            $cpuThreshold = Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold
+                            if ($stats.LoadPercentage -ge $cpuThreshold) {
+                                Write-SysFlowLog -LogLevel "Warning" -Message "CPU load above threshold" -Details "Load: $($stats.LoadPercentage)% | Threshold: $cpuThreshold%" -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Info" -Message "CPU stats checked. Load within threshold" -Details "Load: $($stats.LoadPercentage)% | Threshold: $cpuThreshold%" -LogFilePath $Config.LogPath
+                            }
                         }
 
                         '2' {
                             $stats = Get-RamStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.RAMThreshold)
                             Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "RAM_History.csv")
-                            Write-SysFlowLog -LogLevel "Info" -Message "RAM stats checked. Free: $($stats.Free) GB" -LogFilePath $Config.LogPath
+                            $ramThreshold = Get-ThresholdValue -Default 70 -Value $Config.RAMThreshold
+                            if ($stats.UsedPercent -ge $ramThreshold) {
+                                Write-SysFlowLog -LogLevel "Warning" -Message "RAM usage above threshold" -Details "Used: $($stats.UsedPercent)% | Threshold: $ramThreshold% | Free: $($stats.Free) GB" -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Info" -Message "RAM stats checked. Within threshold" -Details "Used: $($stats.UsedPercent)% | Threshold: $ramThreshold% | Free: $($stats.Free) GB" -LogFilePath $Config.LogPath
+                            }
                         }
 
                         '3' {
                             $stats = Get-StorageStats -Threshold (Get-ThresholdValue -Default 80 -Value $Config.StorageThreshold)
                             $stats | Format-Table -AutoSize
                             Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "Storage_History.csv")
-                            Write-SysFlowLog -LogLevel "Info" -Message "Storage checked for $($stats.Count) disks." -LogFilePath $Config.LogPath
+                            $storageThreshold = Get-ThresholdValue -Default 80 -Value $Config.StorageThreshold
+                            $highStorage = $stats | Where-Object { $_.UsedPercent -ge $storageThreshold }
+                            if ($highStorage) {
+                                $driveList = ($highStorage | Select-Object -ExpandProperty DriveLetter) -join ', '
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Storage above threshold" -Details "Drives: $driveList | Threshold: $storageThreshold%" -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Info" -Message "Storage checked; all drives within threshold" -Details "Drives checked: $($stats.Count) | Threshold: $storageThreshold%" -LogFilePath $Config.LogPath
+                            }
                         }
 
                         '4' {
@@ -190,7 +207,30 @@ function Start-SysFlow {
                             Export-StatToCsv -Stats $ram -OutputFilePath (Join-Path $Config.DefaultReportPath "RAM_History.csv")
                             Export-StatToCsv -Stats $storage -OutputFilePath (Join-Path $Config.DefaultReportPath "Storage_History.csv")
 
-                            Write-SysFlowLog -LogLevel "Info" -Message "Full system scan completed." -LogFilePath $Config.LogPath
+                            $cpuThreshold = Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold
+                            $ramThreshold = Get-ThresholdValue -Default 70 -Value $Config.RAMThreshold
+                            $storageThreshold = Get-ThresholdValue -Default 80 -Value $Config.StorageThreshold
+
+                            $statusDetails = @()
+                            if ($cpu.LoadPercentage -ge $cpuThreshold) {
+                                $statusDetails += "CPU high ($($cpu.LoadPercentage)% >= $cpuThreshold%)"
+                                Write-SysFlowLog -LogLevel "Warning" -Message "CPU load above threshold" -Details "Load: $($cpu.LoadPercentage)% | Threshold: $cpuThreshold%" -LogFilePath $Config.LogPath
+                            }
+                            if ($ram.UsedPercent -ge $ramThreshold) {
+                                $statusDetails += "RAM high ($($ram.UsedPercent)% >= $ramThreshold%)"
+                                Write-SysFlowLog -LogLevel "Warning" -Message "RAM usage above threshold" -Details "Used: $($ram.UsedPercent)% | Threshold: $ramThreshold%" -LogFilePath $Config.LogPath
+                            }
+                            $highStorage = $storage | Where-Object { $_.UsedPercent -ge $storageThreshold }
+                            if ($highStorage) {
+                                $driveList = ($highStorage | Select-Object -ExpandProperty DriveLetter) -join ', '
+                                $statusDetails += "Storage high ($driveList >= $storageThreshold%)"
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Storage above threshold" -Details "Drives: $driveList | Threshold: $storageThreshold%" -LogFilePath $Config.LogPath
+                            }
+                            if (-not $statusDetails) {
+                                Write-SysFlowLog -LogLevel "Info" -Message "Full system scan completed" -Details "CPU/RAM/Storage within thresholds" -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Full system scan detected threshold exceedance" -Details ($statusDetails -join ' | ') -LogFilePath $Config.LogPath
+                            }
                         }
 
                         '5' {
@@ -669,7 +709,3 @@ function Start-SysFlow {
 
 Write-SysFlowLog -LogLevel "Info" -Message "SysFlow application started" -LogFilePath $Config.LogPath
 Start-SysFlow
-
-
-
-
