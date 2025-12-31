@@ -152,20 +152,20 @@ function Start-SysFlow {
                             $stats = Get-CPUStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold)
                             $stats | Format-Table -AutoSize
                             Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "CPU_History.csv")
-                            Write-SysFlowLog -LogLevel "Info" -Message "CPU stats gecontroleerd. Load: $($stats.LoadPercentage)%" -LogFilePath $Config.LogPath
+                            Write-SysFlowLog -LogLevel "Info" -Message "CPU stats checked. Load: $($stats.LoadPercentage)%" -LogFilePath $Config.LogPath
                         }
 
                         '2' {
                             $stats = Get-RamStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.RAMThreshold)
                             Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "RAM_History.csv")
-                            Write-SysFlowLog -LogLevel "Info" -Message "RAM stats gecontroleerd. Vrij: $($stats.Free) GB" -LogFilePath $Config.LogPath
+                            Write-SysFlowLog -LogLevel "Info" -Message "RAM stats checked. Free: $($stats.Free) GB" -LogFilePath $Config.LogPath
                         }
 
                         '3' {
                             $stats = Get-StorageStats -Threshold (Get-ThresholdValue -Default 80 -Value $Config.StorageThreshold)
                             $stats | Format-Table -AutoSize
                             Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "Storage_History.csv")
-                            Write-SysFlowLog -LogLevel "Info" -Message "Storage gecontroleerd voor $($stats.Count) schijven." -LogFilePath $Config.LogPath
+                            Write-SysFlowLog -LogLevel "Info" -Message "Storage checked for $($stats.Count) disks." -LogFilePath $Config.LogPath
                         }
 
                         '4' {
@@ -190,13 +190,13 @@ function Start-SysFlow {
                             Export-StatToCsv -Stats $ram -OutputFilePath (Join-Path $Config.DefaultReportPath "RAM_History.csv")
                             Export-StatToCsv -Stats $storage -OutputFilePath (Join-Path $Config.DefaultReportPath "Storage_History.csv")
 
-                            Write-SysFlowLog -LogLevel "Info" -Message "Volledige systeemscan uitgevoerd." -LogFilePath $Config.LogPath
+                            Write-SysFlowLog -LogLevel "Info" -Message "Full system scan completed." -LogFilePath $Config.LogPath
                         }
 
                         '5' {
                             $stats = Get-Uptime
                             $stats | Format-Table -AutoSize
-                            Write-SysFlowLog -LogLevel "Info" -Message "Uptime: $($stats.Days) dagen, $($stats.Hours) uur." -LogFilePath $Config.LogPath
+                            Write-SysFlowLog -LogLevel "Info" -Message "Uptime: $($stats.Days) days, $($stats.Hours) hours." -LogFilePath $Config.LogPath
                         }
 
                         '6' {
@@ -205,9 +205,9 @@ function Start-SysFlow {
 
                             if ($highMem) {
                                 $highMem | Format-Table -AutoSize
-                                Write-SysFlowLog -LogLevel "Warning" -Message "Hoog geheugenverbruik: $($highMem.Count) processen." -LogFilePath $Config.LogPath
+                                Write-SysFlowLog -LogLevel "Warning" -Message "High memory usage: $($highMem.Count) processes." -LogFilePath $Config.LogPath
                             } else {
-                                Write-SysFlowLog -LogLevel "Info" -Message "Processen gecontroleerd, geen uitschieters." -LogFilePath $Config.LogPath
+                                Write-SysFlowLog -LogLevel "Info" -Message "Processes checked; no outliers." -LogFilePath $Config.LogPath
                             }
 
                             if ($stats) {
@@ -667,7 +667,7 @@ function Start-SysFlow {
     } until ($MainExit)
 }
 
-Write-SysFlowLog -LogLevel "Info" -Message "SysFlow applicatie gestart" -LogFilePath $Config.LogPath
+Write-SysFlowLog -LogLevel "Info" -Message "SysFlow application started" -LogFilePath $Config.LogPath
 Start-SysFlow
 
 
