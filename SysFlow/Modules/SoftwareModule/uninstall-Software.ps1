@@ -132,6 +132,16 @@ function Uninstall-Software {
         Write-Error "Uninstallation failed: $_"
     }
 
+    return [PSCustomObject]@{
+        Timestamp   = Get-Date
+        Action      = "Uninstall-Software"
+        PackageName = $PackageName
+        Manager     = $Manager
+        Status      = $status
+        Details     = $errorDetails
+    }
+
+    
     
 }
 # End of Uninstall-Software function
