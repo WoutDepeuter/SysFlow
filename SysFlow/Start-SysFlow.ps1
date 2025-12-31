@@ -39,6 +39,11 @@ if (-not ($Config.ContainsKey('DefaultPackageManager')) -or [string]::IsNullOrWh
     $Config.DefaultPackageManager = 'choco'
 }
 
+# Ensure export format is available in config
+if (-not ($Config.ContainsKey('ExportFormat')) -or [string]::IsNullOrWhiteSpace($Config.ExportFormat)) {
+    $Config.ExportFormat = 'Both'
+}
+
 # Helper: return a threshold value from config or fall back to a sane default
 function Get-ThresholdValue {
     param(
@@ -51,6 +56,33 @@ function Get-ThresholdValue {
     }
 
     return $Default
+}
+
+# Helper: Export stats to CSV based on config
+function Export-StatsToCsvIfEnabled {
+    param(
+        [Parameter(Mandatory)]$Stats,
+        [Parameter(Mandatory)][string]$CsvPath,
+        [string]$Format = $Config.ExportFormat
+    )
+    
+    if ($Format -in 'CSV', 'Both') {
+        Export-StatToCsv -Stats $Stats -OutputFilePath $CsvPath
+    }
+}
+
+# Helper: Export stats to unified HTML if enabled
+function Export-ToUnifiedHtmlIfEnabled {
+    param(
+        [Parameter(Mandatory)][hashtable]$StatsHashtable,
+        [Parameter(Mandatory)][string]$HtmlPath,
+        [string]$PageTitle = 'SysFlow Report',
+        [string]$Format = $Config.ExportFormat
+    )
+    
+    if ($Format -in 'HTML', 'Both') {
+        Export-UnifiedStatsToHtml -StatsHashtable $StatsHashtable -OutputFilePath $HtmlPath -PageTitle $PageTitle
+    }
 }
 
 # Import Monitor Module
@@ -151,7 +183,10 @@ function Start-SysFlow {
                         '1' {
                             $stats = Get-CPUStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold)
                             $stats | Format-Table -AutoSize
-                            Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "CPU_History.csv")
+                            
+                            Export-StatsToCsvIfEnabled -Stats $stats -CsvPath (Join-Path $Config.DefaultReportPath "History.csv")
+                            Export-ToUnifiedHtmlIfEnabled -StatsHashtable @{ 'CPU Stats' = $stats } -HtmlPath (Join-Path $Config.DefaultReportPath "Report.html") -PageTitle "SysFlow Report"
+                            
                             $cpuThreshold = Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold
                             if ($stats.LoadPercentage -ge $cpuThreshold) {
                                 Write-SysFlowLog -LogLevel "Warning" -Message "CPU load above threshold" -Details "Load: $($stats.LoadPercentage)% | Threshold: $cpuThreshold%" -LogFilePath $Config.LogPath
@@ -162,7 +197,11 @@ function Start-SysFlow {
 
                         '2' {
                             $stats = Get-RamStats -Threshold (Get-ThresholdValue -Default 70 -Value $Config.RAMThreshold)
-                            Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "RAM_History.csv")
+                            $stats | Format-Table -AutoSize
+                            
+                            Export-StatsToCsvIfEnabled -Stats $stats -CsvPath (Join-Path $Config.DefaultReportPath "History.csv")
+                            Export-ToUnifiedHtmlIfEnabled -StatsHashtable @{ 'RAM Stats' = $stats } -HtmlPath (Join-Path $Config.DefaultReportPath "Report.html") -PageTitle "SysFlow Report"
+                            
                             $ramThreshold = Get-ThresholdValue -Default 70 -Value $Config.RAMThreshold
                             if ($stats.UsedPercent -ge $ramThreshold) {
                                 Write-SysFlowLog -LogLevel "Warning" -Message "RAM usage above threshold" -Details "Used: $($stats.UsedPercent)% | Threshold: $ramThreshold% | Free: $($stats.Free) GB" -LogFilePath $Config.LogPath
@@ -174,7 +213,9 @@ function Start-SysFlow {
                         '3' {
                             $stats = Get-StorageStats -Threshold (Get-ThresholdValue -Default 80 -Value $Config.StorageThreshold)
                             $stats | Format-Table -AutoSize
-                            Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "Storage_History.csv")
+                            
+                            Export-StatsToCsvIfEnabled -Stats $stats -CsvPath (Join-Path $Config.DefaultReportPath "History.csv")
+                            Export-ToUnifiedHtmlIfEnabled -StatsHashtable @{ 'Storage Stats' = $stats } -HtmlPath (Join-Path $Config.DefaultReportPath "Report.html") -PageTitle "SysFlow Report"
                             $storageThreshold = Get-ThresholdValue -Default 80 -Value $Config.StorageThreshold
                             $highStorage = $stats | Where-Object { $_.UsedPercent -ge $storageThreshold }
                             if ($highStorage) {
@@ -203,9 +244,18 @@ function Start-SysFlow {
                             Write-Host "--- Uptime Details ---" -ForegroundColor Cyan
                             $uptime | Format-Table -AutoSize
 
-                            Export-StatToCsv -Stats $cpu -OutputFilePath (Join-Path $Config.DefaultReportPath "CPU_History.csv")
-                            Export-StatToCsv -Stats $ram -OutputFilePath (Join-Path $Config.DefaultReportPath "RAM_History.csv")
-                            Export-StatToCsv -Stats $storage -OutputFilePath (Join-Path $Config.DefaultReportPath "Storage_History.csv")
+                            # Export based on config format preference
+                            Export-StatsToCsvIfEnabled -Stats $cpu -CsvPath (Join-Path $Config.DefaultReportPath "History.csv")
+                            Export-StatsToCsvIfEnabled -Stats $ram -CsvPath (Join-Path $Config.DefaultReportPath "History.csv")
+                            Export-StatsToCsvIfEnabled -Stats $storage -CsvPath (Join-Path $Config.DefaultReportPath "History.csv")
+                            
+                            $htmlStats = @{
+                                'CPU Stats' = $cpu
+                                'RAM Stats' = $ram
+                                'Storage Stats' = $storage
+                                'Uptime Stats' = $uptime
+                            }
+                            Export-ToUnifiedHtmlIfEnabled -StatsHashtable $htmlStats -HtmlPath (Join-Path $Config.DefaultReportPath "Report.html") -PageTitle "SysFlow Report"
 
                             $cpuThreshold = Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold
                             $ramThreshold = Get-ThresholdValue -Default 70 -Value $Config.RAMThreshold
@@ -251,7 +301,8 @@ function Start-SysFlow {
                             }
 
                             if ($stats) {
-                                Export-StatToCsv -Stats $stats -OutputFilePath (Join-Path $Config.DefaultReportPath "Process_History.csv")
+                                Export-StatsToCsvIfEnabled -Stats $stats -CsvPath (Join-Path $Config.DefaultReportPath "History.csv")
+                                Export-ToUnifiedHtmlIfEnabled -StatsHashtable @{ 'Process Stats' = $stats } -HtmlPath (Join-Path $Config.DefaultReportPath "Report.html") -PageTitle "SysFlow Report"
                             }
                         }
 

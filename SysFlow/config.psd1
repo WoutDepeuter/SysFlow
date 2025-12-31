@@ -14,6 +14,9 @@
     StorageThreshold = 50
     ProcessMemoryThreshold = 10
     DefaultPackageManager = 'choco'
+    
+    # Export format preference: 'CSV', 'HTML', 'Both', or 'None'
+    ExportFormat = 'Both'
 }
 
 

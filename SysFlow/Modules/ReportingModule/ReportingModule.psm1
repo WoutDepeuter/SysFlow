@@ -10,9 +10,12 @@ $moduleRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 # Dot-source function files
 # ============================================================================
 . (Join-Path $moduleRoot 'Export-StatToCsv.ps1')
+. (Join-Path $moduleRoot 'Export-StatToHtml.ps1')
+. (Join-Path $moduleRoot 'Export-CombinedStatsToHtml.ps1')
+. (Join-Path $moduleRoot 'Export-UnifiedStatsToHtml.ps1')
 . (Join-Path $moduleRoot 'Write-SysFlowLog.ps1')
 
 # ============================================================================
 # Export public functions
 # ============================================================================
-Export-ModuleMember -Function 'Export-StatToCsv', 'Write-SysFlowLog'
+Export-ModuleMember -Function 'Export-StatToCsv', 'Export-StatToHtml', 'Export-CombinedStatsToHtml', 'Export-UnifiedStatsToHtml', 'Write-SysFlowLog'
