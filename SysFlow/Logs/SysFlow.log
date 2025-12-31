@@ -32,3 +32,30 @@
 [2025-12-30 16:50:15] [Info] Statistics exported successfully | Details: File: .\Reports\Storage_History.csv
 [2025-12-30 16:50:15] [Info] Volledige systeemscan uitgevoerd.
 [2025-12-30 16:50:16] [Info] Uptime: 0 dagen, 7 uur.
+[2025-12-31 14:10:15] [Info] SysFlow application started
+[2025-12-31 14:10:17] [Info] Backup creation initiated
+[2025-12-31 14:10:19] [Info] Creating backup | Details: Source: C:\Users\depeu\touhou_little_maid | Destination: C:\Users\depeu | Name: Auto-generated
+[2025-12-31 14:10:20] [Info] Backup created successfully
+[2025-12-31 14:10:22] [Info] Listing backups
+[2025-12-31 14:10:24] [Info] Backups listed | Details: Found 9 backups
+[2025-12-31 14:10:36] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 14:10:36] [Info] New unified HTML report created | Details: File: .\Reports\Report.html; Sections: 1; Date: 2025-12-31; Time: 14:10:36
+[2025-12-31 14:10:36] [Info] CPU stats checked. Load within threshold | Details: Load: 39% | Threshold: 50%
+[2025-12-31 14:10:37] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 14:10:37] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2025-12-31; Time: 14:10:37
+[2025-12-31 14:10:37] [Warning] RAM usage above threshold | Details: Used: 75.78% | Threshold: 50% | Free: 7.68 GB
+[2025-12-31 14:10:41] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 14:10:41] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2025-12-31; Time: 14:10:41
+[2025-12-31 14:10:41] [Warning] Storage above threshold | Details: Drives: C:, G: | Threshold: 50%
+[2025-12-31 14:10:45] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 4
+[2025-12-31 14:10:45] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 4; Date: 2025-12-31; Time: 14:10:45
+[2025-12-31 14:10:45] [Warning] RAM usage above threshold | Details: Used: 75.87% | Threshold: 50%
+[2025-12-31 14:10:45] [Warning] Storage above threshold | Details: Drives: C:, G: | Threshold: 50%
+[2025-12-31 14:10:45] [Warning] Full system scan detected threshold exceedance | Details: RAM high (75.87% >= 50%) | Storage high (C:, G: >= 50%)
+[2025-12-31 14:11:09] [Info] Uptime: 1 days, 4 hours.
+[2025-12-31 14:11:13] [Warning] High memory usage: 309 processes.
+[2025-12-31 14:11:13] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 14:11:13] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2025-12-31; Time: 14:11:13
+[2025-12-31 14:11:20] [Warning] High memory usage: 309 processes.
+[2025-12-31 14:11:20] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 14:11:20] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2025-12-31; Time: 14:11:20

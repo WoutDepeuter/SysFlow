@@ -16,7 +16,7 @@
     DefaultPackageManager = 'choco'
     
     # Export format preference: 'CSV', 'HTML', 'Both', or 'None'
-    ExportFormat = 'Both'
+    ExportFormat = 'HTML'
 }
 
 
