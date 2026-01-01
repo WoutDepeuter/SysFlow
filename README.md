@@ -113,7 +113,9 @@ Er is gebruikgemaakt van Generatieve AI (Google Gemini & OpenAI ChatGPT) voor:
 * **Code Generatie:** Hulp bij het opzetten van de skeletstructuur van modules (o.a. `ReportingModule`).
 * **Debugging:** Het analyseren van foutmeldingen bij de `Restore-Backup` manifest-logica.
 * **Documentatie:** Het genereren van sjablonen voor `.SYNOPSIS` help-blokken in de scripts en delen van deze README.
+* *aanpassen backup functie** zorgen dat back up meer dan 2gb kan doen
 * *Opmerking:* Alle door AI gegenereerde code is handmatig gereviewd, getest en aangepast aan de specifieke eisen van dit project.
+
 
 ### Online Bronnen
 
