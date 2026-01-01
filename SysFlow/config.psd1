@@ -9,15 +9,16 @@
     DefaultReportPath = '.\Reports'
     
     # Monitoring thresholds
-    CPUThreshold = 50
-    RAMThreshold = 50
-    StorageThreshold = 50
-    ProcessMemoryThreshold = 10
+    CPUThreshold = 1
+    RAMThreshold = 1
+    StorageThreshold = 1
+    ProcessMemoryThreshold = 1
     DefaultPackageManager = 'choco'
     
     # Export format preference: 'CSV', 'HTML', 'Both', or 'None'
     ExportFormat = 'HTML'
 }
+
 
 
 
