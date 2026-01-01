@@ -3,9 +3,8 @@
 # Unified SysFlow module aggregating all submodules
 # ============================================================================
 
-# Get root paths
-$moduleRoot  = Split-Path -Parent $MyInvocation.MyCommand.Path
-$sysflowRoot = Split-Path -Parent $moduleRoot
+# Get module root path
+$moduleRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 # ============================================================================
 # Dot-source Backup functions
@@ -23,9 +22,9 @@ if (Test-Path $backupRoot) {
 $monitorRoot = Join-Path $moduleRoot 'MonitorModule'
 if (Test-Path $monitorRoot) {
     . (Join-Path $monitorRoot 'Get-StorageStats.ps1')
-    . (Join-Path $monitorRoot 'Get-CPUStats.ps1')
-    . (Join-Path $monitorRoot 'Get-RamStats.ps1')
-    . (Join-Path $monitorRoot 'Get-Uptime.ps1')
+    . (Join-Path $monitorRoot 'Get-CPUstats.ps1')
+    . (Join-Path $monitorRoot 'Get-Ramstats.ps1')
+    . (Join-Path $monitorRoot 'Get-Uptime.Ps1')
     . (Join-Path $monitorRoot 'Get-ProcessStats.ps1')
 }
 
@@ -47,7 +46,7 @@ if (Test-Path $reportingRoot) {
 $softwareRoot = Join-Path $moduleRoot 'SoftwareModule'
 if (Test-Path $softwareRoot) {
     . (Join-Path $softwareRoot 'Get-SoftwareList.ps1')
-    . (Join-Path $softwareRoot 'Install-Software.ps1')
+    . (Join-Path $softwareRoot 'Install-Software.Ps1')
     . (Join-Path $softwareRoot 'uninstall-Software.ps1')
     . (Join-Path $softwareRoot 'update-Software.ps1')
 }
