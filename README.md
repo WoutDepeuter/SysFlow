@@ -1,132 +1,138 @@
 
 # SysFlow - PowerShell Automation Platform
 
-**SysFlow** is een modulair automatiseringsplatform ontwikkeld om dagelijkse taken van systeembeheerders te vereenvoudigen. Deze tool centraliseert monitoring, back-upbeheer en software-installaties in één gebruiksvriendelijke console-interface (TUI), volledig geschreven in PowerShell.
+**SysFlow** is a modular automation platform designed to simplify the daily tasks of system administrators. It centralizes monitoring, backup management and software installation into one user-friendly console interface (TUI), written entirely in PowerShell.
 
 ---
 
-## 1. Het doel van het project
-Het doel van dit project is het ontwikkelen van een "Minimum Viable Product" (MVP) voor lokale systeemautomatisering. In plaats van verschillende losse commando's of GUI's te gebruiken, biedt SysFlow één centraal punt voor:
-* **Monitoring:** Real-time inzicht in systeembronnen (CPU, RAM, Opslag) en processen.
-* **Back-ups:** Het veiligstellen van bestanden naar gecomprimeerde archieven met versiebeheer.
-* **Softwarebeheer:** Het installeren en updaten van applicaties via package managers zonder handmatige downloads.
-* **Rapportage:** Het automatisch loggen van acties en exporteren van systeemdata naar CSV en HTML voor audit-doeleinden.
+## 1. Project goal
+The goal of this project is to build a **Minimum Viable Product (MVP)** for local system automation. Instead of using separate commands or GUI tools, SysFlow provides a single entry point for:
+* **Monitoring:** Real-time insight into system resources (CPU, RAM, storage) and processes.
+* **Backups:** Safely archiving files into compressed archives with simple versioning.
+* **Software management:** Installing and updating applications via package managers without manual downloads.
+* **Reporting:** Automatically logging actions and exporting system data to CSV and HTML for audit purposes.
 
-Dit project is ontwikkeld in het kader van de module **System Automation & Scripting** (3e jaar).
+This project was created as part of the **System Automation & Scripting** course (3rd year).
 
-## 2. Requirements (Vereisten)
-Om SysFlow correct te laten functioneren, moet het doelsysteem voldoen aan de volgende eisen:
+## 2. Requirements
+To run SysFlow correctly, the target system should meet the following requirements:
 
-* **Besturingssysteem:** Windows 10 of Windows 11.
-* **PowerShell Versie:** 5.1 of hoger (aanbevolen: PowerShell 7+).
-* **Rechten:** Het script moet worden uitgevoerd als **Administrator** (nodig voor software-installaties en CIM/WMI-queries).
-* **Afhankelijkheden:**
-    * Internetverbinding (voor softwarebeheer).
-    * Geïnstalleerde package managers: **Winget** (standaard in moderne Windows) en/of **Chocolatey**.
+* **Operating system:** Windows 10 or Windows 11.
+* **PowerShell version:** 5.1 or higher (PowerShell 7+ recommended).
+* **Privileges:** Run the script as **Administrator** (required for software installs and CIM/WMI queries).
+* **Dependencies:**
+    * Internet connection (for software management).
+    * Installed package managers: **Winget** (default on modern Windows) and/or **Chocolatey**.
 
-## 3. Hoe installeer je het?
-SysFlow is een "portable" script-applicatie en vereist geen complexe installatie.
+## 3. Installation
+SysFlow is a "portable" script application and does not require a complex installer.
 
-1.  **Downloaden:** Clone deze repository of download de broncode als ZIP naar een lokale map (bijv. `C:\Scripts\SysFlow`).
-2.  **Deblokkeren:** Omdat scripts van het internet komen, moet je ze mogelijk deblokkeren. Open PowerShell als Administrator en draai:
+1.  **Download:** Clone this repository or download the source as a ZIP file to a local folder (for example `C:\Scripts\SysFlow`).
+2.  **Unblock:** Because scripts come from the internet, you may need to unblock them. Open PowerShell as Administrator and run:
     ```powershell
     Get-ChildItem -Path "C:\Scripts\SysFlow" -Recurse | Unblock-File
     ```
-3.  **Execution Policy:** Zorg dat scripts mogen draaien op je systeem:
+3.  **Execution policy:** Allow scripts to run on your system:
     ```powershell
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
     ```
 
-## 4. Hoe configureer je het?
-De configuratie wordt beheerd in het bestand `SysFlow/config.psd1`. Je kunt dit bestand handmatig bewerken of instellingen wijzigen via het menu in de applicatie (Optie 5).
+## 4. Configuration
+Configuration is stored in `SysFlow/config.psd1`. You can edit this file manually or change settings via the in-app Settings menu (Option 5).
 
-Belangrijke instellingen in `config.psd1`:
-* **Paden:**
-    * `DefaultBackupDestination`: Waar back-ups standaard worden opgeslagen.
-    * `DefaultReportPath`: Waar CSV/HTML rapporten worden gegenereerd.
-    * `LogPath`: Locatie van het technische logbestand.
-* **Drempelwaarden (Thresholds):**
-    * `CPUThreshold`, `RAMThreshold`: Percentage waarna een waarschuwing wordt gegeven (standaard 50-70%).
-    * `ProcessMemoryThreshold`: Waarschuwing als een proces meer dan X MB geheugen gebruikt.
+Key settings in `config.psd1`:
+* **Paths:**
+    * `DefaultBackupDestination`: Default folder where backups are stored.
+    * `DefaultReportPath`: Where CSV/HTML reports are generated.
+    * `LogPath`: Location of the technical log file.
+* **Thresholds:**
+    * `CPUThreshold`, `RAMThreshold`: Percentage at which a warning is raised (typically 50–70%).
+    * `ProcessMemoryThreshold`: Warning when a process uses more than X MB of memory.
 
-## 5. Hoe gebruik je het?
-1.  Open PowerShell als **Administrator**.
-2.  Navigeer naar de map `SysFlow`.
-3.  Start het hoofdscript:
-    ```powershell
-    .\Start-SysFlow.ps1
-    ```
-4.  Gebruik het numerieke menu om te navigeren:
-    * `1`: **System Monitoring** (Bekijk live stats en exporteer naar CSV).
-    * `2`: **Backup Management** (Maak of herstel back-ups van mappen).
-    * `3`: **Software Management** (Installeer/Update software via Winget/Choco).
-    * `4`: **Reporting** (Genereer gecombineerde HTML-rapporten van eerdere scans).
-    * `5`: **Settings** (Pas configuratiepaden en drempelwaarden live aan).
-    * `Q`: Afsluiten.
+## 5. How to use it
+1. Open PowerShell as **Administrator**.
+2. Navigate to the `SysFlow` folder:
+     ```powershell
+     cd "C:\Users\...\SysFlow\SysFlow"
+     ```
+3. Start the application via the main script (this automatically imports `SysFlowModule.psm1`):
+     ```powershell
+     .\Start-SysFlow.ps1
+     ```
+4. Use the numeric menu to navigate:
+     * `1`: **System Monitoring**  
+         Display CPU/RAM/Storage/Uptime/Process statistics. Results are shown in a table and – depending on configuration – also written to `History.csv` and the HTML report `Report.html` in the configured `DefaultReportPath`.
+     * `2`: **Backup Management**  
+         Create ZIP backups (with manifest) of one or more folders, restore backups (to a target folder or original paths via the manifest), and list or remove existing backups.
+     * `3`: **Software Management**  
+         Retrieve the list of installed software, install new packages or update/uninstall existing packages via **Winget** or **Chocolatey**. The default package manager is determined by `DefaultPackageManager` in `config.psd1`.
+     * `4`: **Reporting**  
+         Reserved for future reporting extensions. Most reporting currently happens automatically from monitoring and backup actions (HTML + CSV export).
+     * `5`: **Settings**  
+         Change paths (`DefaultBackupDestination`, `DefaultBackupSource`, `DefaultReportPath`), thresholds (CPU/RAM/Storage/ProcessMemory) and the default package manager. Changes are written back to `config.psd1`.
+     * `Q`: Exit SysFlow.
 
-**Logbestanden:** Na gebruik kun je logs terugvinden in de map `SysFlow/Logs/` en rapporten in `SysFlow/Reports/`.
+**Logs & reports:**
+- Technical logs: in the folder configured by `LogPath` (by default `SysFlow/Logs/SysFlow.log`).
+- CSV/HTML reports: in the folder configured by `DefaultReportPath` (by default `SysFlow/Reports/`, including `History.csv` and `Report.html`).
 
-## 6. Architectuur & Structuur
-Het project volgt een strikte modulaire structuur om onderhoud en uitbreiding door derden te vergemakkelijken.
+## 6. Architecture & structure
+The project follows a modular structure to make maintenance and extension by others easy.
 
-### Mappenstructuur
+### Folder structure
 ```text
 SysFlow-Software-module/
-├── README.md               <-- Dit bestand
+├── README.md               <-- This file
 ├── SysFlow/
-│   ├── Start-SysFlow.ps1   <-- CONTROLLER: Hoofdmenu en flow-logica
-│   ├── config.psd1         <-- CONFIG: Hashtable met instellingen
-│   ├── Logs/               <-- DATA: Gegenereerde logbestanden
-│   ├── Modules/            <-- LOGICA: Alle functionaliteit per domein
+│   ├── Start-SysFlow.ps1   <-- CONTROLLER: Main menu and flow logic
+│   ├── config.psd1         <-- CONFIG: Hashtable with settings
+│   ├── Logs/               <-- DATA: Generated log files
+│   ├── Modules/            <-- LOGIC: All domain functionality
+│   │   ├── SysFlowModule.psm1  (Main module that exports all functions)
 │   │   ├── BackupModule/       (New-Backup, Restore-Backup, Remove-Backup)
 │   │   ├── MonitorModule/      (Get-CPUStats, Get-RamStats, etc.)
 │   │   ├── ReportingModule/    (Write-SysFlowLog, Export-StatToHtml)
 │   │   └── SoftwareModule/     (Install-Software, Get-SoftwareList)
-│   └── Tests/              <-- KWALITEIT: Pester unit tests
+│   └── Tests/              <-- QUALITY: Pester unit tests
 
 ```
 
-### Technische keuzes
+### Technical choices
 
-* **Controller-script:** `Start-SysFlow.ps1` bevat geen zware logica, maar roept functies aan uit de modules. Dit houdt de interface gescheiden van de code.
-* **Object-georiënteerd:** Functies (zoals `Get-CPUStats`) retourneren `PSCustomObjects` in plaats van platte tekst. Hierdoor kan de data zowel getoond (`Format-Table`) als geëxporteerd (`Export-Csv`) worden.
-* **Foutafhandeling:** Kritieke acties (zoals installaties of bestandsoperaties) zijn verpakt in `Try/Catch` blokken met logging naar `Write-SysFlowLog`.
+* **Controller script:** `Start-SysFlow.ps1` contains no heavy logic, but imports the main module `Modules/SysFlowModule.psm1` and calls functions from there. This keeps the interface separated from the core logic.
+* **Modules:** Instead of multiple separate module files there is now one central module `SysFlowModule.psm1` which dot-sources the functions from `BackupModule`, `MonitorModule`, `ReportingModule` and `SoftwareModule` and exports them as a single API.
+* **Object-oriented data:** Functions (such as `Get-CPUStats`) return `PSCustomObject` instances instead of plain text. This makes it easy to both display data (`Format-Table`) and export it (`Export-Csv`).
+* **Error handling:** Critical actions (such as installs or file operations) are wrapped in `try/catch` blocks with logging via `Write-SysFlowLog`.
 
-## 7. Bronvermelding
+## 7. References
 
-Dit project is een academisch werk. Bij de totstandkoming zijn de volgende bronnen geraadpleegd en gebruikt:
+This project is an academic assignment. The following sources were consulted and used:
 
-### Cursusmateriaal
+### Course material
 
-* Cursus **System Automation & Scripting** (Erasmus Hogeschool Brussel, 2024-2025).
-* PowerPoint-slides en lesnotities over PowerShell functies, modules en CIM/WMI-classes.
+* Course **System Automation & Scripting** (Erasmus University College Brussels, 2024–2025).
+* PowerPoint slides and lecture notes about PowerShell functions, modules and CIM/WMI classes.
 
-### Documentatie
+### Documentation
 
-* **Microsoft Learn:** PowerShell documentatie (o.a. `Get-CimInstance`, `Compress-Archive`).
-* **Package Managers:** Officiële documentatie van [Winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) en [Chocolatey](https://docs.chocolatey.org/).
+* **Microsoft Learn:** PowerShell documentation (e.g. `Get-CimInstance`, `Compress-Archive`).
+* **Package managers:** Official documentation of [Winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) and [Chocolatey](https://docs.chocolatey.org/).
 
-### Artificiële Intelligentie (AI)
+### Artificial Intelligence (AI)
 
-Er is gebruikgemaakt van Generatieve AI (Google Gemini & OpenAI ChatGPT) voor:
+Generative AI (Google Gemini & OpenAI ChatGPT) was used for:
 
-* **Code Generatie:** Hulp bij het opzetten van de skeletstructuur van modules (o.a. `ReportingModule`).
-* **Debugging:** Het analyseren van foutmeldingen bij de `Restore-Backup` manifest-logica.
-* **Documentatie:** Het genereren van sjablonen voor `.SYNOPSIS` help-blokken in de scripts en delen van deze README.
-* *aanpassen backup functie** zorgen dat back up meer dan 2gb kan doen
-* *Opmerking:* Alle door AI gegenereerde code is handmatig gereviewd, getest en aangepast aan de specifieke eisen van dit project.
+* **Code generation:** Helping set up the skeleton structure of modules (e.g. `ReportingModule`).
+* **Debugging:** Analysing error messages for the `Restore-Backup` manifest logic and improving the backup function (e.g. supporting backups larger than 2 GB).
+* **Documentation:** Generating templates for `.SYNOPSIS` help blocks and parts of this README.
+* *Note:* All AI-generated code was manually reviewed, tested and adapted to the specific requirements of this project.
 
+### Online sources
 
-### Online Bronnen
-
-* StackOverflow (Specifieke syntax-vragen over hashtables en arrays).
-* GitHub (Inspiratie voor folderstructuren van PowerShell-modules).
+* StackOverflow (specific syntax questions about hashtables and arrays).
+* GitHub (inspiration for folder structures of PowerShell modules).
 
 ---
 
-*Auteur: Wout De Peuter*
-*Datum: Januari 2025*
-
-```
-
-```
+*Author: Wout De Peuter*  
+*Date: January 2025*
