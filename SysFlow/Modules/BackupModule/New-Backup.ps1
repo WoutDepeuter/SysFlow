@@ -90,9 +90,52 @@ function New-Backup {
         if ($PSCmdlet.ShouldProcess($BackupFilePath, 'Create backup archive')) {
             Write-Progress -Activity "Creating backup" -Status "Compressing files..." -PercentComplete 0
             
-            # Include sources and the manifest file
-            $itemsToArchive = @($PathsToBackup + $tempManifestPath)
-            Compress-Archive -LiteralPath $itemsToArchive -DestinationPath $BackupFilePath -Force -CompressionLevel Optimal
+            # Use .NET ZipFile for large file support (>2GB)
+            Add-Type -AssemblyName System.IO.Compression.FileSystem
+            
+            # Remove existing backup if it exists
+            if (Test-Path $BackupFilePath) {
+                Remove-Item $BackupFilePath -Force
+            }
+            
+            # Create the zip archive
+            $zip = [System.IO.Compression.ZipFile]::Open($BackupFilePath, [System.IO.Compression.ZipArchiveMode]::Create)
+            
+            try {
+                # Add each source path to the archive
+                foreach ($sourcePath in $PathsToBackup) {
+                    $sourcePath = (Resolve-Path $sourcePath).Path
+                    
+                    if (Test-Path $sourcePath -PathType Container) {
+                        # It's a directory - add all files recursively
+                        $files = Get-ChildItem -Path $sourcePath -Recurse -File
+                        $totalFiles = $files.Count
+                        $fileIndex = 0
+                        
+                        foreach ($file in $files) {
+                            $fileIndex++
+                            $relativePath = $file.FullName.Substring($sourcePath.Length).TrimStart('\', '/')
+                            $entryName = (Split-Path -Leaf $sourcePath) + '\' + $relativePath
+                            
+                            Write-Progress -Activity "Creating backup" -Status "Adding: $($file.Name)" -PercentComplete (($fileIndex / $totalFiles) * 100)
+                            [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $file.FullName, $entryName, [System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
+                        }
+                    }
+                    else {
+                        # It's a file - add it directly
+                        $fileName = Split-Path -Leaf $sourcePath
+                        Write-Progress -Activity "Creating backup" -Status "Adding: $fileName"
+                        [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $sourcePath, $fileName, [System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
+                    }
+                }
+                
+                # Add manifest file
+                $manifestName = Split-Path -Leaf $tempManifestPath
+                [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $tempManifestPath, $manifestName, [System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
+            }
+            finally {
+                $zip.Dispose()
+            }
             
             Write-Progress -Activity "Creating backup" -Completed -Status "Done"
             Write-Host "Backup created successfully at: $BackupFilePath" -ForegroundColor Green
