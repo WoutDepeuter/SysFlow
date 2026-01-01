@@ -59,3 +59,124 @@
 [2025-12-31 14:11:20] [Warning] High memory usage: 309 processes.
 [2025-12-31 14:11:20] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
 [2025-12-31 14:11:20] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2025-12-31; Time: 14:11:20
+[2025-12-31 15:14:16] [Info] SysFlow application started
+[2025-12-31 15:14:21] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 15:14:21] [Info] New unified HTML report created | Details: File: .\Reports\Report.html; Sections: 1; Date: 2025-12-31; Time: 15:14:21
+[2025-12-31 15:14:21] [Warning] RAM usage above threshold | Details: Used: 81.96% | Threshold: 50% | Free: 5.72 GB
+[2025-12-31 15:14:22] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 15:14:22] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2025-12-31; Time: 15:14:22
+[2025-12-31 15:14:22] [Warning] Storage above threshold | Details: Drives: C:, G: | Threshold: 50%
+[2025-12-31 15:14:26] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 4
+[2025-12-31 15:14:26] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 4; Date: 2025-12-31; Time: 15:14:26
+[2025-12-31 15:14:26] [Warning] CPU load above threshold | Details: Load: 57% | Threshold: 50%
+[2025-12-31 15:14:26] [Warning] RAM usage above threshold | Details: Used: 81.39% | Threshold: 50%
+[2025-12-31 15:14:26] [Warning] Storage above threshold | Details: Drives: C:, G: | Threshold: 50%
+[2025-12-31 15:14:26] [Warning] Full system scan detected threshold exceedance | Details: CPU high (57% >= 50%) | RAM high (81.39% >= 50%) | Storage high (C:, G: >= 50%)
+[2025-12-31 15:14:28] [Info] Uptime: 1 days, 5 hours.
+[2025-12-31 15:14:35] [Info] Backup creation initiated
+[2025-12-31 15:14:39] [Info] Creating backup | Details: Source: C:\Users\depeu\touhou_little_maid | Destination: C:\Users\depeu | Name: Auto-generated
+[2025-12-31 15:14:39] [Info] Backup created successfully
+[2025-12-31 15:14:41] [Info] Backup removal initiated
+[2025-12-31 15:14:43] [Info] Removing backups | Details: Destination: C:\Users\depeu
+[2025-12-31 15:14:46] [Info] Backup removal completed
+[2025-12-31 15:14:49] [Info] Listing backups
+[2025-12-31 15:14:50] [Info] Backups listed | Details: Found 10 backups
+[2025-12-31 15:15:07] [Info] Installing software | Details: Name: edge | Manager: choco
+[2025-12-31 15:15:10] [Info] Software installation completed
+[2025-12-31 15:15:21] [Info] Installing software | Details: Name: spotify | Manager: choco
+[2025-12-31 15:15:23] [Info] Software installation completed
+[2025-12-31 15:15:31] [Info] Uninstalling software | Details: Name: spotify | Manager: choco
+[2025-12-31 15:15:41] [Info] Software uninstall completed
+[2025-12-31 15:15:53] [Info] Installing software | Details: Name: spotify | Manager: choco
+[2025-12-31 15:17:08] [Info] SysFlow application started
+[2025-12-31 15:17:17] [Info] Installing software | Details: Name: spotify | Manager: choco
+[2025-12-31 15:17:20] [Info] Software installation completed
+[2025-12-31 15:17:34] [Warning] Software installation cancelled: no name provided
+[2025-12-31 15:18:09] [Info] Listing installed software
+[2025-12-31 15:18:10] [Info] Software list displayed | Details: Found 610 applications
+[2025-12-31 15:18:15] [Info] Installing software | Details: Name: spotify | Manager: choco
+[2025-12-31 15:18:18] [Info] Software installation completed
+[2025-12-31 15:18:33] [Info] Updating software | Details: Name: spotify | Manager: choco
+[2025-12-31 15:18:36] [Info] Software update completed
+[2025-12-31 15:18:53] [Info] Updating software | Details: Name: spotify | Manager: choco
+[2025-12-31 15:18:55] [Info] Software update completed
+[2025-12-31 15:19:09] [Info] Reporting module accessed (not yet implemented)
+[2025-12-31 15:19:17] [Info] Configuration viewed
+[2025-12-31 15:19:26] [Info] Monitoring thresholds updated | Details: CPU: 1% | RAM: 1% | Storage: 1% | Process Memory: 1 MB
+[2025-12-31 15:19:42] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 15:19:42] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2025-12-31; Time: 15:19:42
+[2025-12-31 15:19:42] [Warning] CPU load above threshold | Details: Load: 8% | Threshold: 1%
+[2025-12-31 15:19:50] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 15:19:50] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2025-12-31; Time: 15:19:50
+[2025-12-31 15:19:50] [Warning] CPU load above threshold | Details: Load: 14% | Threshold: 1%
+[2025-12-31 15:19:52] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 15:19:52] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2025-12-31; Time: 15:19:52
+[2025-12-31 15:19:52] [Warning] RAM usage above threshold | Details: Used: 85.6% | Threshold: 1% | Free: 4.57 GB
+[2025-12-31 15:19:53] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 15:19:53] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2025-12-31; Time: 15:19:53
+[2025-12-31 15:19:53] [Warning] Storage above threshold | Details: Drives: C:, G: | Threshold: 1%
+[2025-12-31 15:19:57] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 4
+[2025-12-31 15:19:57] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 4; Date: 2025-12-31; Time: 15:19:57
+[2025-12-31 15:19:57] [Warning] CPU load above threshold | Details: Load: 13% | Threshold: 1%
+[2025-12-31 15:19:57] [Warning] RAM usage above threshold | Details: Used: 85.45% | Threshold: 1%
+[2025-12-31 15:19:57] [Warning] Storage above threshold | Details: Drives: C:, G: | Threshold: 1%
+[2025-12-31 15:19:57] [Warning] Full system scan detected threshold exceedance | Details: CPU high (13% >= 1%) | RAM high (85.45% >= 1%) | Storage high (C:, G: >= 1%)
+[2025-12-31 15:19:58] [Info] Uptime: 1 days, 5 hours.
+[2025-12-31 15:20:01] [Warning] High memory usage: 489 processes.
+[2025-12-31 15:20:01] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2025-12-31 15:20:01] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2025-12-31; Time: 15:20:01
+[2025-12-31 15:20:07] [Info] SysFlow application closed by user
+[2025-12-31 15:20:07] [Info] SysFlow application closed by user
+[2026-01-01 14:15:46] [Info] SysFlow application started
+[2026-01-01 14:15:50] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-01-01 14:15:50] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-01-01; Time: 14:15:50
+[2026-01-01 14:15:50] [Warning] RAM usage above threshold | Details: Used: 70.21% | Threshold: 1% | Free: 9.45 GB
+[2026-01-01 14:15:52] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-01-01 14:15:52] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-01-01; Time: 14:15:52
+[2026-01-01 14:15:52] [Warning] Storage above threshold | Details: Drives: C:, G: | Threshold: 1%
+[2026-01-01 14:15:55] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 4
+[2026-01-01 14:15:55] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 4; Date: 2026-01-01; Time: 14:15:55
+[2026-01-01 14:15:55] [Warning] CPU load above threshold | Details: Load: 1% | Threshold: 1%
+[2026-01-01 14:15:55] [Warning] RAM usage above threshold | Details: Used: 70.11% | Threshold: 1%
+[2026-01-01 14:15:55] [Warning] Storage above threshold | Details: Drives: C:, G: | Threshold: 1%
+[2026-01-01 14:15:55] [Warning] Full system scan detected threshold exceedance | Details: CPU high (1% >= 1%) | RAM high (70.11% >= 1%) | Storage high (C:, G: >= 1%)
+[2026-01-01 14:15:57] [Info] Uptime: 2 days, 4 hours.
+[2026-01-01 14:16:00] [Info] Uptime: 2 days, 4 hours.
+[2026-01-01 14:16:03] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-01-01 14:16:03] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-01-01; Time: 14:16:03
+[2026-01-01 14:16:03] [Warning] CPU load above threshold | Details: Load: 1% | Threshold: 1%
+[2026-01-01 14:16:10] [Info] Backup creation initiated
+[2026-01-01 14:16:37] [Info] Creating backup | Details: Source: C:\Users\depeu\Downloads | Destination: C:\Users\depeu | Name: Downloads
+[2026-01-01 14:18:52] [Info] Backup created successfully
+[2026-01-01 17:58:56] [Info] SysFlow application started
+[2026-01-01 17:59:00] [Info] Backup creation initiated
+[2026-01-01 17:59:04] [Warning] Backup cancelled: missing source or destination
+[2026-01-01 17:59:06] [Info] Backup creation initiated
+[2026-01-01 17:59:16] [Info] Creating backup | Details: Source: C:\Users\depeu\Downloads | Destination: C:\Users\depeu | Name: Auto-generated
+[2026-01-01 18:01:31] [Info] Backup created successfully
+[2026-01-01 18:02:31] [Info] SysFlow application closed by user
+[2026-01-01 18:02:31] [Info] SysFlow application closed by user
+[2026-01-01 18:03:22] [Info] SysFlow application started
+[2026-01-01 18:03:27] [Info] Backup creation initiated
+[2026-01-01 18:03:31] [Warning] Backup cancelled: missing source or destination
+[2026-01-01 18:03:33] [Info] Backup creation initiated
+[2026-01-01 18:03:36] [Warning] Backup cancelled: missing source or destination
+[2026-01-01 18:03:38] [Info] Backup creation initiated
+[2026-01-01 18:03:45] [Info] Creating backup | Details: Source: C:\Users\depeu\Downloads | Destination: C:\Users\depeu | Name: Auto-generated
+[2026-01-01 18:08:16] [Info] Backup created successfully
+[2026-01-01 18:08:35] [Info] Listing backups
+[2026-01-01 18:08:36] [Info] Backups listed | Details: Found 10 backups
+[2026-01-01 18:08:52] [Info] Backup creation initiated
+[2026-01-01 18:08:55] [Info] Creating backup | Details: Source: C:\Users\depeu\touhou_little_maid | Destination: C:\Users\depeu | Name: Auto-generated
+[2026-01-01 18:08:55] [Info] Backup created successfully
+[2026-01-01 18:08:57] [Info] Backup creation initiated
+[2026-01-01 18:09:08] [Info] Creating backup | Details: Source: C:\Users\depeu\Downloads\Software-Design-Quality-Assurance-TI2-2025-Dec-26_10-15-28-750 | Destination: C:\Users\depeu | Name: test4
+[2026-01-01 18:09:09] [Info] Backup created successfully
+[2026-01-01 18:09:22] [Info] Listing backups
+[2026-01-01 18:09:23] [Info] Backups listed | Details: Found 12 backups
+[2026-01-01 18:09:33] [Info] Backup creation initiated
+[2026-01-01 18:09:39] [Info] Creating backup | Details: Source: C:\Users\depeu\Downloads\Software-Design-Quality-Assurance-TI2-2025-Dec-26_10-15-28-750\Software-Design-Quality-Assurance-TI2-2025-Dec-26_10-15-28-750 | Destination: C:\Users\depeu | Name: Auto-generated
+[2026-01-01 18:09:41] [Info] Backup created successfully
+[2026-01-01 18:10:36] [Info] Backup creation initiated
+[2026-01-01 18:10:47] [Info] Creating backup | Details: Source: C:\Users\depeu\Downloads\kali-linux-2025.4-virtualbox-amd64 | Destination: C:\Users\depeu | Name: kali
+[2026-01-01 18:12:02] [Info] Backup created successfully

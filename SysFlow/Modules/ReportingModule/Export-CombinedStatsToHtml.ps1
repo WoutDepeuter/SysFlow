@@ -126,6 +126,7 @@ function Export-CombinedStatsToHtml {
             $processTable = $processRows | ConvertTo-Html -Fragment
             $sections += "<div class='section'><h2>Process Statistics</h2>$processTable</div>"
         }
+        
 
         $content = @"
 <!DOCTYPE html>

@@ -44,6 +44,23 @@ if (-not ($Config.ContainsKey('ExportFormat')) -or [string]::IsNullOrWhiteSpace(
     $Config.ExportFormat = 'Both'
 }
 
+# Ensure script runs elevated when needed (required for software install/updates)
+function Ensure-Admin {
+    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
+
+    if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+        Write-Host "Elevation required. Relaunching with Administrator privileges..." -ForegroundColor Yellow
+        $psExe = (Get-Process -Id $PID).Path
+        $args = @('-NoProfile','-ExecutionPolicy','Bypass','-File',"`"$PSCommandPath`"")
+        Start-Process -FilePath $psExe -Verb RunAs -ArgumentList $args | Out-Null
+        exit
+    }
+}
+
+# Enforce elevation before continuing
+Ensure-Admin
+
 # Helper: return a threshold value from config or fall back to a sane default
 function Get-ThresholdValue {
     param(
