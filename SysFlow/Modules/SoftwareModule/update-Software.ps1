@@ -30,6 +30,10 @@ function Update-Software {
         } catch { Write-Warning "Failed to load Get-SoftwareList.ps1: $_" }
     }
 
+    # Track status for the return object
+    $status = "Failed"
+    $errorDetails = $null
+
     # If no package name provided, show interactive list
     if (-not $PackageName) {
         Write-Host "`n=== Installed Software ===" -ForegroundColor Cyan
@@ -37,7 +41,7 @@ function Update-Software {
         
         if ($software.Count -eq 0) {
             Write-Host "No software found." -ForegroundColor Yellow
-            return----
+            return
         }
 
         # Display numbered list
@@ -84,12 +88,18 @@ function Update-Software {
         elseif ($Manager -eq 'choco') {
             Write-Host "Updating $PackageName using Chocolatey..." -ForegroundColor Cyan
             choco upgrade $PackageName -y
+            if ($LASTEXITCODE -ne 0) {
+                throw "Chocolatey returned exit code $LASTEXITCODE"
+            }
         }
         #output update command executed
         Write-Host "✓ Update command executed for $PackageName." -ForegroundColor Green
+        $status = "Success"
     }
     #error handling
     catch {
+        $status = "Error"
+        $errorDetails = $_.Exception.Message
         Write-Error "Update failed: $_"
     }
 

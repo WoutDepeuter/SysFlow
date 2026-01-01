@@ -14,12 +14,15 @@ function Get-FolderSelection {
     return $null
 }
 
-# Import Modules
-$MonitorModulePath   = Join-Path $PSScriptRoot 'Modules\MonitorModule\MonitorModule.psm1'
-$BackupModulePath    = Join-Path $PSScriptRoot 'Modules\BackupModule\BackupModule.psm1'
-$SoftwareModulePath  = Join-Path $PSScriptRoot 'Modules\SoftwareModule\SoftwareModule.psm1'
-$ReportingModulePath = Join-Path $PSScriptRoot 'Modules\ReportingModule\ReportingModule.psm1'
-$ConfigPath = Join-Path $PSScriptRoot 'config.psd1'
+# Import unified SysFlow module
+$SysFlowModulePath = Join-Path $PSScriptRoot 'Modules\SysFlowModule.psm1'
+$ConfigPath        = Join-Path $PSScriptRoot 'config.psd1'
+
+if (Test-Path $SysFlowModulePath) {
+    Import-Module $SysFlowModulePath -Force
+} else {
+    throw "SysFlowModule.psm1 not found at $SysFlowModulePath"
+}
 
 # Load configuration
 $Config = @{}

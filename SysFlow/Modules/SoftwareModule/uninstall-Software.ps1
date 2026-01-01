@@ -52,7 +52,11 @@ function Uninstall-Software {
 #>
 
 
-#parameters for the function
+    # Track status for the return object
+    $status = "Failed"
+    $errorDetails = $null
+
+    #parameters for the function
     param(
         [string]$PackageName,
         [ValidateSet('winget', 'choco')]
@@ -113,7 +117,7 @@ function Uninstall-Software {
     }
 
     try {
-        #check what manager to use if manager is winget or choco uses that manager to uninstall
+        #check what manager to use; if manager is winget or choco uses that manager to uninstall
         if ($Manager -eq 'winget') {
             Write-Host "Uninstalling $PackageName using Winget..." -ForegroundColor Cyan
             winget uninstall --id $PackageName --silent --accept-source-agreements --accept-package-agreements
@@ -122,13 +126,17 @@ function Uninstall-Software {
         elseif ($Manager -eq 'choco') {
             Write-Host "Uninstalling $PackageName using Chocolatey..." -ForegroundColor Cyan
             choco uninstall $PackageName -y
+            if ($LASTEXITCODE -ne 0) {
+                throw "Chocolatey returned exit code $LASTEXITCODE"
+            }
         }
         Write-Host "✓ Uninstallation command executed for $PackageName." -ForegroundColor Green
-        Write-Host "Uninstallation command executed for $PackageName."
+        $status = "Success"
     }
     #error handling
     catch {
-        
+        $status = "Error"
+        $errorDetails = $_.Exception.Message
         Write-Error "Uninstallation failed: $_"
     }
 
