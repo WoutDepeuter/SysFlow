@@ -157,6 +157,7 @@ function Show-BackupMenu {
     Write-Host "2. Restore Backup"
     Write-Host "3. Remove Backup(s)"
     Write-Host "4. List Backups"
+    Write-Host "5. Schedule Daily Backup"
     Write-Host "B. Back to Main Menu"
 }
 
@@ -502,6 +503,40 @@ function Start-SysFlow {
                             $backupList = Remove-Backup -BackupDestination $dest -ListOnly
                             $backupList | Format-Table Index, Name, Size, Created -AutoSize
                             Write-SysFlowLog -LogLevel "Info" -Message "Backups listed" -Details "Found $($backupList.Count) backups" -LogFilePath $Config.LogPath
+                        }
+
+                        '5' {
+                            $registerScript = Join-Path $PSScriptRoot 'Register-DailyBackupTask.ps1'
+                            if (-not (Test-Path $registerScript)) {
+                                Write-Host "Register-DailyBackupTask.ps1 not found. Please ensure it exists next to Start-SysFlow.ps1." -ForegroundColor Red
+                                Write-SysFlowLog -LogLevel "Error" -Message "Register-DailyBackupTask.ps1 not found" -LogFilePath $Config.LogPath
+                                Pause
+                                break
+                            }
+
+                            Write-Host "\n=== Schedule Daily Backup ===" -ForegroundColor Cyan
+                            Write-Host "Current default source: $($Config.DefaultBackupSource)" -ForegroundColor White
+                            Write-Host "Current default destination: $($Config.DefaultBackupDestination)" -ForegroundColor White
+                            Write-Host "(These are used by the scheduled backup via Run-DailyBackup.ps1)" -ForegroundColor DarkGray
+
+                            $time = Read-Host "Enter daily run time (HH:mm, 24h, default 03:00)"
+                            if ([string]::IsNullOrWhiteSpace($time)) { $time = '03:00' }
+
+                            $taskName = Read-Host "Enter task name (default SysFlow-DailyBackup)"
+                            if ([string]::IsNullOrWhiteSpace($taskName)) { $taskName = 'SysFlow-DailyBackup' }
+
+                            Write-SysFlowLog -LogLevel "Info" -Message "Registering daily backup task" -Details "TaskName=$taskName; Time=$time" -LogFilePath $Config.LogPath
+
+                            try {
+                                & $registerScript -TaskName $taskName -Time $time
+                                Write-SysFlowLog -LogLevel "Info" -Message "Daily backup task registered" -Details "TaskName=$taskName; Time=$time" -LogFilePath $Config.LogPath
+                            }
+                            catch {
+                                Write-Host "Failed to register scheduled task: $_" -ForegroundColor Red
+                                Write-SysFlowLog -LogLevel "Error" -Message "Failed to register daily backup task" -Details $_ -LogFilePath $Config.LogPath
+                            }
+
+                            Pause
                         }
 
                         'B' { $BackupExit = $true }
