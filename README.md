@@ -129,7 +129,7 @@ Generative AI (Google Gemini & OpenAI ChatGPT) was used for:
 * **Debugging:** Troubleshooting the `Stream was too long` error in `Compress-Archive` and providing the .NET replacement code.
 * **Documentation:** Assisting in generating Comment-Based Help blocks and translating this README.
 * *Note:* All AI-generated code has been manually reviewed, tested, and adapted to the specific requirements of this project.
-
+[ai conversatie]https://gemini.google.com/share/dc56e8db1873
 ### Online Resources
 
 * StackOverflow (Specific syntax questions regarding hashtables and arrays).
