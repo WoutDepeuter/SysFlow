@@ -1,3 +1,35 @@
+<#
+.SYNOPSIS
+    Registers a Windows Scheduled Task to run the SysFlow daily backup.
+
+.DESCRIPTION
+    Creates or updates a scheduled task that runs Run-DailyBackup.ps1
+    every day at a specified time. It automatically chooses pwsh.exe
+    when available, otherwise falls back to powershell.exe.
+
+.PARAMETER TaskName
+    Name of the scheduled task to create or update. Defaults to
+    'SysFlow-DailyBackup'.
+
+.PARAMETER Time
+    Time of day in 24-hour HH:mm format at which the backup should run.
+    Defaults to 03:00.
+
+.PARAMETER UserId
+    The user account under which the task runs. Defaults to the
+    current user name.
+
+.EXAMPLE
+    .\Register-DailyBackupTask.ps1
+
+    Registers a task named 'SysFlow-DailyBackup' to run daily at 03:00
+    for the current user.
+
+.EXAMPLE
+    .\Register-DailyBackupTask.ps1 -TaskName 'SysFlow-Backup-22h' -Time '22:00'
+
+    Registers a task that runs the daily backup every evening at 22:00.
+#>
 param(
     [string]$TaskName = 'SysFlow-DailyBackup',
     [string]$Time = '03:00',          # HH:mm, 24h format

@@ -1,3 +1,27 @@
+<#
+.SYNOPSIS
+    Runs a SysFlow backup using configuration settings (for scheduling).
+
+.DESCRIPTION
+    This script loads SysFlow configuration from config.psd1, imports the
+    unified SysFlow module, and executes a backup using New-Backup.
+    It is primarily intended to be called by a Windows Scheduled Task
+    created via Register-DailyBackupTask.ps1.
+
+.PARAMETER ConfigPathOverride
+    Optional path to a custom config.psd1 file. When omitted, the
+    config.psd1 next to this script is used.
+
+.EXAMPLE
+    .\Run-DailyBackup.ps1
+
+    Runs a scheduled backup using the default config.psd1 file.
+
+.EXAMPLE
+    .\Run-DailyBackup.ps1 -ConfigPathOverride 'C:\Path\To\config.psd1'
+
+    Runs a scheduled backup using a specific configuration file.
+#>
 param(
     [string]$ConfigPathOverride
 )

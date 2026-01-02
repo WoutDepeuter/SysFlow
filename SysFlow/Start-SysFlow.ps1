@@ -1,5 +1,25 @@
 # Folder selection GUI function
 function Get-FolderSelection {
+    <#
+    .SYNOPSIS
+        Shows a folder selection dialog and returns the selected path.
+
+    .DESCRIPTION
+        Opens a Windows folder browser dialog so the user can choose
+        a folder. Returns the selected path as a string, or $null when
+        the dialog is cancelled.
+
+    .PARAMETER Description
+        Description text shown in the folder selection dialog.
+
+    .OUTPUTS
+        System.String
+
+    .EXAMPLE
+        Get-FolderSelection -Description 'Select backup folder'
+
+        Shows a dialog and returns the chosen folder path.
+    #>
     param([string]$Description)
 
     Add-Type -AssemblyName System.Windows.Forms
@@ -49,6 +69,20 @@ if (-not ($Config.ContainsKey('ExportFormat')) -or [string]::IsNullOrWhiteSpace(
 
 # Ensure script runs elevated when needed (required for software install/updates)
 function Ensure-Admin {
+    <#
+    .SYNOPSIS
+        Ensures the script is running with Administrator privileges.
+
+    .DESCRIPTION
+        Checks whether the current PowerShell session is elevated.
+        If not, it restarts the script as Administrator and exits
+        the current (non-elevated) process.
+
+    .EXAMPLE
+        Ensure-Admin
+
+        Restarts the script as Administrator when needed.
+    #>
     $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
     $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
 
@@ -66,6 +100,29 @@ Ensure-Admin
 
 # Helper: return a threshold value from config or fall back to a sane default
 function Get-ThresholdValue {
+    <#
+    .SYNOPSIS
+        Gets an effective threshold value from config or a default.
+
+    .DESCRIPTION
+        Returns the configured threshold value when it is a positive
+        integer; otherwise returns the specified default value. Used
+        to apply monitoring thresholds from the configuration.
+
+    .PARAMETER Default
+        Default threshold value to use when no valid value is provided.
+
+    .PARAMETER Value
+        Threshold value from configuration to validate and prefer.
+
+    .OUTPUTS
+        System.Int32
+
+    .EXAMPLE
+        Get-ThresholdValue -Default 70 -Value $Config.CPUThreshold
+
+        Returns the CPU threshold from config, or 70 if invalid.
+    #>
     param(
         [Parameter(Mandatory)][int]$Default,
         [Parameter(Mandatory)]$Value
@@ -80,6 +137,28 @@ function Get-ThresholdValue {
 
 # Helper: Export stats to CSV based on config
 function Export-StatsToCsvIfEnabled {
+    <#
+    .SYNOPSIS
+        Exports statistics to CSV when the config format allows it.
+
+    .DESCRIPTION
+        Helper that checks the configured ExportFormat value and
+        calls Export-StatToCsv only when CSV export is enabled.
+
+    .PARAMETER Stats
+        The statistics object or collection to export.
+
+    .PARAMETER CsvPath
+        Path to the CSV file that will be written.
+
+    .PARAMETER Format
+        Export format preference (CSV, HTML, Both, or None).
+
+    .EXAMPLE
+        Export-StatsToCsvIfEnabled -Stats $cpu -CsvPath '.\\Reports\\History.csv'
+
+        Exports CPU stats to CSV when CSV or Both is configured.
+    #>
     param(
         [Parameter(Mandatory)]$Stats,
         [Parameter(Mandatory)][string]$CsvPath,
@@ -93,6 +172,32 @@ function Export-StatsToCsvIfEnabled {
 
 # Helper: Export stats to unified HTML if enabled
 function Export-ToUnifiedHtmlIfEnabled {
+    <#
+    .SYNOPSIS
+        Exports multiple statistic sets to a unified HTML report.
+
+    .DESCRIPTION
+        Helper that checks the configured ExportFormat value and
+        calls Export-UnifiedStatsToHtml only when HTML export is
+        enabled. Used to generate the combined SysFlow HTML report.
+
+    .PARAMETER StatsHashtable
+        Hashtable where keys are section titles and values are stats.
+
+    .PARAMETER HtmlPath
+        Path to the HTML report file that will be written.
+
+    .PARAMETER PageTitle
+        Title to display on the HTML report page.
+
+    .PARAMETER Format
+        Export format preference (CSV, HTML, Both, or None).
+
+    .EXAMPLE
+        Export-ToUnifiedHtmlIfEnabled -StatsHashtable $htmlStats -HtmlPath '.\\Reports\\Report.html'
+
+        Writes an HTML report when HTML or Both is configured.
+    #>
     param(
         [Parameter(Mandatory)][hashtable]$StatsHashtable,
         [Parameter(Mandatory)][string]$HtmlPath,
@@ -105,25 +210,22 @@ function Export-ToUnifiedHtmlIfEnabled {
     }
 }
 
-# Import Monitor Module
-if (Test-Path $MonitorModulePath) {
-    Import-Module $MonitorModulePath -Force
-}
-# Import Backup Module
-if (Test-Path $BackupModulePath) {
-    Import-Module $BackupModulePath -Force
-}
-# Import Software Module
-if (Test-Path $SoftwareModulePath) {
-    Import-Module $SoftwareModulePath -Force
-}
-# Import Reporting Module (provides Export-StatToCsv, Write-SysFlowLog)
-if (Test-Path $ReportingModulePath) {
-    Import-Module $ReportingModulePath -Force
-}
-
 # Main Menu Function 
 function Show-MainMenu {
+    <#
+    .SYNOPSIS
+        Displays the main SysFlow menu.
+
+    .DESCRIPTION
+        Clears the console and writes the main SysFlow automation
+        menu, allowing the user to choose monitoring, backup,
+        software management, reporting, or settings.
+
+    .EXAMPLE
+        Show-MainMenu
+
+        Draws the main menu on the console.
+    #>
     Clear-Host
     Write-Host "==============================" -ForegroundColor Cyan
     Write-Host "   SYSFLOW AUTOMATION TOOL    " -ForegroundColor Cyan
@@ -140,6 +242,19 @@ function Show-MainMenu {
 
 # Submenu Functions for monitoring
 function Show-StatusMenu {
+    <#
+    .SYNOPSIS
+        Displays the system status (monitoring) submenu.
+
+    .DESCRIPTION
+        Writes the monitoring submenu options to the console,
+        including CPU, RAM, storage, uptime, and process stats.
+
+    .EXAMPLE
+        Show-StatusMenu
+
+        Draws the monitoring submenu.
+    #>
     Write-Host "----- System Status Submenu -----" -ForegroundColor Green
     Write-Host "1. CPU Only"
     Write-Host "2. RAM Only"
@@ -152,6 +267,19 @@ function Show-StatusMenu {
 
 # Submenu Functions for backup management
 function Show-BackupMenu {
+    <#
+    .SYNOPSIS
+        Displays the backup management submenu.
+
+    .DESCRIPTION
+        Writes the backup submenu options for creating, restoring,
+        removing, listing backups, and scheduling daily backups.
+
+    .EXAMPLE
+        Show-BackupMenu
+
+        Draws the backup management submenu.
+    #>
     Write-Host "----- Backup Management Submenu -----" -ForegroundColor Green
     Write-Host "1. Create Backup"
     Write-Host "2. Restore Backup"
@@ -163,6 +291,20 @@ function Show-BackupMenu {
 
 # Submenu Functions for settings
 function Show-SettingsMenu {
+    <#
+    .SYNOPSIS
+        Displays the settings submenu.
+
+    .DESCRIPTION
+        Writes the settings menu options, allowing the user to view
+        and change configuration such as backup paths, thresholds,
+        and the default package manager.
+
+    .EXAMPLE
+        Show-SettingsMenu
+
+        Draws the settings submenu.
+    #>
     Write-Host "----- Settings Menu -----" -ForegroundColor Green
     Write-Host "1. View Current Configuration"
     Write-Host "2. Set Default Backup Destination Folder"
@@ -175,6 +317,19 @@ function Show-SettingsMenu {
 
 # Submenu Functions for software management
 function Show-SoftwareMenu {
+    <#
+    .SYNOPSIS
+        Displays the software management submenu.
+
+    .DESCRIPTION
+        Writes the software submenu options to list, install,
+        update, or uninstall software using package managers.
+
+    .EXAMPLE
+        Show-SoftwareMenu
+
+        Draws the software management submenu.
+    #>
     Write-Host "----- Software Management Submenu -----" -ForegroundColor Green
     Write-Host "1. List Installed Software"
     Write-Host "2. Install Software"
@@ -185,6 +340,20 @@ function Show-SoftwareMenu {
 
 # Main driver
 function Start-SysFlow {
+    <#
+    .SYNOPSIS
+        Starts the interactive SysFlow automation tool.
+
+    .DESCRIPTION
+        Main entry point for SysFlow. Shows the main menu and
+        handles user interaction for monitoring, backups, software
+        management, reporting, and settings until the user exits.
+
+    .EXAMPLE
+        .\\Start-SysFlow.ps1
+
+        Launches the SysFlow menu UI.
+    #>
     $MainExit = $false
 
     do {
