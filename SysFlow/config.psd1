@@ -1,9 +1,11 @@
 @{
     # Default backup destination folder (where backups are saved)
-    DefaultBackupDestination = 'C:\Users\depeu'
+    # Use a folder inside the SysFlow project by default
+    DefaultBackupDestination = '.\\Backups'
     
     # Default source folder to backup (what gets backed up)
-    DefaultBackupSource = 'C:\Users\depeu\touhou_little_maid'
+    # Change this to the folder you want to back up
+    DefaultBackupSource = '.\\DataToBackup'
     
     # Default report output folder
     DefaultReportPath = '.\Reports'
