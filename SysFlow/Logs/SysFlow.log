@@ -40,3 +40,14 @@
 [2026-05-05 22:44:10] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
 [2026-05-05 22:49:19] [Info] SysFlow application started
 [2026-05-05 22:49:30] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-06-18 14:25:58] [Info] SysFlow application started
+[2026-06-18 14:26:02] [Info] Listing installed software
+[2026-06-18 14:26:07] [Info] Software list displayed | Details: Found 1 applications
+[2026-06-18 14:26:13] [Info] Listing installed software
+[2026-06-18 14:26:27] [Info] Software list displayed | Details: Found 615 applications
+[2026-06-18 14:26:38] [Info] Installing software | Details: Name: spotify | Manager: choco
+[2026-06-18 14:26:39] [Info] Software installation completed
+[2026-06-18 14:26:50] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-06-18 14:26:59] [Info] Software search completed
+[2026-06-18 14:27:23] [Info] Installing software | Details: Name: spicetify | Manager: choco
+[2026-06-18 14:27:28] [Info] Software installation completed

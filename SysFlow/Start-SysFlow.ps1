@@ -723,14 +723,34 @@ function Start-SysFlow {
                     Clear-Host
 
                     switch ($SoftChoice) {
-                        '1' {
-                            Write-Host "Listing installed software..." -ForegroundColor Cyan
+                       '1' {
+                            Write-Host "Geïnstalleerde software ophalen..." -ForegroundColor Cyan
                             Write-SysFlowLog -LogLevel "Info" -Message "Listing installed software" -LogFilePath $Config.LogPath
                             $softwareList = Get-SoftwareList | Sort-Object Name
-                            $softwareList | Format-Table Name, Version, Publisher -AutoSize
-                            Write-SysFlowLog -LogLevel "Info" -Message "Software list displayed" -Details "Found $($softwareList.Count) applications" -LogFilePath $Config.LogPath
-                            Pause
-                        }
+
+                                   # Zoekfunctie toevoegen
+    Write-Host ""
+    $search = Read-Host "Voer een zoekterm in om te filteren (of druk op Enter voor de volledige lijst)"
+    
+    if (-not [string]::IsNullOrWhiteSpace($search)) {
+        # Filteren op naam of uitgever (case-insensitive match)
+        $softwareList = $softwareList | Where-Object { $_.Name -match $search -or $_.Publisher -match $search }
+    }
+
+    Clear-Host
+    Write-Host "=== Geïnstalleerde Software (Gebruik SPATIE voor volgende pagina, Q om te sluiten) ===" -ForegroundColor Cyan
+    Write-Host ""
+
+    if ($softwareList.Count -gt 0) {
+        # Out-Host -Paging zorgt voor automatische paginering/scrolling per schermlengte
+        $softwareList | Format-Table Name, Version, Publisher -AutoSize | Out-Host -Paging
+    } else {
+        Write-Host "Geen software gevonden die voldoet aan de zoekterm '$search'." -ForegroundColor Yellow
+        Pause
+    }
+
+    Write-SysFlowLog -LogLevel "Info" -Message "Software list displayed" -Details "Found $($softwareList.Count) applications" -LogFilePath $Config.LogPath
+}
                         '2' {
                             $name = Read-Host "Enter software name or ID"
                             if (-not [string]::IsNullOrWhiteSpace($name)) {
