@@ -775,7 +775,8 @@ function Start-SysFlow {
                                 $showList = Read-Host "No name entered. Show installed software list? (Y/N)"
                                 Write-SysFlowLog -LogLevel "Warning" -Message "Software update cancelled: no name provided" -LogFilePath $Config.LogPath
                                 if ($showList -match '^[Yy]$') {
-                                    Get-SoftwareList | Sort-Object Name | Format-Table Name, Version -AutoSize
+                                        # Launch the interactive Update-Software selector (paginated/searchable)
+                                        Update-Software -Manager $mgr
                                 }
                             } else {
                                 Write-SysFlowLog -LogLevel "Info" -Message "Updating software" -Details "Name: $name | Manager: $mgr" -LogFilePath $Config.LogPath

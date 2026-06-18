@@ -51,3 +51,14 @@
 [2026-06-18 14:26:59] [Info] Software search completed
 [2026-06-18 14:27:23] [Info] Installing software | Details: Name: spicetify | Manager: choco
 [2026-06-18 14:27:28] [Info] Software installation completed
+[2026-06-18 14:37:56] [Warning] Software update cancelled: no name provided
+[2026-06-18 14:40:20] [Info] SysFlow application started
+[2026-06-18 14:40:27] [Warning] Software update cancelled: no name provided
+[2026-06-18 14:40:35] [Info] Updating software | Details: Name: spotify | Manager: choco
+[2026-06-18 14:41:27] [Info] Software update completed
+[2026-06-18 14:42:46] [Info] SysFlow application started
+[2026-06-18 14:42:51] [Warning] Software update cancelled: no name provided
+[2026-06-18 14:44:40] [Info] SysFlow application started
+[2026-06-18 14:44:44] [Warning] Software update cancelled: no name provided
+[2026-06-18 14:44:51] [Info] Updating software | Details: Name: google  | Manager: choco
+[2026-06-18 14:44:56] [Info] Software update completed
