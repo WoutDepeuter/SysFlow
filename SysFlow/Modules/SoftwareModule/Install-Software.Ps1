@@ -53,12 +53,13 @@ function Find-PackageId {
 function Install-Software {
     <#
     .SYNOPSIS
-        Installs software via Winget or Chocolatey with automatic ID lookup.
+        Installs software via Winget or Chocolatey with automatic ID lookup and optional confirmation.
 
     .DESCRIPTION
         The Install-Software function installs a specified software package on the system.
         It supports installation via the Winget and Chocolatey package managers.
         If the provided name is not an exact ID, the function automatically searches for and retrieves the package ID.
+        For Winget, a confirmation prompt is shown before proceeding with the install.
 
     .PARAMETER SoftwareName
         The name or ID of the software package (e.g., 'firefox', 'git', '7zip', 'Git.Git').
@@ -69,11 +70,7 @@ function Install-Software {
 
     .EXAMPLE
         Install-Software -SoftwareName "7zip"
-        Installs 7zip using the default manager (Winget), automatically searching for the ID.
-
-    .EXAMPLE
-        Install-Software -SoftwareName "googlechrome" -Manager "choco"
-        Installs Google Chrome using Chocolatey.
+        Installs 7zip using the default manager (Winget), automatically searching for the ID and asking for confirmation.
 
     .OUTPUTS
         PSCustomObject containing the installation status.
@@ -97,8 +94,11 @@ function Install-Software {
     # Attempt to resolve ID if it doesn't look like a winget ID (contains dot) and manager is winget
     if ($Manager -eq 'winget' -and $SoftwareName -notmatch '\.') {
         Write-Host "Searching for package ID: $SoftwareName..." -ForegroundColor Yellow
-        $resolvedId = Find-PackageId -PackageName $SoftwareName -Manager 'winget'
-        if ($resolvedId) {
+        
+        $searchedId = Find-PackageId -PackageName $SoftwareName -Manager 'winget'
+        
+        if ($null -ne $searchedId) {
+            $resolvedId = $searchedId
             Write-Host "✓ Found package ID: $resolvedId" -ForegroundColor Green
         } else {
             Write-Warning "Could not find exact ID for '$SoftwareName'. Attempting install with name..."
@@ -109,11 +109,28 @@ function Install-Software {
         switch ($Manager) {
             'winget' {
                 if (Get-Command winget -ErrorAction SilentlyContinue) {
-                    Write-Host "Installing '$SoftwareName' using Winget..." -ForegroundColor Cyan
-                    # Use resolved ID, with --silent to suppress popups
+                    # BEVESTIGING STAP
+                    Write-Host ""
+                    $confirmation = Read-Host "Are you sure you want to install '$resolvedId' via Winget? (Y/N)"
+                    
+                    if ($confirmation -notmatch '^[Yy]$') {
+                        $status = "Cancelled"
+                        $errorMessage = "Installation cancelled by user confirmation prompt."
+                        Write-Host "X Installation of '$resolvedId' cancelled." -ForegroundColor Yellow
+                        return [PSCustomObject]@{
+                            Timestamp    = Get-Date
+                            Action       = "Install-Software"
+                            PackageName  = $SoftwareName
+                            ResolvedId   = $resolvedId
+                            Manager      = $Manager
+                            Status       = $status
+                            Details      = $errorMessage
+                        }
+                    }
+
+                    Write-Host "Installing '$resolvedId' using Winget..." -ForegroundColor Cyan
                     winget install --id $resolvedId --silent --accept-source-agreements --accept-package-agreements
                     
-                    # Winget does not always return exit codes, so we assume no error = success
                     $status = "Success" 
                     Write-Host "✓ Winget execution completed." -ForegroundColor Green
                 } else {
@@ -123,7 +140,6 @@ function Install-Software {
             'choco' {
                 if (Get-Command choco -ErrorAction SilentlyContinue) {
                     Write-Host "Installing '$SoftwareName' using Chocolatey..." -ForegroundColor Cyan
-                    # Chocolatey works with package names directly, no ID resolution needed
                     choco install $SoftwareName -y
                     
                     if ($LASTEXITCODE -eq 0) {
@@ -155,4 +171,3 @@ function Install-Software {
         Details      = $errorMessage
     }
 }
-

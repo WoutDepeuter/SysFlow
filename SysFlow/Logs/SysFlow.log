@@ -62,3 +62,31 @@
 [2026-06-18 14:44:44] [Warning] Software update cancelled: no name provided
 [2026-06-18 14:44:51] [Info] Updating software | Details: Name: google  | Manager: choco
 [2026-06-18 14:44:56] [Info] Software update completed
+[2026-06-18 18:19:24] [Info] SysFlow application started
+[2026-06-18 18:19:32] [Info] Installing software | Details: Name: firefox | Manager: choco
+[2026-06-18 18:20:38] [Info] Software installation completed
+[2026-06-18 18:21:57] [Info] Installing software | Details: Name: test | Manager: choco
+[2026-06-18 18:21:58] [Info] Software installation completed
+[2026-06-18 18:23:15] [Info] Installing software | Details: Name: spotify | Manager: winget
+[2026-06-18 18:23:20] [Info] Software installation completed
+[2026-06-18 18:23:30] [Info] Installing software | Details: Name: git | Manager: winget
+[2026-06-18 18:25:06] [Info] Software installation completed
+[2026-06-18 18:25:42] [Info] Installing software | Details: Name: google | Manager: winget
+[2026-06-18 18:26:16] [Info] Software installation completed
+[2026-06-18 18:28:45] [Info] SysFlow application started
+[2026-06-18 18:28:54] [Info] Installing software | Details: Name: spotify | Manager: winget
+[2026-06-18 18:29:04] [Info] Software installation completed
+[2026-06-18 18:29:57] [Info] SysFlow application started
+[2026-06-18 18:30:13] [Info] SysFlow application started
+[2026-06-18 18:31:52] [Info] SysFlow application started
+[2026-06-18 18:32:02] [Info] SysFlow application started
+[2026-06-18 18:32:09] [Info] Installing software | Details: Name: spotify | Manager: winget
+[2026-06-18 18:32:12] [Info] Software installation completed
+[2026-06-18 18:32:17] [Info] Updating software | Details: Name: google | Manager: choco
+[2026-06-18 18:32:17] [Info] Software update completed
+[2026-06-18 18:33:15] [Info] SysFlow application started
+[2026-06-18 18:33:25] [Info] Installing software | Details: Name: spotify | Manager: winget
+[2026-06-18 18:33:31] [Info] Software installation completed
+[2026-06-18 18:33:42] [Info] Installing software | Details: Name: google | Manager: winget
+[2026-06-18 18:33:48] [Info] Software installation completed
+[2026-06-18 18:33:56] [Info] Installing software | Details: Name: git | Manager: winget
