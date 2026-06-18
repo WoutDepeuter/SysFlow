@@ -8,6 +8,7 @@ $moduleRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $moduleRoot 'Install-Software.ps1')
 . (Join-Path $moduleRoot 'uninstall-Software.ps1')
 . (Join-Path $moduleRoot 'update-Software.ps1')
+.(join-path $moduleRoot 'search-Software.ps1')
 
 # Export public functions
-Export-ModuleMember -Function 'Get-SoftwareList','Install-Software','Uninstall-Software','Update-Software','Get-InstalledBy'
+Export-ModuleMember -Function 'Get-SoftwareList','Install-Software','Uninstall-Software','Update-Software','Search-Software'

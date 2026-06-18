@@ -323,7 +323,7 @@ function Show-SoftwareMenu {
 
     .DESCRIPTION
         Writes the software submenu options to list, install,
-        update, or uninstall software using package managers.
+        update, uninstall, or search for software using package managers.
 
     .EXAMPLE
         Show-SoftwareMenu
@@ -335,6 +335,7 @@ function Show-SoftwareMenu {
     Write-Host "2. Install Software"
     Write-Host "3. Update Software"
     Write-Host "4. Uninstall Software"
+    Write-Host "5. Search Software"
     Write-Host "B. Back to Main Menu"
 }
 
@@ -779,6 +780,22 @@ function Start-SysFlow {
                                 Write-SysFlowLog -LogLevel "Info" -Message "Uninstalling software" -Details "Name: $name | Manager: $mgr" -LogFilePath $Config.LogPath
                                 Uninstall-Software -PackageName $name -Manager $mgr
                                 Write-SysFlowLog -LogLevel "Info" -Message "Software uninstall completed" -LogFilePath $Config.LogPath
+                            }
+                            Pause
+                        }
+                        '5' {
+                            $searchTerm = Read-Host "Enter software name to search"
+                            if (-not [string]::IsNullOrWhiteSpace($searchTerm)) {
+                                $defaultMgr = if ([string]::IsNullOrWhiteSpace($Config.DefaultPackageManager)) { 'winget' } else { $Config.DefaultPackageManager }
+                                $mgr = Read-Host "Manager (winget/choco, default $defaultMgr)"
+                                if ([string]::IsNullOrWhiteSpace($mgr)) { $mgr = $defaultMgr }
+                                Write-SysFlowLog -LogLevel "Info" -Message "Searching for software" -Details "SearchTerm: $searchTerm | Manager: $mgr" -LogFilePath $Config.LogPath
+                                
+                                Search-Software -SearchTerm $searchTerm -Engine $mgr
+                                
+                                Write-SysFlowLog -LogLevel "Info" -Message "Software search completed" -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Software search cancelled: no search term provided" -LogFilePath $Config.LogPath
                             }
                             Pause
                         }

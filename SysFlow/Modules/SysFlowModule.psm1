@@ -49,9 +49,10 @@ if (Test-Path $softwareRoot) {
     . (Join-Path $softwareRoot 'Install-Software.Ps1')
     . (Join-Path $softwareRoot 'uninstall-Software.ps1')
     . (Join-Path $softwareRoot 'update-Software.ps1')
+    . (Join-Path $softwareRoot 'search-Software.ps1')
 }
 
 # ============================================================================
 # Export all public functions from all feature areas
 # ============================================================================
-Export-ModuleMember -Function 'New-Backup','Restore-Backup','Remove-Backup','Get-StorageStats','Get-CPUStats','Get-RamStats','Get-Uptime','Get-ProcessStats','Write-SysFlowLog','Export-StatToCsv','Export-StatToHtml','Export-CombinedStatsToHtml','Export-UnifiedStatsToHtml','Get-SoftwareList','Install-Software','Uninstall-Software','Update-Software','Get-InstalledBy'
+Export-ModuleMember -Function 'New-Backup','Restore-Backup','Remove-Backup','Get-StorageStats','Get-CPUStats','Get-RamStats','Get-Uptime','Get-ProcessStats','Write-SysFlowLog','Export-StatToCsv','Export-StatToHtml','Export-CombinedStatsToHtml','Export-UnifiedStatsToHtml','Get-SoftwareList','Install-Software','Uninstall-Software','Update-Software','Get-InstalledBy','Search-Software'
