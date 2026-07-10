@@ -32,7 +32,10 @@ function Export-CombinedStatsToHtml {
         [Parameter(Mandatory=$true)]
         [string]$OutputFilePath,
 
-        [string]$Title = 'SysFlow System Report'
+        [string]$Title = 'SysFlow System Report',
+
+        [bool]$ExportCsv = $true,
+        [string]$CsvDirectory = $null
     )
 
     # Determine default log file path
@@ -59,6 +62,10 @@ function Export-CombinedStatsToHtml {
         $runTimestamp = Get-Date
         $runDate = $runTimestamp.ToString('yyyy-MM-dd')
         $runTime = $runTimestamp.ToString('HH:mm:ss')
+
+        # CSV export helpers
+        if (-not $CsvDirectory) { $CsvDirectory = $outputDir }
+        function Sanitize-FileName { param($n) return ($n -replace '[\\/:*?"<>|]', '_') }
 
         # Helper function to add timestamp columns
         function Add-Timestamps {
@@ -95,6 +102,17 @@ function Export-CombinedStatsToHtml {
         # CPU Section
         if ($CpuStats) {
             $cpuRows = Add-Timestamps -Stats $CpuStats
+            # Export CSV for this section
+            if ($ExportCsv -and $cpuRows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName 'CPU Statistics'
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $cpuRows -OutputFilePath $csvPath | Out-Null }
+                    else { $cpuRows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export CPU CSV: $_" }
+            }
             $cpuTable = $cpuRows | ConvertTo-Html -Fragment
             $sections += "<div class='section'><h2>CPU Statistics</h2>$cpuTable</div>"
         }
@@ -102,6 +120,16 @@ function Export-CombinedStatsToHtml {
         # RAM Section
         if ($RamStats) {
             $ramRows = Add-Timestamps -Stats $RamStats
+            if ($ExportCsv -and $ramRows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName 'RAM Statistics'
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $ramRows -OutputFilePath $csvPath | Out-Null }
+                    else { $ramRows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export RAM CSV: $_" }
+            }
             $ramTable = $ramRows | ConvertTo-Html -Fragment
             $sections += "<div class='section'><h2>RAM Statistics</h2>$ramTable</div>"
         }
@@ -109,6 +137,16 @@ function Export-CombinedStatsToHtml {
         # Storage Section
         if ($StorageStats) {
             $storageRows = Add-Timestamps -Stats $StorageStats
+            if ($ExportCsv -and $storageRows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName 'Storage Statistics'
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $storageRows -OutputFilePath $csvPath | Out-Null }
+                    else { $storageRows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export Storage CSV: $_" }
+            }
             $storageTable = $storageRows | ConvertTo-Html -Fragment
             $sections += "<div class='section'><h2>Storage Statistics</h2>$storageTable</div>"
         }
@@ -116,6 +154,16 @@ function Export-CombinedStatsToHtml {
         # Uptime Section
         if ($UptimeStats) {
             $uptimeRows = Add-Timestamps -Stats $UptimeStats
+            if ($ExportCsv -and $uptimeRows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName 'Uptime Statistics'
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $uptimeRows -OutputFilePath $csvPath | Out-Null }
+                    else { $uptimeRows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export Uptime CSV: $_" }
+            }
             $uptimeTable = $uptimeRows | ConvertTo-Html -Fragment
             $sections += "<div class='section'><h2>System Uptime</h2>$uptimeTable</div>"
         }
@@ -123,6 +171,16 @@ function Export-CombinedStatsToHtml {
         # Process Section (limited to top entries for readability)
         if ($ProcessStats) {
             $processRows = Add-Timestamps -Stats $ProcessStats
+            if ($ExportCsv -and $processRows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName 'Process Statistics'
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $processRows -OutputFilePath $csvPath | Out-Null }
+                    else { $processRows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export Process CSV: $_" }
+            }
             $processTable = $processRows | ConvertTo-Html -Fragment
             $sections += "<div class='section'><h2>Process Statistics</h2>$processTable</div>"
         }

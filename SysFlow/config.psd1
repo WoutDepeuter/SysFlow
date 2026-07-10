@@ -15,11 +15,13 @@
     RAMThreshold = 1
     StorageThreshold = 1
     ProcessMemoryThreshold = 1
-    DefaultPackageManager = 'choco'
+    DefaultPackageManager = 'winget'
     
     # Export format preference: 'CSV', 'HTML', 'Both', or 'None'
-    ExportFormat = 'HTML'
+    ExportFormat = 'both'
 }
+
+
 
 
 

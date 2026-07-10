@@ -90,3 +90,121 @@
 [2026-06-18 18:33:42] [Info] Installing software | Details: Name: google | Manager: winget
 [2026-06-18 18:33:48] [Info] Software installation completed
 [2026-06-18 18:33:56] [Info] Installing software | Details: Name: git | Manager: winget
+[2026-07-10 14:17:13] [Info] SysFlow application started
+[2026-07-10 14:17:16] [Info] Reporting module accessed (not yet implemented)
+[2026-07-10 14:17:28] [Warning] High memory usage: 391 processes.
+[2026-07-10 14:17:28] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-10 14:17:29] [Info] New unified HTML report created | Details: File: .\Reports\Report.html; Sections: 1; Date: 2026-07-10; Time: 14:17:28
+[2026-07-10 14:17:39] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-10 14:17:39] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-10; Time: 14:17:39
+[2026-07-10 14:17:39] [Warning] CPU load above threshold | Details: Load: 6% | Threshold: 1%
+[2026-07-10 14:17:41] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-10 14:17:41] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-10; Time: 14:17:41
+[2026-07-10 14:17:41] [Warning] RAM usage above threshold | Details: Used: 55.82% | Threshold: 1% | Free: 14.02 GB
+[2026-07-10 14:18:25] [Info] SysFlow application started
+[2026-07-10 14:18:27] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-10 14:18:27] [Info] New unified HTML report created | Details: File: .\Reports\Report.html; Sections: 1; Date: 2026-07-10; Time: 14:18:27
+[2026-07-10 14:18:27] [Warning] RAM usage above threshold | Details: Used: 51.91% | Threshold: 1% | Free: 15.26 GB
+[2026-07-10 14:18:27] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-10 14:18:27] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-10; Time: 14:18:27
+[2026-07-10 14:18:27] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-07-10 14:18:28] [Info] Uptime: 0 days, 5 hours.
+[2026-07-10 14:18:31] [Info] Uptime: 0 days, 5 hours.
+[2026-07-10 14:18:34] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 4
+[2026-07-10 14:18:34] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 4; Date: 2026-07-10; Time: 14:18:34
+[2026-07-10 14:18:34] [Warning] CPU load above threshold | Details: Load: 2% | Threshold: 1%
+[2026-07-10 14:18:34] [Warning] RAM usage above threshold | Details: Used: 51.72% | Threshold: 1%
+[2026-07-10 14:18:34] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-07-10 14:18:34] [Warning] Full system scan detected threshold exceedance | Details: CPU high (2% >= 1%) | RAM high (51.72% >= 1%) | Storage high (C: >= 1%)
+[2026-07-10 14:18:51] [Info] Installing software | Details: Name: google | Manager: choco
+[2026-07-10 14:18:54] [Info] Software installation completed
+[2026-07-10 14:19:08] [Info] Installing software | Details: Name: google | Manager: winget
+[2026-07-10 14:19:18] [Info] Software installation completed
+[2026-07-10 14:19:27] [Info] Installing software | Details: Name: spotify | Manager: winget
+[2026-07-10 14:19:33] [Info] Software installation completed
+[2026-07-10 14:19:46] [Info] Updating software | Details: Name: spotify | Manager: winget
+[2026-07-10 14:19:50] [Info] Software update completed
+[2026-07-10 14:22:38] [Info] SysFlow application started
+[2026-07-10 14:26:48] [Info] SysFlow application started
+[2026-07-10 14:26:50] [Info] Reporting module accessed (not yet implemented)
+[2026-07-10 14:27:05] [Info] SysFlow application started
+[2026-07-10 14:29:12] [Info] SysFlow application started
+[2026-07-10 14:29:20] [Info] Reporting module accessed (not yet implemented)
+[2026-07-10 14:29:43] [Info] Default package manager updated | Details: New manager: winget
+[2026-07-10 14:30:21] [Info] SysFlow application closed by user
+[2026-07-10 14:30:21] [Info] SysFlow application closed by user
+[2026-07-10 14:32:15] [Info] SysFlow application started
+[2026-07-10 14:33:47] [Info] SysFlow application started
+[2026-07-10 14:35:19] [Info] SysFlow application started
+[2026-07-10 14:36:35] [Info] SysFlow application started
+[2026-07-10 14:36:42] [Info] Backup creation initiated
+[2026-07-10 14:36:46] [Info] Creating backup | Details: Source: .\\DataToBackup | Destination: .\\Backups | Name: Auto-generated
+[2026-07-10 14:36:46] [Info] Backup created successfully
+[2026-07-10 14:42:49] [Info] SysFlow application started
+[2026-07-10 14:44:24] [Info] SysFlow application started
+[2026-07-10 14:44:31] [Warning] Invalid export format selection attempted | Details: Input: bothµ
+[2026-07-10 14:44:36] [Info] Export format updated | Details: New format: both
+[2026-07-10 14:44:44] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-10 14:44:44] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-07-10; Time: 14:44:44; Timestamp: 07/10/2026 14:44:44
+[2026-07-10 14:44:44] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-10 14:44:44] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-CPU Stats.csv, Record count: 1
+[2026-07-10 14:44:45] [Info] Statistics exported successfully | Details: File: .\Reports\Report-CPU Stats.csv; Records: 1; Date: 2026-07-10; Time: 14:44:44; Timestamp: 07/10/2026 14:44:44
+[2026-07-10 14:44:45] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-10; Time: 14:44:44
+[2026-07-10 14:44:45] [Warning] CPU load above threshold | Details: Load: 26% | Threshold: 1%
+[2026-07-10 14:44:45] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-10 14:44:46] [Error] Failed to export statistics | Details: Error: Cannot append CSV content to the following file: .\Reports\History.csv. The appended object does not have a property that corresponds to the following column: Name. To continue with mismatched properties, add the -Force parameter, and then retry the command.
+[2026-07-10 14:44:46] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-10 14:44:46] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-07-10 14:44:46] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-07-10; Time: 14:44:46; Timestamp: 07/10/2026 14:44:46
+[2026-07-10 14:44:46] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-10; Time: 14:44:46
+[2026-07-10 14:44:46] [Warning] RAM usage above threshold | Details: Used: 69.49% | Threshold: 1% | Free: 9.68 GB
+[2026-07-10 14:44:50] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-10 14:44:50] [Error] Failed to export statistics | Details: Error: Cannot append CSV content to the following file: .\Reports\History.csv. The appended object does not have a property that corresponds to the following column: Name. To continue with mismatched properties, add the -Force parameter, and then retry the command.
+[2026-07-10 14:44:50] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-10 14:44:50] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Storage Stats.csv, Record count: 1
+[2026-07-10 14:44:50] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Storage Stats.csv; Records: 1; Date: 2026-07-10; Time: 14:44:50; Timestamp: 07/10/2026 14:44:50
+[2026-07-10 14:44:50] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-10; Time: 14:44:50
+[2026-07-10 14:44:50] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-07-10 14:49:20] [Info] SysFlow application started
+[2026-07-10 14:49:27] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-10 14:49:27] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-07-10; Time: 14:49:27; Timestamp: 07/10/2026 14:49:27
+[2026-07-10 14:49:27] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-10 14:49:27] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-CPU Stats.csv, Record count: 1
+[2026-07-10 14:49:27] [Info] Statistics exported successfully | Details: File: .\Reports\Report-CPU Stats.csv; Records: 1; Date: 2026-07-10; Time: 14:49:27; Timestamp: 07/10/2026 14:49:27
+[2026-07-10 14:49:27] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-10; Time: 14:49:27
+[2026-07-10 14:49:27] [Warning] CPU load above threshold | Details: Load: 5% | Threshold: 1%
+[2026-07-10 14:49:29] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-10 14:49:29] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-07-10; Time: 14:49:29; Timestamp: 07/10/2026 14:49:29
+[2026-07-10 14:49:29] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-10 14:49:29] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-07-10 14:49:29] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-07-10; Time: 14:49:29; Timestamp: 07/10/2026 14:49:29
+[2026-07-10 14:49:29] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-10; Time: 14:49:29
+[2026-07-10 14:49:29] [Warning] RAM usage above threshold | Details: Used: 61.08% | Threshold: 1% | Free: 12.35 GB
+[2026-07-10 14:49:30] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-10 14:49:30] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-07-10; Time: 14:49:30; Timestamp: 07/10/2026 14:49:30
+[2026-07-10 14:49:30] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-10 14:49:30] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Storage Stats.csv, Record count: 1
+[2026-07-10 14:49:30] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Storage Stats.csv; Records: 1; Date: 2026-07-10; Time: 14:49:30; Timestamp: 07/10/2026 14:49:30
+[2026-07-10 14:49:30] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-10; Time: 14:49:30
+[2026-07-10 14:49:30] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-07-10 14:49:33] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-10 14:49:33] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-07-10; Time: 14:49:33; Timestamp: 07/10/2026 14:49:33
+[2026-07-10 14:49:33] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-10 14:49:33] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-07-10; Time: 14:49:33; Timestamp: 07/10/2026 14:49:33
+[2026-07-10 14:49:33] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-10 14:49:33] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-07-10; Time: 14:49:33; Timestamp: 07/10/2026 14:49:33
+[2026-07-10 14:49:33] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 4
+[2026-07-10 14:49:33] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Storage Stats.csv, Record count: 1
+[2026-07-10 14:49:33] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Storage Stats.csv; Records: 1; Date: 2026-07-10; Time: 14:49:33; Timestamp: 07/10/2026 14:49:33
+[2026-07-10 14:49:33] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-07-10 14:49:33] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-07-10; Time: 14:49:33; Timestamp: 07/10/2026 14:49:33
+[2026-07-10 14:49:33] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Uptime Stats.csv, Record count: 1
+[2026-07-10 14:49:33] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Uptime Stats.csv; Records: 1; Date: 2026-07-10; Time: 14:49:33; Timestamp: 07/10/2026 14:49:33
+[2026-07-10 14:49:33] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-CPU Stats.csv, Record count: 1
+[2026-07-10 14:49:33] [Info] Statistics exported successfully | Details: File: .\Reports\Report-CPU Stats.csv; Records: 1; Date: 2026-07-10; Time: 14:49:33; Timestamp: 07/10/2026 14:49:33
+[2026-07-10 14:49:33] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 4; Date: 2026-07-10; Time: 14:49:33
+[2026-07-10 14:49:33] [Warning] CPU load above threshold | Details: Load: 6% | Threshold: 1%
+[2026-07-10 14:49:33] [Warning] RAM usage above threshold | Details: Used: 61.26% | Threshold: 1%
+[2026-07-10 14:49:33] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-07-10 14:49:33] [Warning] Full system scan detected threshold exceedance | Details: CPU high (6% >= 1%) | RAM high (61.26% >= 1%) | Storage high (C: >= 1%)
+[2026-07-10 14:49:34] [Info] Uptime: 0 days, 5 hours.
