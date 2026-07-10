@@ -1,0 +1,92 @@
+[2026-05-05 20:59:08] [Info] SysFlow application started
+[2026-05-05 20:59:17] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-05-05 20:59:17] [Info] Software search completed
+[2026-05-05 20:59:48] [Info] SysFlow application started
+[2026-05-05 20:59:55] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-05-05 20:59:55] [Info] Software search completed
+[2026-05-05 21:04:35] [Info] SysFlow application started
+[2026-05-05 21:04:43] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-05-05 21:04:45] [Info] Software search completed
+[2026-05-05 21:06:26] [Info] SysFlow application started
+[2026-05-05 21:06:38] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-05-05 21:06:43] [Info] Software search completed
+[2026-05-05 21:06:55] [Info] Searching for software | Details: SearchTerm: github | Manager: choco
+[2026-05-05 22:04:19] [Info] Software search completed
+[2026-05-05 22:06:04] [Info] SysFlow application started
+[2026-05-05 22:06:16] [Warning] Software update cancelled: no name provided
+[2026-05-05 22:06:19] [Warning] Software search cancelled: no search term provided
+[2026-05-05 22:06:26] [Info] Searching for software | Details: SearchTerm: SPOTIFY | Manager: choco
+[2026-05-05 22:06:28] [Info] Software search completed
+[2026-05-05 22:06:38] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-05-05 22:12:21] [Info] SysFlow application started
+[2026-05-05 22:12:28] [Info] Searching for software | Details: SearchTerm: spotfiy | Manager: choco
+[2026-05-05 22:12:35] [Info] Software search completed
+[2026-05-05 22:15:57] [Info] SysFlow application started
+[2026-05-05 22:16:06] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-05-05 22:16:16] [Info] Installing software from search | Details: Name:  | ID:  | Manager: choco
+[2026-05-05 22:16:16] [Info] Software installation completed
+[2026-05-05 22:16:16] [Info] Software search completed
+[2026-05-05 22:17:56] [Info] SysFlow application started
+[2026-05-05 22:19:05] [Info] SysFlow application started
+[2026-05-05 22:19:15] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-05-05 22:19:19] [Info] Software search completed
+[2026-05-05 22:22:15] [Info] SysFlow application started
+[2026-05-05 22:22:24] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-05-05 22:24:52] [Info] SysFlow application started
+[2026-05-05 22:24:58] [Warning] Software search cancelled: no search term provided
+[2026-05-05 22:25:03] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-05-05 22:25:05] [Info] Software search completed
+[2026-05-05 22:44:02] [Info] SysFlow application started
+[2026-05-05 22:44:10] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-05-05 22:49:19] [Info] SysFlow application started
+[2026-05-05 22:49:30] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-06-18 14:25:58] [Info] SysFlow application started
+[2026-06-18 14:26:02] [Info] Listing installed software
+[2026-06-18 14:26:07] [Info] Software list displayed | Details: Found 1 applications
+[2026-06-18 14:26:13] [Info] Listing installed software
+[2026-06-18 14:26:27] [Info] Software list displayed | Details: Found 615 applications
+[2026-06-18 14:26:38] [Info] Installing software | Details: Name: spotify | Manager: choco
+[2026-06-18 14:26:39] [Info] Software installation completed
+[2026-06-18 14:26:50] [Info] Searching for software | Details: SearchTerm: spotify | Manager: choco
+[2026-06-18 14:26:59] [Info] Software search completed
+[2026-06-18 14:27:23] [Info] Installing software | Details: Name: spicetify | Manager: choco
+[2026-06-18 14:27:28] [Info] Software installation completed
+[2026-06-18 14:37:56] [Warning] Software update cancelled: no name provided
+[2026-06-18 14:40:20] [Info] SysFlow application started
+[2026-06-18 14:40:27] [Warning] Software update cancelled: no name provided
+[2026-06-18 14:40:35] [Info] Updating software | Details: Name: spotify | Manager: choco
+[2026-06-18 14:41:27] [Info] Software update completed
+[2026-06-18 14:42:46] [Info] SysFlow application started
+[2026-06-18 14:42:51] [Warning] Software update cancelled: no name provided
+[2026-06-18 14:44:40] [Info] SysFlow application started
+[2026-06-18 14:44:44] [Warning] Software update cancelled: no name provided
+[2026-06-18 14:44:51] [Info] Updating software | Details: Name: google  | Manager: choco
+[2026-06-18 14:44:56] [Info] Software update completed
+[2026-06-18 18:19:24] [Info] SysFlow application started
+[2026-06-18 18:19:32] [Info] Installing software | Details: Name: firefox | Manager: choco
+[2026-06-18 18:20:38] [Info] Software installation completed
+[2026-06-18 18:21:57] [Info] Installing software | Details: Name: test | Manager: choco
+[2026-06-18 18:21:58] [Info] Software installation completed
+[2026-06-18 18:23:15] [Info] Installing software | Details: Name: spotify | Manager: winget
+[2026-06-18 18:23:20] [Info] Software installation completed
+[2026-06-18 18:23:30] [Info] Installing software | Details: Name: git | Manager: winget
+[2026-06-18 18:25:06] [Info] Software installation completed
+[2026-06-18 18:25:42] [Info] Installing software | Details: Name: google | Manager: winget
+[2026-06-18 18:26:16] [Info] Software installation completed
+[2026-06-18 18:28:45] [Info] SysFlow application started
+[2026-06-18 18:28:54] [Info] Installing software | Details: Name: spotify | Manager: winget
+[2026-06-18 18:29:04] [Info] Software installation completed
+[2026-06-18 18:29:57] [Info] SysFlow application started
+[2026-06-18 18:30:13] [Info] SysFlow application started
+[2026-06-18 18:31:52] [Info] SysFlow application started
+[2026-06-18 18:32:02] [Info] SysFlow application started
+[2026-06-18 18:32:09] [Info] Installing software | Details: Name: spotify | Manager: winget
+[2026-06-18 18:32:12] [Info] Software installation completed
+[2026-06-18 18:32:17] [Info] Updating software | Details: Name: google | Manager: choco
+[2026-06-18 18:32:17] [Info] Software update completed
+[2026-06-18 18:33:15] [Info] SysFlow application started
+[2026-06-18 18:33:25] [Info] Installing software | Details: Name: spotify | Manager: winget
+[2026-06-18 18:33:31] [Info] Software installation completed
+[2026-06-18 18:33:42] [Info] Installing software | Details: Name: google | Manager: winget
+[2026-06-18 18:33:48] [Info] Software installation completed
+[2026-06-18 18:33:56] [Info] Installing software | Details: Name: git | Manager: winget

@@ -323,7 +323,7 @@ function Show-SoftwareMenu {
 
     .DESCRIPTION
         Writes the software submenu options to list, install,
-        update, or uninstall software using package managers.
+        update, uninstall, or search for software using package managers.
 
     .EXAMPLE
         Show-SoftwareMenu
@@ -335,6 +335,7 @@ function Show-SoftwareMenu {
     Write-Host "2. Install Software"
     Write-Host "3. Update Software"
     Write-Host "4. Uninstall Software"
+    Write-Host "5. Search Software"
     Write-Host "B. Back to Main Menu"
 }
 
@@ -722,14 +723,34 @@ function Start-SysFlow {
                     Clear-Host
 
                     switch ($SoftChoice) {
-                        '1' {
-                            Write-Host "Listing installed software..." -ForegroundColor Cyan
+                       '1' {
+                            Write-Host "Geïnstalleerde software ophalen..." -ForegroundColor Cyan
                             Write-SysFlowLog -LogLevel "Info" -Message "Listing installed software" -LogFilePath $Config.LogPath
                             $softwareList = Get-SoftwareList | Sort-Object Name
-                            $softwareList | Format-Table Name, Version, Publisher -AutoSize
-                            Write-SysFlowLog -LogLevel "Info" -Message "Software list displayed" -Details "Found $($softwareList.Count) applications" -LogFilePath $Config.LogPath
-                            Pause
-                        }
+
+                                   # Zoekfunctie toevoegen
+    Write-Host ""
+    $search = Read-Host "Voer een zoekterm in om te filteren (of druk op Enter voor de volledige lijst)"
+    
+    if (-not [string]::IsNullOrWhiteSpace($search)) {
+        # Filteren op naam of uitgever (case-insensitive match)
+        $softwareList = $softwareList | Where-Object { $_.Name -match $search -or $_.Publisher -match $search }
+    }
+
+    Clear-Host
+    Write-Host "=== Geïnstalleerde Software (Gebruik SPATIE voor volgende pagina, Q om te sluiten) ===" -ForegroundColor Cyan
+    Write-Host ""
+
+    if ($softwareList.Count -gt 0) {
+        # Out-Host -Paging zorgt voor automatische paginering/scrolling per schermlengte
+        $softwareList | Format-Table Name, Version, Publisher -AutoSize | Out-Host -Paging
+    } else {
+        Write-Host "Geen software gevonden die voldoet aan de zoekterm '$search'." -ForegroundColor Yellow
+        Pause
+    }
+
+    Write-SysFlowLog -LogLevel "Info" -Message "Software list displayed" -Details "Found $($softwareList.Count) applications" -LogFilePath $Config.LogPath
+}
                         '2' {
                             $name = Read-Host "Enter software name or ID"
                             if (-not [string]::IsNullOrWhiteSpace($name)) {
@@ -754,7 +775,8 @@ function Start-SysFlow {
                                 $showList = Read-Host "No name entered. Show installed software list? (Y/N)"
                                 Write-SysFlowLog -LogLevel "Warning" -Message "Software update cancelled: no name provided" -LogFilePath $Config.LogPath
                                 if ($showList -match '^[Yy]$') {
-                                    Get-SoftwareList | Sort-Object Name | Format-Table Name, Version -AutoSize
+                                        # Launch the interactive Update-Software selector (paginated/searchable)
+                                        Update-Software -Manager $mgr
                                 }
                             } else {
                                 Write-SysFlowLog -LogLevel "Info" -Message "Updating software" -Details "Name: $name | Manager: $mgr" -LogFilePath $Config.LogPath
@@ -779,6 +801,22 @@ function Start-SysFlow {
                                 Write-SysFlowLog -LogLevel "Info" -Message "Uninstalling software" -Details "Name: $name | Manager: $mgr" -LogFilePath $Config.LogPath
                                 Uninstall-Software -PackageName $name -Manager $mgr
                                 Write-SysFlowLog -LogLevel "Info" -Message "Software uninstall completed" -LogFilePath $Config.LogPath
+                            }
+                            Pause
+                        }
+                        '5' {
+                            $searchTerm = Read-Host "Enter software name to search"
+                            if (-not [string]::IsNullOrWhiteSpace($searchTerm)) {
+                                $defaultMgr = if ([string]::IsNullOrWhiteSpace($Config.DefaultPackageManager)) { 'winget' } else { $Config.DefaultPackageManager }
+                                $mgr = Read-Host "Manager (winget/choco, default $defaultMgr)"
+                                if ([string]::IsNullOrWhiteSpace($mgr)) { $mgr = $defaultMgr }
+                                Write-SysFlowLog -LogLevel "Info" -Message "Searching for software" -Details "SearchTerm: $searchTerm | Manager: $mgr" -LogFilePath $Config.LogPath
+                                
+                                Search-Software -SearchTerm $searchTerm -Engine $mgr
+                                
+                                Write-SysFlowLog -LogLevel "Info" -Message "Software search completed" -LogFilePath $Config.LogPath
+                            } else {
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Software search cancelled: no search term provided" -LogFilePath $Config.LogPath
                             }
                             Pause
                         }
