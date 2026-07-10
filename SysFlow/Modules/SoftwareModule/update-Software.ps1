@@ -18,7 +18,7 @@ function Update-Software {
         [ValidateSet('winget', 'choco')]
         [string]$Manager = 'winget'
 
-    
+        
     )
 
     # Ensure Get-SoftwareList is available even if this script is dot-sourced directly
