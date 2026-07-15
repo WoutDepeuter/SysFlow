@@ -482,20 +482,14 @@ function Start-SysFlow {
                         }
 
                         '6' {
-                            $stats = Get-ProcessStats -Threshold (Get-ThresholdValue -Default 500 -Value $Config.ProcessMemoryThreshold)
-                            $highMem = $stats | Where-Object { $_.MemoryUsageMB -ge (Get-ThresholdValue -Default 500 -Value $Config.ProcessMemoryThreshold) }
-
-                            if ($highMem) {
-                                $highMem | Format-Table -AutoSize
-                                Write-SysFlowLog -LogLevel "Warning" -Message "High memory usage: $($highMem.Count) processes." -LogFilePath $Config.LogPath
-                            } else {
-                                Write-SysFlowLog -LogLevel "Info" -Message "Processes checked; no outliers." -LogFilePath $Config.LogPath
-                            }
-
-                            if ($stats) {
-                                Export-StatsToCsvIfEnabled -Stats $stats -CsvPath (Join-Path $Config.DefaultReportPath "History.csv")
-                                Export-ToUnifiedHtmlIfEnabled -StatsHashtable @{ 'Process Stats' = $stats } -HtmlPath (Join-Path $Config.DefaultReportPath "Report.html") -PageTitle "SysFlow Report"
-                            }
+                            $threshold = Get-ThresholdValue -Default 500 -Value $Config.ProcessMemoryThreshold
+                            Write-Host "Starting Process Stats viewer..." -ForegroundColor Cyan
+                            Write-Host "Use [N]ext, [P]revious, [G]o to page, or [Q]uit to navigate" -ForegroundColor Yellow
+                            Start-Sleep -Seconds 1
+                            
+                            $stats = Get-ProcessStats -Threshold $threshold -Interactive
+                            
+                            Write-SysFlowLog -LogLevel "Info" -Message "Process stats interactive viewer closed" -LogFilePath $Config.LogPath
                         }
 
                         'B' { $SubExit = $true }
