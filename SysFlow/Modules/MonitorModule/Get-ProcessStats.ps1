@@ -103,8 +103,7 @@ function Get-ProcessStats {
             Write-Host "═" * 80 -ForegroundColor Cyan
             Write-Host "Page $pageNumber of $totalPages (Items $($skipCount + 1)-$($skipCount + @($paginatedProcesses).Count) of $totalProcesses) | Threshold: $threshold MB" -ForegroundColor Cyan
             Write-Host "─" * 80 -ForegroundColor Cyan
-            
-            $paginatedProcesses | Format-Table -AutoSize
+            $paginatedProcesses | Format-Table -AutoSize | Out-Host
 
             # Display high memory alerts on current page
             $highMemoryOnPage = $paginatedProcesses | Where-Object { $_.MemoryUsageMB -ge $threshold }
@@ -139,10 +138,10 @@ function Get-ProcessStats {
                 }
                 'G' {
                     $targetPage = Read-Host "Enter page number (1-$totalPages)"
-                    if ([int]::TryParse($targetPage, [ref]$null)) {
-                        $targetPage = [int]$targetPage
-                        if ($targetPage -ge 1 -and $targetPage -le $totalPages) {
-                            $pageNumber = $targetPage
+                    $parsedPage = 0
+                    if ([int]::TryParse($targetPage, [ref]$parsedPage)) {
+                        if ($parsedPage -ge 1 -and $parsedPage -le $totalPages) {
+                            $pageNumber = $parsedPage
                         } else {
                             Write-Host "Invalid page number! Enter between 1 and $totalPages" -ForegroundColor Red
                             Start-Sleep -Seconds 2
@@ -172,7 +171,7 @@ function Get-ProcessStats {
 
     # Display pagination info
     Write-Host "`nDisplaying page $pageNumber of $totalPages (Items $($skipCount + 1)-$($skipCount + @($paginatedProcesses).Count) of $totalProcesses):" -ForegroundColor Cyan
-    $paginatedProcesses | Format-Table -AutoSize
+    $paginatedProcesses | Format-Table -AutoSize | Out-Host
 
     # Add pagination info as note properties to each process object
     foreach ($process in $paginatedProcesses) {

@@ -208,3 +208,5 @@
 [2026-07-10 14:49:33] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
 [2026-07-10 14:49:33] [Warning] Full system scan detected threshold exceedance | Details: CPU high (6% >= 1%) | RAM high (61.26% >= 1%) | Storage high (C: >= 1%)
 [2026-07-10 14:49:34] [Info] Uptime: 0 days, 5 hours.
+[2026-07-15 16:46:46] [Info] SysFlow application started
+[2026-07-15 18:22:06] [Info] SysFlow application started
