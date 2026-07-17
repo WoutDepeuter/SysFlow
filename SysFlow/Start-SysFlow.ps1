@@ -312,6 +312,7 @@ function Show-SettingsMenu {
     Write-Host "4. Set Default Report Folder"
     Write-Host "5. Set Monitoring Thresholds"
     Write-Host "6. Set Default Package Manager"
+    Write-Host "7. Set Export Format (CSV/HTML/Both/None)"
     Write-Host "B. Back to Main Menu"
 }
 
@@ -481,20 +482,14 @@ function Start-SysFlow {
                         }
 
                         '6' {
-                            $stats = Get-ProcessStats -Threshold (Get-ThresholdValue -Default 500 -Value $Config.ProcessMemoryThreshold)
-                            $highMem = $stats | Where-Object { $_.MemoryUsageMB -ge (Get-ThresholdValue -Default 500 -Value $Config.ProcessMemoryThreshold) }
-
-                            if ($highMem) {
-                                $highMem | Format-Table -AutoSize
-                                Write-SysFlowLog -LogLevel "Warning" -Message "High memory usage: $($highMem.Count) processes." -LogFilePath $Config.LogPath
-                            } else {
-                                Write-SysFlowLog -LogLevel "Info" -Message "Processes checked; no outliers." -LogFilePath $Config.LogPath
-                            }
-
-                            if ($stats) {
-                                Export-StatsToCsvIfEnabled -Stats $stats -CsvPath (Join-Path $Config.DefaultReportPath "History.csv")
-                                Export-ToUnifiedHtmlIfEnabled -StatsHashtable @{ 'Process Stats' = $stats } -HtmlPath (Join-Path $Config.DefaultReportPath "Report.html") -PageTitle "SysFlow Report"
-                            }
+                            $threshold = Get-ThresholdValue -Default 500 -Value $Config.ProcessMemoryThreshold
+                            Write-Host "Starting Process Stats viewer..." -ForegroundColor Cyan
+                            Write-Host "Use [N]ext, [P]revious, [G]o to page, or [Q]uit to navigate" -ForegroundColor Yellow
+                            Start-Sleep -Seconds 1
+                            
+                            $stats = Get-ProcessStats -Threshold $threshold -Interactive
+                            
+                            Write-SysFlowLog -LogLevel "Info" -Message "Process stats interactive viewer closed" -LogFilePath $Config.LogPath
                         }
 
                         'B' { $SubExit = $true }
@@ -708,6 +703,37 @@ function Start-SysFlow {
 
                             Pause
                         }
+
+                        '7' {
+                            # Set export format (CSV, HTML, Both, None)
+                            $currentFormat = if ($Config.ExportFormat) { $Config.ExportFormat } else { 'Both' }
+                            Write-Host "`nCurrent export format: $currentFormat" -ForegroundColor Cyan
+                            $fmt = Read-Host "Enter export format (CSV/HTML/Both/None)"
+                            if ($fmt -notin @('CSV','HTML','Both','None')) {
+                                Write-Host "Invalid export format. Please enter one of: CSV, HTML, Both, None." -ForegroundColor Yellow
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Invalid export format selection attempted" -Details "Input: $fmt" -LogFilePath $Config.LogPath
+                            } else {
+                                $configContent = Get-Content $ConfigPath -Raw
+                                if ($configContent -match "ExportFormat\s*=\s*'.*'") {
+                                    $configContent = $configContent -replace "ExportFormat\s*=\s*'.*'", "ExportFormat = '$fmt'"
+                                } else {
+                                    if ($configContent -match "\}\s*$") {
+                                        $configContent = $configContent -replace "\}\s*$", "    ExportFormat = '$fmt'`n}"
+                                    } else {
+                                        $configContent += "`nExportFormat = '$fmt'"
+                                    }
+                                }
+                                $configContent | Set-Content $ConfigPath -Encoding UTF8
+                                $Config.ExportFormat = $fmt
+                                Write-Host "✓ Export format set to: $fmt" -ForegroundColor Green
+                                Write-SysFlowLog -LogLevel "Info" -Message "Export format updated" -Details "New format: $fmt" -LogFilePath $Config.LogPath
+                            }
+                            Pause
+                        }
+
+                        
+
+                        
 
                         'B' { $BackupExit = $true }
                         'b' { $BackupExit = $true }
@@ -999,6 +1025,39 @@ function Start-SysFlow {
                                 Write-Host "✓ Default package manager set to: $sel" -ForegroundColor Green
                                 Write-SysFlowLog -LogLevel "Info" -Message "Default package manager updated" -Details "New manager: $sel" -LogFilePath $Config.LogPath
                             }
+                            Pause
+                        }
+
+                        '7' {
+                            $currentFormat = if ($Config.ExportFormat) { $Config.ExportFormat } else { 'Both' }
+                            Write-Host "\nCurrent export format: $currentFormat" -ForegroundColor Cyan
+                            $fmt = Read-Host "Enter export format (CSV/HTML/Both/None)"
+
+                            if ($fmt -notin @('CSV', 'HTML', 'Both', 'None')) {
+                                Write-Host "Invalid export format. Please enter one of: CSV, HTML, Both, None." -ForegroundColor Yellow
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Invalid export format selection attempted" -Details "Input: $fmt" -LogFilePath $Config.LogPath
+                            }
+                            else {
+                                $configContent = Get-Content $ConfigPath -Raw
+
+                                if ($configContent -match "ExportFormat\s*=\s*'.*'") {
+                                    $configContent = $configContent -replace "ExportFormat\s*=\s*'.*'", "ExportFormat = '$fmt'"
+                                }
+                                else {
+                                    if ($configContent -match "\}\s*$") {
+                                        $configContent = $configContent -replace "\}\s*$", "    ExportFormat = '$fmt'`n}"
+                                    }
+                                    else {
+                                        $configContent += "`nExportFormat = '$fmt'"
+                                    }
+                                }
+
+                                $configContent | Set-Content $ConfigPath -Encoding UTF8
+                                $Config.ExportFormat = $fmt
+                                Write-Host "✓ Export format set to: $fmt" -ForegroundColor Green
+                                Write-SysFlowLog -LogLevel "Info" -Message "Export format updated" -Details "New format: $fmt" -LogFilePath $Config.LogPath
+                            }
+
                             Pause
                         }
 

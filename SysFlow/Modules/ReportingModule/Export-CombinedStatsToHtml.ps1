@@ -28,11 +28,17 @@ function Export-CombinedStatsToHtml {
         [array]$StorageStats,
         [array]$ProcessStats,
         [array]$UptimeStats,
+        [array]$SoftwareList,
+        [int]$SoftwarePageSize = 50,
+        [int]$ProcessPageSize = 50,
 
         [Parameter(Mandatory=$true)]
         [string]$OutputFilePath,
 
-        [string]$Title = 'SysFlow System Report'
+        [string]$Title = 'SysFlow System Report',
+
+        [bool]$ExportCsv = $true,
+        [string]$CsvDirectory = $null
     )
 
     # Determine default log file path
@@ -60,6 +66,10 @@ function Export-CombinedStatsToHtml {
         $runDate = $runTimestamp.ToString('yyyy-MM-dd')
         $runTime = $runTimestamp.ToString('HH:mm:ss')
 
+        # CSV export helpers
+        if (-not $CsvDirectory) { $CsvDirectory = $outputDir }
+        function Sanitize-FileName { param($n) return ($n -replace '[\\/:*?"<>|]', '_') }
+
         # Helper function to add timestamp columns
         function Add-Timestamps {
             param([array]$Stats)
@@ -75,19 +85,87 @@ function Export-CombinedStatsToHtml {
             }
         }
 
+        function Get-PaginationScript {
+            param([int]$SoftwarePageSize, [int]$ProcessPageSize)
+            $swps = $SoftwarePageSize
+            $prps = $ProcessPageSize
+            $out = "<script>`n"
+            $out += "var swPageSize = $swps; var procPageSize = $prps;`n"
+            $out += @'
+(function() {
+  var pageSize = swPageSize;
+  var table = document.getElementById('softwareTable');
+  if (!table) return;
+  var tbody = table.getElementsByTagName('tbody')[0];
+  var rows = Array.prototype.slice.call(tbody.rows);
+  var total = rows.length;
+  var totalPages = Math.max(1, Math.ceil(total / pageSize));
+  var pager = document.getElementById('softwarePager');
+  function showPage(n) {
+    var start = (n-1)*pageSize;
+    var end = start + pageSize;
+    rows.forEach(function(r, i) { r.style.display = (i>=start && i<end) ? "" : "none"; });
+    if (!pager) return;
+    pager.innerHTML = "";
+    for (var i=1;i<=totalPages;i++) {
+      var a = document.createElement('a');
+      a.href = 'javascript:void(0)';
+      a.textContent = i;
+      (function(i){ a.addEventListener('click', function(){ showPage(i); }); })(i);
+      if (i===n) { a.className = "active"; }
+      pager.appendChild(a);
+    }
+  }
+  showPage(1);
+})();
+(function() {
+  var pageSize = procPageSize;
+  var table = document.getElementById('processTable');
+  if (!table) return;
+  var tbody = table.getElementsByTagName('tbody')[0];
+  var rows = Array.prototype.slice.call(tbody.rows);
+  var total = rows.length;
+  var totalPages = Math.max(1, Math.ceil(total / pageSize));
+  var pager = document.getElementById('processPager');
+  function showPage(n) {
+    var start = (n-1)*pageSize;
+    var end = start + pageSize;
+    rows.forEach(function(r, i) { r.style.display = (i>=start && i<end) ? "" : "none"; });
+    if (!pager) return;
+    pager.innerHTML = "";
+    for (var i=1;i<=totalPages;i++) {
+      var a = document.createElement('a');
+      a.href = 'javascript:void(0)';
+      a.textContent = i;
+      (function(i){ a.addEventListener('click', function(){ showPage(i); }); })(i);
+      if (i===n) { a.className = "active"; }
+      pager.appendChild(a);
+    }
+  }
+  showPage(1);
+})();
+'@
+            $out += "`n</script>"
+            return $out
+        }
+
         $style = @"
-<style>
-    body { font-family: Segoe UI, Arial, sans-serif; margin: 24px; color: #1f2937; background: #f9fafb; }
-    h1 { color: #111827; font-size: 24px; margin-bottom: 8px; }
-    h2 { color: #374151; font-size: 18px; margin-top: 32px; margin-bottom: 12px; border-bottom: 2px solid #e5e7eb; padding-bottom: 4px; }
-    .meta { color: #4b5563; margin-bottom: 24px; font-size: 13px; }
-    table { border-collapse: collapse; width: 100%; background: #ffffff; margin-bottom: 24px; }
-    th, td { border: 1px solid #e5e7eb; padding: 8px 10px; text-align: left; font-size: 13px; }
-    th { background: #f3f4f6; font-weight: 600; }
-    tr:nth-child(even) { background: #f9fafb; }
-    .section { margin-bottom: 32px; }
-</style>
-"@
+    <style>
+        body { font-family: Segoe UI, Arial, sans-serif; margin: 24px; color: #1f2937; background: #f9fafb; }
+        h1 { color: #111827; font-size: 24px; margin-bottom: 8px; }
+        h2 { color: #374151; font-size: 18px; margin-top: 32px; margin-bottom: 12px; border-bottom: 2px solid #e5e7eb; padding-bottom: 4px; }
+        .meta { color: #4b5563; margin-bottom: 24px; font-size: 13px; }
+        table { border-collapse: collapse; width: 100%; background: #ffffff; margin-bottom: 24px; }
+        th, td { border: 1px solid #e5e7eb; padding: 8px 10px; text-align: left; font-size: 13px; }
+        th { background: #f3f4f6; font-weight: 600; }
+        tr:nth-child(even) { background: #f9fafb; }
+        .section { margin-bottom: 32px; }
+        /* Pagination styles for software list */
+        .pager { margin: 12px 0 24px 0; }
+        .pager a { margin-right: 6px; padding: 6px 10px; background: #fff; border: 1px solid #e5e7eb; color: #374151; text-decoration: none; border-radius: 4px; }
+        .pager a.active { background: #111827; color: #fff; }
+    </style>
+    "@
 
         $meta = "Generated: $runDate $runTime"
         $sections = ""
@@ -95,6 +173,17 @@ function Export-CombinedStatsToHtml {
         # CPU Section
         if ($CpuStats) {
             $cpuRows = Add-Timestamps -Stats $CpuStats
+            # Export CSV for this section
+            if ($ExportCsv -and $cpuRows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName 'CPU Statistics'
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $cpuRows -OutputFilePath $csvPath | Out-Null }
+                    else { $cpuRows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export CPU CSV: $_" }
+            }
             $cpuTable = $cpuRows | ConvertTo-Html -Fragment
             $sections += "<div class='section'><h2>CPU Statistics</h2>$cpuTable</div>"
         }
@@ -102,6 +191,16 @@ function Export-CombinedStatsToHtml {
         # RAM Section
         if ($RamStats) {
             $ramRows = Add-Timestamps -Stats $RamStats
+            if ($ExportCsv -and $ramRows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName 'RAM Statistics'
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $ramRows -OutputFilePath $csvPath | Out-Null }
+                    else { $ramRows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export RAM CSV: $_" }
+            }
             $ramTable = $ramRows | ConvertTo-Html -Fragment
             $sections += "<div class='section'><h2>RAM Statistics</h2>$ramTable</div>"
         }
@@ -109,6 +208,16 @@ function Export-CombinedStatsToHtml {
         # Storage Section
         if ($StorageStats) {
             $storageRows = Add-Timestamps -Stats $StorageStats
+            if ($ExportCsv -and $storageRows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName 'Storage Statistics'
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $storageRows -OutputFilePath $csvPath | Out-Null }
+                    else { $storageRows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export Storage CSV: $_" }
+            }
             $storageTable = $storageRows | ConvertTo-Html -Fragment
             $sections += "<div class='section'><h2>Storage Statistics</h2>$storageTable</div>"
         }
@@ -116,17 +225,101 @@ function Export-CombinedStatsToHtml {
         # Uptime Section
         if ($UptimeStats) {
             $uptimeRows = Add-Timestamps -Stats $UptimeStats
+            if ($ExportCsv -and $uptimeRows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName 'Uptime Statistics'
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $uptimeRows -OutputFilePath $csvPath | Out-Null }
+                    else { $uptimeRows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export Uptime CSV: $_" }
+            }
             $uptimeTable = $uptimeRows | ConvertTo-Html -Fragment
             $sections += "<div class='section'><h2>System Uptime</h2>$uptimeTable</div>"
         }
 
-        # Process Section (limited to top entries for readability)
+        # Process Section (paginated)
         if ($ProcessStats) {
             $processRows = Add-Timestamps -Stats $ProcessStats
-            $processTable = $processRows | ConvertTo-Html -Fragment
-            $sections += "<div class='section'><h2>Process Statistics</h2>$processTable</div>"
+            if ($ExportCsv -and $processRows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName 'Process Statistics'
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $processRows -OutputFilePath $csvPath | Out-Null }
+                    else { $processRows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export Process CSV: $_" }
+            }
+            # Build HTML table manually so we can paginate client-side
+            $processRows = $processRows | Sort-Object Name
+            $first = $processRows | Select-Object -First 1
+            $cols = @()
+            if ($first) { $cols = $first.PSObject.Properties | ForEach-Object { $_.Name } }
+
+            function Html-Encode { param([string]$s) if ($null -eq $s) { return '' } return ($s -replace '&','&amp;' -replace '<','&lt;' -replace '>','&gt;' -replace '"','&quot;' -replace "'","&#39;") }
+
+            $tableHtml = "<table id='processTable'><thead><tr>"
+            foreach ($c in $cols) { $tableHtml += "<th>$c</th>" }
+            $tableHtml += "</tr></thead><tbody>"
+            foreach ($r in $processRows) {
+                $tableHtml += "<tr>"
+                foreach ($c in $cols) {
+                    $val = $r.$c
+                    $enc = Html-Encode -s ([string]$val)
+                    $tableHtml += "<td>$enc</td>"
+                }
+                $tableHtml += "</tr>"
+            }
+            $tableHtml += "</tbody></table>"
+
+            $sections += "<div class='section'><h2>Active Processes</h2>$tableHtml<div id='processPager' class='pager'></div></div>"
         }
         
+
+        # Software Section (paginated)
+        $scripts = ""
+        if ($SoftwareList) {
+            $softwareRows = Add-Timestamps -Stats $SoftwareList
+            if ($ExportCsv -and $softwareRows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName 'Installed Software'
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $softwareRows -OutputFilePath $csvPath | Out-Null }
+                    else { $softwareRows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export Software CSV: $_" }
+            }
+
+            # Build HTML table manually so we can paginate client-side
+            $softwareRows = $softwareRows | Sort-Object Name
+            $first = $softwareRows | Select-Object -First 1
+            $cols = @()
+            if ($first) { $cols = $first.PSObject.Properties | ForEach-Object { $_.Name } }
+
+            function Html-Encode { param([string]$s) if ($null -eq $s) { return '' } return ($s -replace '&','&amp;' -replace '<','&lt;' -replace '>','&gt;' -replace '"','&quot;' -replace "'","&#39;") }
+
+            $tableHtml = "<table id='softwareTable'><thead><tr>"
+            foreach ($c in $cols) { $tableHtml += "<th>$c</th>" }
+            $tableHtml += "</tr></thead><tbody>"
+            foreach ($r in $softwareRows) {
+                $tableHtml += "<tr>"
+                foreach ($c in $cols) {
+                    $val = $r.$c
+                    $enc = Html-Encode -s ([string]$val)
+                    $tableHtml += "<td>$enc</td>"
+                }
+                $tableHtml += "</tr>"
+            }
+            $tableHtml += "</tbody></table>"
+
+            $sections += "<div class='section'><h2>Installed Software</h2>$tableHtml<div id='softwarePager' class='pager'></div></div>"
+        }
+
+        # Generate pagination scripts after all sections are built
+        $scripts = Get-PaginationScript -SoftwarePageSize $SoftwarePageSize -ProcessPageSize $ProcessPageSize
 
         $content = @"
 <!DOCTYPE html>
@@ -140,6 +333,7 @@ $style
 <h1>$Title</h1>
 <div class="meta">$meta</div>
 $sections
+$scripts
 </body>
 </html>
 "@

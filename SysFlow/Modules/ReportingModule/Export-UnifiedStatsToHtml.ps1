@@ -26,8 +26,12 @@ function Export-UnifiedStatsToHtml {
         [Parameter(Mandatory=$true)]
         [string]$OutputFilePath,
 
-        [string]$PageTitle = 'SysFlow Report'
+        [string]$PageTitle = 'SysFlow Report',
+
+        [bool]$ExportCsv = $true,
+        [string]$CsvDirectory = $null
     )
+
 
     # Determine default log file path
     $moduleRoot = Split-Path -Parent $PSScriptRoot
@@ -56,6 +60,8 @@ function Export-UnifiedStatsToHtml {
 
         # Build sections HTML
         $sectionsHtml = @()
+        if (-not $CsvDirectory) { $CsvDirectory = $outputDir }
+        function Sanitize-FileName { param($n) return ($n -replace '[\\/:*?"<>|]', '_') }
         foreach ($sectionTitle in $StatsHashtable.Keys) {
             $stats = $StatsHashtable[$sectionTitle]
             
@@ -69,6 +75,18 @@ function Export-UnifiedStatsToHtml {
                     @{ Name = 'RunDate'; Expression = { $runDate } },
                     @{ Name = 'RunTime'; Expression = { $runTime } },
                     @{ Name = 'RunTimestamp'; Expression = { $runTimestamp } }
+            }
+
+            # Export CSV for this section (file per section)
+            if ($ExportCsv -and $rows) {
+                $base = [IO.Path]::GetFileNameWithoutExtension($OutputFilePath)
+                $safeSectionTitle = Sanitize-FileName $sectionTitle
+                $csvName = "${base}-$safeSectionTitle.csv"
+                $csvPath = Join-Path $CsvDirectory $csvName
+                try {
+                    if (Get-Command Export-StatToCsv -ErrorAction SilentlyContinue) { Export-StatToCsv -Stats $rows -OutputFilePath $csvPath | Out-Null }
+                    else { $rows | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8 }
+                } catch { Write-Warning "Failed to export CSV for section '$sectionTitle': $_" }
             }
 
             $htmlTable = $rows | ConvertTo-Html -Fragment
