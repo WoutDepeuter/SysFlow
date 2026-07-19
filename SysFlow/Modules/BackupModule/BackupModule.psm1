@@ -13,9 +13,10 @@ $moduleRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $moduleRoot 'New-Backup.ps1')
 . (Join-Path $moduleRoot 'Restore-Backup.ps1')
 . (Join-Path $moduleRoot 'Remove-Backup.ps1')
+. (Join-Path $moduleRoot 'Test-BackupIntegrity.ps1')
 
 # ============================================================================
 # Export public functions
 # ============================================================================
 
-Export-ModuleMember -Function 'New-Backup', 'Restore-Backup', 'Remove-Backup'
+Export-ModuleMember -Function 'New-Backup', 'Restore-Backup', 'Remove-Backup', 'Test-BackupIntegrity', 'Test-BackupIntegrityAfterCreation'

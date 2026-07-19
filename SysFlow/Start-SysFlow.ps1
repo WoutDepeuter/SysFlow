@@ -34,6 +34,40 @@ function Get-FolderSelection {
     return $null
 }
 
+function Get-BackupFileSelection {
+    <#
+    .SYNOPSIS
+        Shows a file selection dialog for backup ZIP files.
+
+    .DESCRIPTION
+        Opens a Windows file picker so the user can choose a backup
+        archive to validate or restore. Returns the selected file path,
+        or $null when the dialog is cancelled.
+
+    .PARAMETER Description
+        Description text shown in the file selection dialog.
+
+    .OUTPUTS
+        System.String
+    #>
+    param([string]$Description)
+
+    Add-Type -AssemblyName System.Windows.Forms
+
+    $openFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+    $openFileDialog.Title = $Description
+    $openFileDialog.Filter = 'ZIP files (*.zip)|*.zip|All files (*.*)|*.*'
+    $openFileDialog.CheckFileExists = $true
+    $openFileDialog.CheckPathExists = $true
+    $openFileDialog.Multiselect = $false
+
+    if ($openFileDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+        return $openFileDialog.FileName
+    }
+
+    return $null
+}
+
 # Import unified SysFlow module
 $SysFlowModulePath = Join-Path $PSScriptRoot 'Modules\SysFlowModule.psm1'
 $ConfigPath        = Join-Path $PSScriptRoot 'config.psd1'
@@ -286,6 +320,7 @@ function Show-BackupMenu {
     Write-Host "3. Remove Backup(s)"
     Write-Host "4. List Backups"
     Write-Host "5. Schedule Daily Backup"
+    Write-Host "6. Test Backup Integrity"
     Write-Host "B. Back to Main Menu"
 }
 
@@ -567,11 +602,12 @@ function Start-SysFlow {
                                 Write-SysFlowLog -LogLevel "Info" -Message "Creating backup" -Details $backupDetails -LogFilePath $Config.LogPath
 
                                 if ([string]::IsNullOrWhiteSpace($name)) {
-                                    New-Backup -PathsToBackup $pathList -BackupDestination $dest
+                                    $backupResult = New-Backup -PathsToBackup $pathList -BackupDestination $dest
                                 } else {
                                     if (-not $name.EndsWith('.zip')) { $name += '.zip' }
-                                    New-Backup -PathsToBackup $pathList -BackupDestination $dest -BackupName $name
+                                    $backupResult = New-Backup -PathsToBackup $pathList -BackupDestination $dest -BackupName $name
                                 }
+
                                 Write-SysFlowLog -LogLevel "Info" -Message "Backup created successfully" -LogFilePath $Config.LogPath
                             } else {
                                 Write-SysFlowLog -LogLevel "Warning" -Message "Backup cancelled: missing source or destination" -LogFilePath $Config.LogPath
@@ -699,6 +735,72 @@ function Start-SysFlow {
                             catch {
                                 Write-Host "Failed to register scheduled task: $_" -ForegroundColor Red
                                 Write-SysFlowLog -LogLevel "Error" -Message "Failed to register daily backup task" -Details $_ -LogFilePath $Config.LogPath
+                            }
+
+                            Pause
+                        }
+
+                        '6' {
+                            Write-SysFlowLog -LogLevel "Info" -Message "Backup integrity check initiated" -LogFilePath $Config.LogPath
+
+                            $backupFile = $null
+                            if ($Config.DefaultBackupDestination) {
+                                Write-Host "`nDefault backup folder: $($Config.DefaultBackupDestination)" -ForegroundColor Cyan
+                                $useDefaultFolder = Read-Host "Select a backup from the default folder? (Y/N)"
+
+                                if ($useDefaultFolder -match '^[Yy]$') {
+                                    try {
+                                        $zips = Get-ChildItem -Path $Config.DefaultBackupDestination -Filter "*.zip" -File | Sort-Object LastWriteTime -Descending
+                                    } catch {
+                                        Write-Warning "Could not read default backup folder: $_"
+                                        Write-SysFlowLog -LogLevel "Error" -Message "Failed to read backup folder" -Details $_ -LogFilePath $Config.LogPath
+                                        $zips = @()
+                                    }
+
+                                    if ($zips.Count -eq 0) {
+                                        Write-Host "No backup ZIPs found in default folder." -ForegroundColor Yellow
+                                        Write-SysFlowLog -LogLevel "Warning" -Message "No backup files found for integrity check" -LogFilePath $Config.LogPath
+                                    } else {
+                                        Write-Host "`nAvailable backups:" -ForegroundColor Cyan
+                                        for ($i = 0; $i -lt $zips.Count; $i++) {
+                                            $idx = $i + 1
+                                            Write-Host ("{0}. {1} ({2})" -f $idx, $zips[$i].Name, $zips[$i].LastWriteTime)
+                                        }
+
+                                        $choice = Read-Host "Enter number to select backup"
+                                        if ($choice -match '^[0-9]+$' -and [int]$choice -ge 1 -and [int]$choice -le $zips.Count) {
+                                            $backupFile = $zips[[int]$choice - 1].FullName
+                                            Write-Host "Selected: $backupFile" -ForegroundColor Green
+                                            Write-SysFlowLog -LogLevel "Info" -Message "Backup selected for integrity check" -Details "File: $backupFile" -LogFilePath $Config.LogPath
+                                        } else {
+                                            Write-Host "Invalid selection; falling back to manual path." -ForegroundColor Yellow
+                                            Write-SysFlowLog -LogLevel "Warning" -Message "Invalid backup selection for integrity check" -LogFilePath $Config.LogPath
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (-not $backupFile) {
+                                $useGui = Read-Host "Use file selection window? (Y/N)"
+                                if ($useGui -match '^[Yy]$') {
+                                    $backupFile = Get-BackupFileSelection "Select backup ZIP to test"
+                                } else {
+                                    $backupFile = Read-Host "Enter backup zip path"
+                                }
+                            }
+
+                            if ([string]::IsNullOrWhiteSpace($backupFile)) {
+                                Write-Host "Integrity check cancelled." -ForegroundColor Yellow
+                                Write-SysFlowLog -LogLevel "Warning" -Message "Backup integrity check cancelled" -LogFilePath $Config.LogPath
+                            } else {
+                                $isValid = Test-BackupIntegrity -BackupFilePath $backupFile
+                                if ($isValid) {
+                                    Write-Host "Backup integrity check passed for: $backupFile" -ForegroundColor Green
+                                    Write-SysFlowLog -LogLevel "Info" -Message "Backup integrity check passed" -Details "File: $backupFile" -LogFilePath $Config.LogPath
+                                } else {
+                                    Write-Host "Backup integrity check failed for: $backupFile" -ForegroundColor Red
+                                    Write-SysFlowLog -LogLevel "Error" -Message "Backup integrity check failed" -Details "File: $backupFile" -LogFilePath $Config.LogPath
+                                }
                             }
 
                             Pause

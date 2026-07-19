@@ -145,13 +145,28 @@ function New-Backup {
 
         # Cleanup temp manifest
         if (Test-Path $tempManifestPath) { Remove-Item -Path $tempManifestPath -ErrorAction SilentlyContinue }
-        
-        # Return backup info (even on WhatIf, reflect intended path)
-        $size = (Test-Path $BackupFilePath) ? (Get-Item $BackupFilePath).Length : 0
+
+        # Validate the created backup before returning it to callers
+        $size = if (Test-Path $BackupFilePath) { (Get-Item $BackupFilePath).Length } else { 0 }
+        $integrityChecked = $false
+        $integrityPassed = $null
+
+        if ($size -gt 0) {
+            $integrityChecked = $true
+            $integrityPassed = Test-BackupIntegrity -BackupFilePath $BackupFilePath
+
+            if (-not $integrityPassed) {
+                Write-Error "Backup integrity check failed for $BackupFilePath."
+                return $false
+            }
+        }
+
         return [PSCustomObject]@{
-            BackupPath = $BackupFilePath
-            CreatedAt = Get-Date
-            Size = $size
+            BackupPath       = $BackupFilePath
+            CreatedAt        = Get-Date
+            Size             = $size
+            IntegrityChecked = $integrityChecked
+            IntegrityPassed  = $integrityPassed
         }
     }
     catch {
@@ -159,7 +174,7 @@ function New-Backup {
     }
 }
 # End of New-Backup function
- 
+
 
 
 

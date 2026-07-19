@@ -20,7 +20,8 @@ function Test-BackupIntegrity {
     #>
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true)]
+        [Alias('BackupPath', 'FullName')]
         [ValidateNotNullOrEmpty()]
         [string]$BackupFilePath
     )
@@ -56,5 +57,21 @@ function Test-BackupIntegrity {
     }
 
     return $isValid
+}
+
+function Test-BackupIntegrityAfterCreation {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$BackupFilePath
+    )
+
+    Write-Verbose "Testing integrity of backup: $BackupFilePath"
+    $isValid = Test-BackupIntegrity -BackupFilePath $BackupFilePath
+
+    if ($isValid) {
+        Write-Host "Backup integrity check passed for: $BackupFilePath"
+    } else {
+        Write-Host "Backup integrity check failed for: $BackupFilePath"
+    }
 }
 
