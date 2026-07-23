@@ -67,6 +67,13 @@ function Restore-Backup {
         }
     }
     try {
+        # Check integrity of the backup before restoring
+        $isValid = Test-BackupIntegrity -BackupFilePath $BackupFilePath
+        if (-not $isValid) {
+            Write-Error "Cannot restore from corrupted backup: $BackupFilePath."
+            return $false
+        }
+
         if ($PSCmdlet.ParameterSetName -eq 'Manifest') {
             Write-Verbose "Restoring using manifest paths from: $BackupFilePath"
 
@@ -171,7 +178,7 @@ function Restore-Backup {
 
 # End of Restore-Backup function
 }
- 
+
 
 
 

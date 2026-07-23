@@ -11,6 +11,7 @@ $moduleRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 # ============================================================================
 $backupRoot = Join-Path $moduleRoot 'BackupModule'
 if (Test-Path $backupRoot) {
+    . (Join-Path $backupRoot 'Test-BackupIntegrity.ps1')
     . (Join-Path $backupRoot 'New-Backup.ps1')
     . (Join-Path $backupRoot 'Restore-Backup.ps1')
     . (Join-Path $backupRoot 'Remove-Backup.ps1')
@@ -55,4 +56,4 @@ if (Test-Path $softwareRoot) {
 # ============================================================================
 # Export all public functions from all feature areas
 # ============================================================================
-Export-ModuleMember -Function 'New-Backup','Restore-Backup','Remove-Backup','Get-StorageStats','Get-CPUStats','Get-RamStats','Get-Uptime','Get-ProcessStats','Write-SysFlowLog','Export-StatToCsv','Export-StatToHtml','Export-CombinedStatsToHtml','Export-UnifiedStatsToHtml','Get-SoftwareList','Install-Software','Uninstall-Software','Update-Software','Get-InstalledBy','Search-Software'
+Export-ModuleMember -Function 'New-Backup','Restore-Backup','Remove-Backup','Test-BackupIntegrity','Test-BackupIntegrityAfterCreation','Get-StorageStats','Get-CPUStats','Get-RamStats','Get-Uptime','Get-ProcessStats','Write-SysFlowLog','Export-StatToCsv','Export-StatToHtml','Export-CombinedStatsToHtml','Export-UnifiedStatsToHtml','Get-SoftwareList','Install-Software','Uninstall-Software','Update-Software','Get-InstalledBy','Search-Software'
