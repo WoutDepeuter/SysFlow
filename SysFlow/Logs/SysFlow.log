@@ -210,3 +210,72 @@
 [2026-07-10 14:49:34] [Info] Uptime: 0 days, 5 hours.
 [2026-07-15 16:46:46] [Info] SysFlow application started
 [2026-07-15 18:22:06] [Info] SysFlow application started
+[2026-07-28 14:54:56] [Info] SysFlow application started
+[2026-07-28 14:54:59] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-28 14:54:59] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-07-28; Time: 14:54:59; Timestamp: 07/28/2026 14:54:59
+[2026-07-28 14:54:59] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-28 14:54:59] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-07-28 14:54:59] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-07-28; Time: 14:54:59; Timestamp: 07/28/2026 14:54:59
+[2026-07-28 14:54:59] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-28; Time: 14:54:59
+[2026-07-28 14:54:59] [Warning] RAM usage above threshold | Details: Used: 62.59% | Threshold: 1% | Free: 11.87 GB
+[2026-07-28 14:55:00] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-28 14:55:00] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-07-28; Time: 14:55:00; Timestamp: 07/28/2026 14:55:00
+[2026-07-28 14:55:00] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-28 14:55:00] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Storage Stats.csv, Record count: 1
+[2026-07-28 14:55:00] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Storage Stats.csv; Records: 1; Date: 2026-07-28; Time: 14:55:00; Timestamp: 07/28/2026 14:55:00
+[2026-07-28 14:55:00] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-28; Time: 14:55:00
+[2026-07-28 14:55:00] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-07-28 14:55:08] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 5
+[2026-07-28 14:55:08] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Storage Stats.csv, Record count: 1
+[2026-07-28 14:55:08] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Storage Stats.csv; Records: 1; Date: 2026-07-28; Time: 14:55:08; Timestamp: 07/28/2026 14:55:08
+[2026-07-28 14:55:08] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Installed Software.csv, Record count: 631
+[2026-07-28 14:55:08] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Installed Software.csv; Records: 631; Date: 2026-07-28; Time: 14:55:08; Timestamp: 07/28/2026 14:55:08
+[2026-07-28 14:55:08] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-07-28 14:55:08] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-07-28; Time: 14:55:08; Timestamp: 07/28/2026 14:55:08
+[2026-07-28 14:55:08] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Uptime Stats.csv, Record count: 1
+[2026-07-28 14:55:08] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Uptime Stats.csv; Records: 1; Date: 2026-07-28; Time: 14:55:08; Timestamp: 07/28/2026 14:55:08
+[2026-07-28 14:55:08] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-CPU Stats.csv, Record count: 1
+[2026-07-28 14:55:08] [Info] Statistics exported successfully | Details: File: .\Reports\Report-CPU Stats.csv; Records: 1; Date: 2026-07-28; Time: 14:55:08; Timestamp: 07/28/2026 14:55:08
+[2026-07-28 14:55:08] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 5; Date: 2026-07-28; Time: 14:55:08
+[2026-07-28 14:55:08] [Info] Full system report manually generated via Reporting Menu
+[2026-07-28 15:00:31] [Info] SysFlow application started
+[2026-07-28 15:00:39] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 6
+[2026-07-28 15:00:39] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Executed Actions.csv, Record count: 100
+[2026-07-28 15:00:39] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Executed Actions.csv; Records: 100; Date: 2026-07-28; Time: 15:00:39; Timestamp: 07/28/2026 15:00:39
+[2026-07-28 15:00:39] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-CPU Stats.csv, Record count: 1
+[2026-07-28 15:00:39] [Info] Statistics exported successfully | Details: File: .\Reports\Report-CPU Stats.csv; Records: 1; Date: 2026-07-28; Time: 15:00:39; Timestamp: 07/28/2026 15:00:39
+[2026-07-28 15:00:39] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Storage Stats.csv, Record count: 1
+[2026-07-28 15:00:39] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Storage Stats.csv; Records: 1; Date: 2026-07-28; Time: 15:00:39; Timestamp: 07/28/2026 15:00:39
+[2026-07-28 15:00:39] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-07-28 15:00:39] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-07-28; Time: 15:00:39; Timestamp: 07/28/2026 15:00:39
+[2026-07-28 15:00:39] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Uptime Stats.csv, Record count: 1
+[2026-07-28 15:00:39] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Uptime Stats.csv; Records: 1; Date: 2026-07-28; Time: 15:00:39; Timestamp: 07/28/2026 15:00:39
+[2026-07-28 15:00:39] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Installed Software.csv, Record count: 631
+[2026-07-28 15:00:39] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Installed Software.csv; Records: 631; Date: 2026-07-28; Time: 15:00:39; Timestamp: 07/28/2026 15:00:39
+[2026-07-28 15:00:39] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 6; Date: 2026-07-28; Time: 15:00:39
+[2026-07-28 15:00:39] [Info] Full system report manually generated via Reporting Menu
+[2026-07-28 15:00:49] [Info] Report directory opened in Explorer
+[2026-07-28 17:03:02] [Info] SysFlow application started
+[2026-07-28 17:03:04] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-07-28 17:03:04] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-07-28; Time: 17:03:04; Timestamp: 07/28/2026 17:03:04
+[2026-07-28 17:03:04] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-07-28 17:03:04] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-07-28 17:03:04] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-07-28; Time: 17:03:04; Timestamp: 07/28/2026 17:03:04
+[2026-07-28 17:03:04] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-07-28; Time: 17:03:04
+[2026-07-28 17:03:04] [Warning] RAM usage above threshold | Details: Used: 63.31% | Threshold: 1% | Free: 11.64 GB
+[2026-07-28 17:03:11] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 6
+[2026-07-28 17:03:11] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-CPU Stats.csv, Record count: 1
+[2026-07-28 17:03:11] [Info] Statistics exported successfully | Details: File: .\Reports\Report-CPU Stats.csv; Records: 1; Date: 2026-07-28; Time: 17:03:11; Timestamp: 07/28/2026 17:03:11
+[2026-07-28 17:03:11] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Uptime Stats.csv, Record count: 1
+[2026-07-28 17:03:11] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Uptime Stats.csv; Records: 1; Date: 2026-07-28; Time: 17:03:11; Timestamp: 07/28/2026 17:03:11
+[2026-07-28 17:03:11] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Executed Actions.csv, Record count: 100
+[2026-07-28 17:03:11] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Executed Actions.csv; Records: 100; Date: 2026-07-28; Time: 17:03:11; Timestamp: 07/28/2026 17:03:11
+[2026-07-28 17:03:11] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Storage Stats.csv, Record count: 1
+[2026-07-28 17:03:11] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Storage Stats.csv; Records: 1; Date: 2026-07-28; Time: 17:03:11; Timestamp: 07/28/2026 17:03:11
+[2026-07-28 17:03:11] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-07-28 17:03:11] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-07-28; Time: 17:03:11; Timestamp: 07/28/2026 17:03:11
+[2026-07-28 17:03:11] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Installed Software.csv, Record count: 631
+[2026-07-28 17:03:11] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Installed Software.csv; Records: 631; Date: 2026-07-28; Time: 17:03:11; Timestamp: 07/28/2026 17:03:11
+[2026-07-28 17:03:11] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 6; Date: 2026-07-28; Time: 17:03:11
+[2026-07-28 17:03:11] [Info] Full system report manually generated via Reporting Menu
+[2026-07-28 17:03:20] [Info] Report directory opened in Explorer

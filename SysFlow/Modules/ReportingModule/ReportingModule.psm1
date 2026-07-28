@@ -14,8 +14,10 @@ $moduleRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $moduleRoot 'Export-CombinedStatsToHtml.ps1')
 . (Join-Path $moduleRoot 'Export-UnifiedStatsToHtml.ps1')
 . (Join-Path $moduleRoot 'Write-SysFlowLog.ps1')
+. (Join-Path $moduleRoot 'Get-SysflowLogs.ps1')
+
 
 # ============================================================================
 # Export public functions
 # ============================================================================
-Export-ModuleMember -Function 'Export-StatToCsv', 'Export-StatToHtml', 'Export-CombinedStatsToHtml', 'Export-UnifiedStatsToHtml', 'Write-SysFlowLog'
+Export-ModuleMember -Function 'Export-StatToCsv', 'Export-StatToHtml', 'Export-CombinedStatsToHtml', 'Export-UnifiedStatsToHtml', 'Write-SysFlowLog', 'Get-SysFlowLogs'
