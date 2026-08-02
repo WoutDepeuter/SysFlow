@@ -18,7 +18,7 @@ This project was developed as part of the **System Automation & Scripting** modu
 To function correctly, the target system must meet the following requirements:
 
 * **Operating System:** Windows 10 or Windows 11.
-* **PowerShell Version:** 5.1 or higher (PowerShell 7+ recommended).
+* **PowerShell Version:** 7 or higher
 * **Permissions:** The script must be run as **Administrator** (required for software installations, Task Scheduler registration, and CIM/WMI queries).
 * **Dependencies:**
     * Active internet connection (for software management).
