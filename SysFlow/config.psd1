@@ -18,7 +18,7 @@
     DefaultPackageManager = 'winget'
     
     # Export format preference: 'CSV', 'HTML', 'Both', or 'None'
-    ExportFormat = 'both'
+    ExportFormat = 'Both'
 }
 
 

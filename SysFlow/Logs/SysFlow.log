@@ -279,3 +279,108 @@
 [2026-07-28 17:03:11] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 6; Date: 2026-07-28; Time: 17:03:11
 [2026-07-28 17:03:11] [Info] Full system report manually generated via Reporting Menu
 [2026-07-28 17:03:20] [Info] Report directory opened in Explorer
+[2026-08-02 10:54:08] [Info] SysFlow application started
+[2026-08-02 10:54:11] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:54:11] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:54:11; Timestamp: 08/02/2026 10:54:11
+[2026-08-02 10:54:11] [Warning] CPU load above threshold | Details: Load: 2% | Threshold: 1%
+[2026-08-02 10:54:12] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:54:12] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:54:12; Timestamp: 08/02/2026 10:54:12
+[2026-08-02 10:54:12] [Warning] RAM usage above threshold | Details: Used: 57.25% | Threshold: 1% | Free: 13.57 GB
+[2026-08-02 10:54:13] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:54:13] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:54:13; Timestamp: 08/02/2026 10:54:13
+[2026-08-02 10:54:13] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-08-02 10:54:14] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:54:14] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:54:14; Timestamp: 08/02/2026 10:54:14
+[2026-08-02 10:54:14] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-08-02 10:54:16] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:54:16] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:54:16; Timestamp: 08/02/2026 10:54:16
+[2026-08-02 10:54:16] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:54:16] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:54:16; Timestamp: 08/02/2026 10:54:16
+[2026-08-02 10:54:16] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:54:16] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:54:16; Timestamp: 08/02/2026 10:54:16
+[2026-08-02 10:54:16] [Warning] RAM usage above threshold | Details: Used: 56.64% | Threshold: 1%
+[2026-08-02 10:54:16] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-08-02 10:54:16] [Warning] Full system scan detected threshold exceedance | Details: RAM high (56.64% >= 1%) | Storage high (C: >= 1%)
+[2026-08-02 10:54:34] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:54:34] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:54:34; Timestamp: 08/02/2026 10:54:34
+[2026-08-02 10:54:34] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-08-02 10:54:38] [Info] Uptime: 0 days, 12 hours.
+[2026-08-02 10:54:52] [Info] Full system report manually generated via Reporting Menu
+[2026-08-02 10:55:22] [Info] SysFlow application started
+[2026-08-02 10:55:27] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:55:27] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:55:27; Timestamp: 08/02/2026 10:55:27
+[2026-08-02 10:55:27] [Warning] CPU load above threshold | Details: Load: 10% | Threshold: 1%
+[2026-08-02 10:55:28] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:55:28] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:55:28; Timestamp: 08/02/2026 10:55:28
+[2026-08-02 10:55:28] [Warning] RAM usage above threshold | Details: Used: 57.48% | Threshold: 1% | Free: 13.49 GB
+[2026-08-02 10:55:29] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:55:29] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:55:29; Timestamp: 08/02/2026 10:55:29
+[2026-08-02 10:55:29] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-08-02 10:55:31] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:55:31] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:55:31; Timestamp: 08/02/2026 10:55:31
+[2026-08-02 10:55:31] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:55:31] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:55:31; Timestamp: 08/02/2026 10:55:31
+[2026-08-02 10:55:31] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:55:31] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:55:31; Timestamp: 08/02/2026 10:55:31
+[2026-08-02 10:55:31] [Warning] CPU load above threshold | Details: Load: 6% | Threshold: 1%
+[2026-08-02 10:55:31] [Warning] RAM usage above threshold | Details: Used: 57.34% | Threshold: 1%
+[2026-08-02 10:55:31] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-08-02 10:55:31] [Warning] Full system scan detected threshold exceedance | Details: CPU high (6% >= 1%) | RAM high (57.34% >= 1%) | Storage high (C: >= 1%)
+[2026-08-02 10:56:19] [Info] SysFlow application started
+[2026-08-02 10:56:22] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:56:22] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:56:22; Timestamp: 08/02/2026 10:56:22
+[2026-08-02 10:56:22] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-08-02 10:56:22] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-08-02 10:56:22] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-08-02; Time: 10:56:22; Timestamp: 08/02/2026 10:56:22
+[2026-08-02 10:56:22] [Info] New unified HTML report created | Details: File: .\Reports\Report.html; Sections: 1; Date: 2026-08-02; Time: 10:56:22
+[2026-08-02 10:56:22] [Warning] RAM usage above threshold | Details: Used: 58.44% | Threshold: 1% | Free: 13.19 GB
+[2026-08-02 10:56:23] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:56:23] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:56:23; Timestamp: 08/02/2026 10:56:23
+[2026-08-02 10:56:23] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-08-02 10:56:23] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-08-02 10:56:23] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-08-02; Time: 10:56:23; Timestamp: 08/02/2026 10:56:23
+[2026-08-02 10:56:23] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-08-02; Time: 10:56:23
+[2026-08-02 10:56:23] [Warning] RAM usage above threshold | Details: Used: 58.57% | Threshold: 1% | Free: 13.14 GB
+[2026-08-02 10:56:23] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:56:23] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:56:23; Timestamp: 08/02/2026 10:56:23
+[2026-08-02 10:56:23] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-08-02 10:56:23] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-08-02 10:56:23] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-08-02; Time: 10:56:23; Timestamp: 08/02/2026 10:56:23
+[2026-08-02 10:56:23] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-08-02; Time: 10:56:23
+[2026-08-02 10:56:24] [Warning] RAM usage above threshold | Details: Used: 58.87% | Threshold: 1% | Free: 13.05 GB
+[2026-08-02 10:56:24] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:56:24] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:56:24; Timestamp: 08/02/2026 10:56:24
+[2026-08-02 10:56:24] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-08-02 10:56:24] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Storage Stats.csv, Record count: 1
+[2026-08-02 10:56:24] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Storage Stats.csv; Records: 1; Date: 2026-08-02; Time: 10:56:24; Timestamp: 08/02/2026 10:56:24
+[2026-08-02 10:56:24] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-08-02; Time: 10:56:24
+[2026-08-02 10:56:24] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-08-02 10:56:26] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\History.csv, Record count: 1
+[2026-08-02 10:56:26] [Info] Statistics exported successfully | Details: File: .\Reports\History.csv; Records: 1; Date: 2026-08-02; Time: 10:56:26; Timestamp: 08/02/2026 10:56:26
+[2026-08-02 10:56:26] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 1
+[2026-08-02 10:56:26] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Storage Stats.csv, Record count: 1
+[2026-08-02 10:56:26] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Storage Stats.csv; Records: 1; Date: 2026-08-02; Time: 10:56:26; Timestamp: 08/02/2026 10:56:26
+[2026-08-02 10:56:26] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 1; Date: 2026-08-02; Time: 10:56:26
+[2026-08-02 10:56:26] [Warning] Storage above threshold | Details: Drives: C: | Threshold: 1%
+[2026-08-02 10:56:30] [Info] Listing installed software
+[2026-08-02 10:56:34] [Info] Software list displayed | Details: Found 1 applications
+[2026-08-02 10:56:40] [Info] Updating software | Details: Name: spotify | Manager: winget
+[2026-08-02 10:56:45] [Info] Software update completed
+[2026-08-02 10:56:49] [Warning] Software installation cancelled: no name provided
+[2026-08-02 10:56:56] [Info] Searching for software | Details: SearchTerm: spotify | Manager: winget
+[2026-08-02 10:56:56] [Info] Software search completed
+[2026-08-02 10:57:13] [Info] Exporting statistics to unified HTML | Details: Output path: .\Reports\Report.html; Sections: 6
+[2026-08-02 10:57:13] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-CPU Stats.csv, Record count: 1
+[2026-08-02 10:57:13] [Info] Statistics exported successfully | Details: File: .\Reports\Report-CPU Stats.csv; Records: 1; Date: 2026-08-02; Time: 10:57:13; Timestamp: 08/02/2026 10:57:13
+[2026-08-02 10:57:13] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Uptime Stats.csv, Record count: 1
+[2026-08-02 10:57:13] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Uptime Stats.csv; Records: 1; Date: 2026-08-02; Time: 10:57:13; Timestamp: 08/02/2026 10:57:13
+[2026-08-02 10:57:13] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-RAM Stats.csv, Record count: 1
+[2026-08-02 10:57:13] [Info] Statistics exported successfully | Details: File: .\Reports\Report-RAM Stats.csv; Records: 1; Date: 2026-08-02; Time: 10:57:13; Timestamp: 08/02/2026 10:57:13
+[2026-08-02 10:57:13] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Executed Actions.csv, Record count: 100
+[2026-08-02 10:57:13] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Executed Actions.csv; Records: 100; Date: 2026-08-02; Time: 10:57:13; Timestamp: 08/02/2026 10:57:13
+[2026-08-02 10:57:14] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Installed Software.csv, Record count: 631
+[2026-08-02 10:57:14] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Installed Software.csv; Records: 631; Date: 2026-08-02; Time: 10:57:14; Timestamp: 08/02/2026 10:57:14
+[2026-08-02 10:57:14] [Info] Exporting statistics to CSV | Details: Output path: .\Reports\Report-Storage Stats.csv, Record count: 1
+[2026-08-02 10:57:14] [Info] Statistics exported successfully | Details: File: .\Reports\Report-Storage Stats.csv; Records: 1; Date: 2026-08-02; Time: 10:57:14; Timestamp: 08/02/2026 10:57:14
+[2026-08-02 10:57:14] [Info] Statistics appended to existing unified HTML | Details: File: .\Reports\Report.html; New sections: 6; Date: 2026-08-02; Time: 10:57:13
+[2026-08-02 10:57:14] [Info] Full system report manually generated via Reporting Menu

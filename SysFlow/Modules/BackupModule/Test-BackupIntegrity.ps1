@@ -59,7 +59,20 @@ function Test-BackupIntegrity {
     return $isValid
 }
 
+
 function Test-BackupIntegrityAfterCreation {
+    <#
+    .SYNOPSIS
+        Tests the integrity of a backup archive immediately after creation.
+    .DESCRIPTION
+        This is a wrapper function that calls Test-BackupIntegrity to verify
+        the backup zip file and outputs the result directly to the console.
+    .PARAMETER BackupFilePath
+        The full path to the newly created backup zip file.
+    .EXAMPLE
+        Test-BackupIntegrityAfterCreation -BackupFilePath "C:\Backups\backup.zip"
+    #>
+
     param (
         [Parameter(Mandatory=$true)]
         [string]$BackupFilePath
